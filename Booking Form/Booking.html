@@ -9,64 +9,53 @@
 </head>
 
 <body>
-    <h1>Welcome to Soulmate Events</h1>
-    <div>
-        <form action="">
-            <div>
-                <label for="name">Client Name</label>
-                <input id="name" type="text" placeholder="Enter Client Name" required>  
-            </div>
-            <div>
-                <label for="phone">Client Number</label>
-                <input id="phone" type="phone" placeholder="Enter Client Number" required>  
-            </div>
-            <div>
-                <label for="calender">Date Of Event</label>
-                <input id="dob" type="date" required>  
-            </div>
+    <div class="form-container">
+        <h2>Please Fill Details</h2>
+        <form>
+            <label>Client Name</label>
+            <input type="text" placeholder="Enter Client Name">
 
-            <div>
-                <label for="event">Event</label>
-                <select id="event" required>
-                    <option value="" disabled selected>Select Event</option>
-                    <option value="Ring Ceremony">Ring Ceremony</option>
-                    <option value="Destination Wedding">Destination Wedding</option>    
-                    <option value="Wedding">Wedding</option>    
-                    <option value="Roka">Roka</option>    
-                    <option value="Cocktail">Cocktail</option>    
-                    <option value="Sangeet">Sangeet</option>      
-                    <option value="Corporate Event">Corporate Event</option>    
-                    <option value="Get-Together">Get-Together</option>    
-                    <option value="Other">Other</option>    
-                </select>
-            </div>
+            <label>Client Number</label>
+            <input type="text" placeholder="Enter Client Number">
 
+            <label>Date Of Event</label>
+            <input type="date">
 
-            <div>
-                <label for="venue">Venue</label>
-                <select id="venue" required>
-                    <option value="" disabled selected>Select Venue</option>
-                    <option value="Noor Mahal">Noor Mahal</option>
-                    <option value="Eden">Eden</option>    
-                    <option value="Amani Farms">Amani Farms</option>    
-                    <option value="Rutba">Rutba</option>    
-                    <option value="Other">Other</option>    
-                </select>
-            </div>
-            
-            <div>
-                <label for="totalamount">Total Amount</label>
-                <input id="totalamount" type="ruppe" placeholder="Enter Booking Amount" required>  
-            </div>
-            
-            <div>
-                <label for="advancerecieved">Advance Recieved</label>
-                <input id="advancerecieved" type="ruppe" placeholder="Enter Advance Recieved" required>  
-            </div>
-            
-            <div>
-                <button type="submit">Submit</button>
-            </div>
+            <label>Event</label>
+            <select>
+                <option>Select Event</option>
+                <option>Birthday</option>
+                <option>Anniversary</option>
+                <option>Engagement</option>
+                <option>Sangeet</option>
+                <option>Ring Ceremony</option>
+                <option>Roka Ceremony</option>
+                <option>Wedding</option>
+                <option>Corporate</option>
+                <option>Get Together</option>
+                <option>Other</option>
+
+            </select>
+
+            <label>Venue</label>
+            <select>
+                <option>Select Venue</option>
+                <option>Noor Mahal</option>
+                <option>Amani farms</option>
+                <option>Rutba</option>
+                <option>Eden</option>
+                <option>Prem Plaza</option>
+                <option>Jewels</option>
+                <option>Other</option>
+            </select>
+
+            <label>Total Amount</label>
+            <input type="number" placeholder="Enter Booking Amount">
+
+            <label>Advance Received</label>
+            <input type="number" placeholder="Enter Advance Received">
+
+            <button type="submit">Submit</button>
         </form>
     </div>
 </body>

@@ -1,123 +1,104 @@
-/* ===== Global Page Styling ===== */
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Background */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: url("background.jpeg") no-repeat center center/cover;
-    margin: 0;
-    padding: 0;
+    height: 100vh;
     display: flex;
-    flex-direction: column;
-    justify-content: center;   
-    align-items: center;       
-    min-height: 100vh;
-}
-
-/* ===== Container ===== */
-.container {
-    display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    gap: 20px;
 }
 
-/* ===== Heading ===== */
-.container h1 {
-    font-size: 2.5rem;
-    font-weight: 800;
-    letter-spacing: 1px;
-    margin: 0 0 20px 0;
+/* Form container */
+.form-container {
+    background: rgba(0, 0, 0, 0.55); /* dark overlay */
+    padding: 30px;
+    border-radius: 15px;
+    width: 400px;
     text-align: center;
-
-    /* Gradient text */
-    background: linear-gradient(90deg, #ff512f, #dd2476, #24c6dc, #5433ff);
-    background-size: 300% 300%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
-
-    /* Animation */
-    animation: gradientMove 5s ease infinite;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
 }
 
-/* Gradient animation */
-@keyframes gradientMove {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+/* Heading */
+.form-container h2 {
+    font-size: 26px;
+    margin-bottom: 20px;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
 }
 
-/* ===== Form Card ===== */
-form {
-    background: #ffffff;
-    padding: 30px 35px;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    width: 420px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+/* Labels */
+.form-container label {
+    display: block;
+    text-align: left;
+    margin: 10px 0 5px;
+    font-weight: bold;
+    color: #ffffff;
+    font-size: 14px;
 }
 
-form:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 14px 35px rgba(0,0,0,0.15);
-}
-
-/* ===== Form Groups ===== */
-form div {
-    margin-bottom: 18px;
-    display: flex;
-    flex-direction: column;
-}
-
-/* ===== Labels ===== */
-label {
-    margin-bottom: 6px;
-    font-weight: 600;
-    color: #34495e;
-    font-size: 0.95rem;
-}
-
-/* ===== Inputs & Selects ===== */
-input, select {
-    padding: 12px 14px;
-    border: 1px solid #dcdfe3;
-    border-radius: 10px;
-    font-size: 1rem;
-    background: #f9fafc;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
-}
-
-input:focus, select:focus {
-    border-color: #6a11cb;
-    background: #ffffff;
-    box-shadow: 0 0 10px rgba(106, 17, 203, 0.25);
+/* Inputs & Select */
+.form-container input,
+/* Style Select Box */
+.form-container select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ff4ab3;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 14px;
     outline: none;
-}
-
-/* ===== Button ===== */
-button {
-    background: linear-gradient(90deg, #6a11cb, #2575fc);
-    color: white;
-    border: none;
-    padding: 14px;
-    border-radius: 10px;
-    font-size: 1rem;
-    font-weight: 600;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
     cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.3s ease;
 }
 
-button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 18px rgba(37, 117, 252, 0.4);
+/* Dropdown options */
+.form-container select option {
+    background: #222;  /* dark background */
+    color: #fff;       /* white text */
+    padding: 10px;
 }
 
-/* ===== Responsive ===== */
-@media (max-width: 500px) {
-    form {
-        width: 90%;
-        padding: 20px;
-    }
+/* Hover effect on option */
+.form-container select option:hover {
+    background: #ff4ab3;
+    color: #fff;
+}
 
-    .container h1 {
-        font-size: 2rem;
-    }
+.form-container input::placeholder {
+    color: #ddd;
+}
+
+.form-container input:focus,
+.form-container select:focus {
+    background: rgba(255, 255, 255, 0.35);
+    border: 1px solid #ff4ab3;
+}
+
+/* Submit button */
+.form-container button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #ff0077, #ff4ab3);
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.form-container button:hover {
+    background: linear-gradient(90deg, #ff4ab3, #ff0077);
 }
