@@ -1,7 +1,7 @@
 /* ===== Global Page Styling ===== */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #f0f4ff, #e6f0ff);
+    background: url("background.jpeg") no-repeat center center/cover;
     margin: 0;
     padding: 0;
     display: flex;
