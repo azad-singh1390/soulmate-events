@@ -1,0 +1,137 @@
+/* ===== Global Styling ===== */
+body {
+  font-family: 'Poppins', sans-serif;
+  background: url("https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1500&q=80")
+              no-repeat center center fixed;
+  background-size: cover;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* Dark overlay for readability */
+body::before {
+  content: "";
+  position: absolute;
+  flex-direction: column;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: -1;        /* ✅ Push behind content */
+}
+
+
+/* ===== Contact Form Container ===== */
+.contact-container {
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 40px 50px;
+  width: 420px;
+  color: #fff;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+  animation: fadeIn 1.2s ease;
+}
+
+/* Fade animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== Heading ===== */
+.contact-container h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 10px;
+  background: linear-gradient(90deg, #ff9966, #ff5e62, #00c6ff, #0072ff);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientFlow 6s ease infinite;
+}
+
+/* Animated gradient text */
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Subtitle */
+.subtitle {
+  font-size: 0.95rem;
+  text-align: center;
+  margin-bottom: 25px;
+  color: #eee;
+}
+
+/* ===== Form Styling ===== */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Labels */
+label {
+  font-weight: 500;
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+  color: #f1f1f1;
+  text-align: left;
+}
+
+/* Inputs & Textarea */
+input, textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  color: #333;
+  background: rgba(255, 255, 255, 0.85);
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+input:focus, textarea:focus {
+  box-shadow: 0 0 12px rgba(0, 198, 255, 0.6);
+  outline: none;
+  transform: scale(1.02);
+}
+
+/* ===== Button ===== */
+button {
+  background: linear-gradient(90deg, #ff5e62, #ff9966);
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+button:hover {
+  transform: scale(1.07);
+  box-shadow: 0 8px 20px rgba(255, 94, 98, 0.5);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 500px) {
+  .contact-container {
+    width: 90%;
+    padding: 25px;
+  }
+
+  .contact-container h1 {
+    font-size: 1.8rem;
+  }
+}

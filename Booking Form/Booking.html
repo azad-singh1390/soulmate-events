@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soulmate Events Booking Form</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <h1>Welcome to Soulmate Events</h1>
+    <div>
+        <form action="">
+            <div>
+                <label for="name">Client Name</label>
+                <input id="name" type="text" placeholder="Enter Client Name" required>  
+            </div>
+            <div>
+                <label for="phone">Client Number</label>
+                <input id="phone" type="phone" placeholder="Enter Client Number" required>  
+            </div>
+            <div>
+                <label for="calender">Date Of Event</label>
+                <input id="dob" type="date" required>  
+            </div>
+
+            <div>
+                <label for="event">Event</label>
+                <select id="event" required>
+                    <option value="" disabled selected>Select Event</option>
+                    <option value="Ring Ceremony">Ring Ceremony</option>
+                    <option value="Destination Wedding">Destination Wedding</option>    
+                    <option value="Wedding">Wedding</option>    
+                    <option value="Roka">Roka</option>    
+                    <option value="Cocktail">Cocktail</option>    
+                    <option value="Sangeet">Sangeet</option>      
+                    <option value="Corporate Event">Corporate Event</option>    
+                    <option value="Get-Together">Get-Together</option>    
+                    <option value="Other">Other</option>    
+                </select>
+            </div>
+
+
+            <div>
+                <label for="venue">Venue</label>
+                <select id="venue" required>
+                    <option value="" disabled selected>Select Venue</option>
+                    <option value="Noor Mahal">Noor Mahal</option>
+                    <option value="Eden">Eden</option>    
+                    <option value="Amani Farms">Amani Farms</option>    
+                    <option value="Rutba">Rutba</option>    
+                    <option value="Other">Other</option>    
+                </select>
+            </div>
+            
+            <div>
+                <label for="totalamount">Total Amount</label>
+                <input id="totalamount" type="ruppe" placeholder="Enter Booking Amount" required>  
+            </div>
+            
+            <div>
+                <label for="advancerecieved">Advance Recieved</label>
+                <input id="advancerecieved" type="ruppe" placeholder="Enter Advance Recieved" required>  
+            </div>
+            
+            <div>
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>
