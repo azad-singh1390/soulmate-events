@@ -5,18 +5,63 @@
     box-sizing: border-box;
 }
 
+/* Navbar */
+.navbar {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 20px 0;
+    background: rgba(0, 0, 0, 0.6);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    z-index: 10;
+}
+
+.nav-links {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+}
+
+.nav-links a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    position: relative;
+    transition: 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #ff007f;
+}
+
+.nav-links a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 0%;
+    height: 2px;
+    background: #ff007f;
+    transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
 /* Background styling */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: url("contactus.jpg") 
-                no-repeat center center/cover;
+    background: url("contactus.jpg") no-repeat center center/cover;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
     color: #fff;
-    padding: 40px 20px;
+    padding: 120px 20px 40px;  /* ⬅ Added top padding so content doesn’t hide behind navbar */
 }
 
 /* Main Heading */
@@ -108,4 +153,20 @@ p {
     text-align: center;
     box-shadow: 0 6px 15px rgba(0,0,0,0.4);
     line-height: 1.6;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+    .nav-links {
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    form, p {
+        max-width: 100%;
+    }
 }
