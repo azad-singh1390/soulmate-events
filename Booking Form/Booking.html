@@ -21,18 +21,18 @@
     <br><br><br>
     <div class="form-container">
         <!-- <h2>Please Fill Details</h2> -->
-        <form>
+        <form action="/book-event" method="POST">
             <label>Client Name</label>
-            <input type="text" placeholder="Enter Client Name">
+            <input type="text" name="clientname" placeholder="Enter Client Name">
 
             <label>Client Number</label>
-            <input type="text" placeholder="Enter Client Number">
+            <input type="text" name="clientNumber" placeholder="Enter Client Number">
 
             <label>Date Of Event</label>
-            <input type="date">
+             <input type="date" name="eventDate">
 
             <label>Event</label>
-            <select>
+            <select name="eventType">
                 <option>Select Event</option>
                 <option>Birthday</option>
                 <option>Anniversary</option>
@@ -48,7 +48,7 @@
             </select>
 
             <label>Venue</label>
-            <select>
+            <select name="venue">
                 <option>Select Venue</option>
                 <option>Noor Mahal</option>
                 <option>Amani farms</option>
@@ -60,10 +60,21 @@
             </select>
 
             <label>Total Amount</label>
-            <input type="number" placeholder="Enter Booking Amount">
+            <input type="number" name="totalAmount" placeholder="Enter Booking Amount">
 
             <label>Advance Received</label>
-            <input type="number" placeholder="Enter Advance Received">
+            <input type="number" name="advanceReceived" placeholder="Enter Advance Received">
+
+            
+            <label>Advance Recieved by</label>
+            <select name="receivedBy">
+                <option>Select Name</option>
+                <option>Azad Sandhu</option>
+                <option>Palki</option>
+                <option>Uday Maan</option>
+                <option>Ashwini</option>
+                <option>Other</option>
+            </select>
 
             <button type="submit">Submit</button>
         </form>
