@@ -16,12 +16,13 @@
             <a href="Booking.html">Book Event</a>
             <a href="#">Events</a>
             <a href="../Contact Form/Contact.html">Contact Us</a>
+            <a href="../View Form/View.html">View Bookings</a>
         </div>
     </nav>
     <br><br><br>
     <div class="form-container">
         <!-- <h2>Please Fill Details</h2> -->
-        <form action="/book-event" method="POST">
+        <form action="https://soulmate-backend-production.up.railway.app/book-event" method="POST">
             <label>Client Name</label>
             <input type="text" name="clientname" placeholder="Enter Client Name">
 
@@ -60,12 +61,11 @@
             </select>
 
             <label>Total Amount</label>
-            <input type="number" name="totalAmount" placeholder="Enter Booking Amount">
+            <input type="text" name="totalAmount" placeholder="Enter Booking Amount">
 
             <label>Advance Received</label>
-            <input type="number" name="advanceReceived" placeholder="Enter Advance Received">
+            <input type="text" name="advanceReceived" placeholder="Enter Advance Received">
 
-            
             <label>Advance Recieved by</label>
             <select name="receivedBy">
                 <option>Select Name</option>
