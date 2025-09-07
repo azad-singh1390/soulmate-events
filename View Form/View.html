@@ -59,7 +59,7 @@
   <script>
     async function loadBookings() {
       try {
-        const res = await fetch("/bookings"); // Calls backend
+        const res = await fetch("https://soulmate-backend-production.up.railway.app/bookings");
         const data = await res.json();
         const tbody = document.querySelector("#bookingsTable tbody");
         tbody.innerHTML = "";
