@@ -1,108 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>View Bookings</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f6f9;
-      margin: 20px;
-      padding-top: 60px;
-    }
-    .navbar {
-      width: 100%;
-      background-color: #333;
-      padding: 10px 0;
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 1000;
-    }
-    .nav-links {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-    }
-    .nav-links a {
-      color: #fff;
-      text-decoration: none;
-      font-size: 1em;
-      padding: 8px 16px;
-      border-radius: 4px;
-      transition: background 0.3s;
-    }
-    .nav-links a:hover {
-      background-color: #2e8b57;
-    }
-    h1 {
-      text-align: center;
-      color: #333;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-      background: #fff;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    th, td {
-      padding: 10px;
-      border: 1px solid #ddd;
-      text-align: center;
-    }
-    th {
-      background: #007bff;
-      color: white;
-    }
-    tr:nth-child(even) {
-      background: #f9f9f9;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Bookings</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            margin: 20px;
+            padding-top: 60px;
+        }
+
+        /* Navbar */
+        .navbar {
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 20px 0;
+            background: rgba(0, 0, 0, 0.6);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            position: relative;
+            transition: 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #ff007f;
+        }
+
+        .nav-links a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -6px;
+            width: 0%;
+            height: 2px;
+            background: #ff007f;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        th,
+        td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background: #007bff;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+    </style>
 </head>
+
 <body>
 
-  <nav class="navbar">
-    <div class="nav-links">
-      <a href="../index.html">Home</a>
-      <a href="../Booking Form/Booking.html">Book Event</a>
-      <a href="View.html">View Bookings</a>
-      <a href="#">Events</a>
-      <a href="../Contact Form/Contact.html">Contact Us</a>
-    </div>
-  </nav>
+    <nav class="navbar">
+        <div class="nav-links">
+            <a href="../index.html">Home</a>
+            <a href="../Booking Form/Booking.html">Book Event</a>
+            <a href="View.html">View Bookings</a>
+            <a href="#">Events</a>
+            <a href="../Contact Form/Contact.html">Contact Us</a>
+        </div>
+    </nav>
 
-  <h1>📋 All Bookings</h1>
+    <h1>📋 All Bookings</h1>
 
-  <table id="bookingsTable">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Client Name</th>
-        <th>Client Number</th>
-        <th>Event Date</th>
-        <th>Event Type</th>
-        <th>Venue</th>
-        <th>Total Amount</th>
-        <th>Advance Received</th>
-        <th>Received By</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+    <table id="bookingsTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Client Name</th>
+                <th>Client Number</th>
+                <th>Event Date</th>
+                <th>Event Type</th>
+                <th>Venue</th>
+                <th>Total Amount</th>
+                <th>Advance Received</th>
+                <th>Received By</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
 
-  <script>
-    async function loadBookings() {
-      try {
-        const res = await fetch("https://soulmate-backend-production.up.railway.app/bookings"); 
-        const data = await res.json();
-        const tbody = document.querySelector("#bookingsTable tbody");
-        tbody.innerHTML = "";
+    <script>
+        async function loadBookings() {
+            try {
+                const res = await fetch("https://soulmate-backend-production.up.railway.app/bookings");
+                const data = await res.json();
+                const tbody = document.querySelector("#bookingsTable tbody");
+                tbody.innerHTML = "";
 
-        data.forEach(row => {
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
+                data.forEach(row => {
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `
             <td>${row.id}</td>
             <td>${row.client_name}</td>
             <td>${row.client_number}</td>
@@ -113,14 +143,15 @@
             <td>${row.advance_received}</td>
             <td>${row.received_by}</td>
           `;
-          tbody.appendChild(tr);
-        });
-      } catch (err) {
-        console.error("Error fetching bookings:", err);
-      }
-    }
+                    tbody.appendChild(tr);
+                });
+            } catch (err) {
+                console.error("Error fetching bookings:", err);
+            }
+        }
 
-    loadBookings();
-  </script>
+        loadBookings();
+    </script>
 </body>
+
 </html>
