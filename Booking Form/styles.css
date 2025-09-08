@@ -147,3 +147,12 @@ body {
 .form-container button:hover {
     background: linear-gradient(90deg, #ff4ab3, #ff0077);
 }
+
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+    .nav-links {
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+}
