@@ -100,6 +100,33 @@ h1 {
     transform: translateY(-3px);
 }
 
+/* Dropdown */
+.dropdown {
+    position: relative;
+}
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background: #222;
+    min-width: 180px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    border-radius: 6px;
+    top: 100%;
+    left: 0;
+    z-index: 99;
+}
+.dropdown-content a {
+    display: block;
+    padding: 10px;
+    color: white;
+}
+.dropdown-content a:hover {
+    background: #444;
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
 /* Heading animation */
 @keyframes fadeInDown {
     from {
