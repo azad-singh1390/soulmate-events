@@ -119,6 +119,7 @@ h1 {
 
     .nav-links {
         gap: 20px;
+        flex-wrap: wrap;
     }
 
     .cta-btn {

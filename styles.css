@@ -66,6 +66,7 @@ body {
     width: 100%;
 }
 
+
 /* Hero Heading */
 h1 {
     font-size: 3rem;
@@ -119,6 +120,7 @@ h1 {
 
     .nav-links {
         gap: 20px;
+        flex-wrap: wrap;
     }
 
     .cta-btn {
@@ -126,3 +128,4 @@ h1 {
         font-size: 1rem;
     }
 }
+
