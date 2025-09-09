@@ -196,21 +196,10 @@ p {
         position: absolute;
         top: 70px;
         left: 0;
-        width: 100%;
-        padding: 20px 0;
-        gap: 15px;
-    }
-
-    .nav-links.show {
+        width: 70%;
+        padding: 15px 0;
+        gap: 10px;
         display: flex;
-    }
-
-    .menu-toggle {
-        display: block;
-        cursor: pointer;
-        color: white;
-        font-size: 1.5rem;
-        margin-left: 20px;
     }
 
     h1 {
