@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Indian Classical</title>
+    <title>Bride Groom Artists</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -30,12 +30,12 @@
             <div class="dropdown">
                 <a href="#">Artist ▾</a>
                 <div class="dropdown-content">
-                    <a href="../../Artist/Jockey/Jockey.html">Jockey</a>
-                    <a href="../../Artist/Dholies/Dholies.html">Dholies</a>
-                    <a href="../../Artist/Rajasthani Artist/Rajasthani.html">Rajasthani Artist</a>
-                    <a href="../../Artist/Flute Artist/Flute.html">Flute Artist</a>
-                    <a href="../../Artist/Indian Classical Artist/Classical.html">Indian Classical Artist</a>
-                    <a href="../../Artist/Bride Groom Artist/BrideGroom.html">Bride Groom Artists</a>
+                    <a href="../Jockey/Jockey.html">Jockey</a>
+                    <a href="../Dholies/Dholies.html">Dholies</a>
+                    <a href="../Rajasthani Artist/Rajasthani.html">Rajasthani Artist</a>
+                    <a href="../Flute Artist/Flute.html">Flute Artist</a>
+                    <a href="../Indian Classical Artist/Classical.html">Indian Classical Artist</a>
+                    <a href="../Bride Groom Artist/BrideGroom.html">Bride Groom Artists</a>
                 </div>
             </div>
             <!-- 🎤 New Artist Dropdown -->
@@ -53,8 +53,8 @@
                     <a href="../../Special Effects/Pyro Gun/PyroGun.html">Pyro Guns</a>
                     <a href="../../Special Effects/Color Shots/ColorShots.html">Color Shots</a>
                     <a href="../../Special Effects/ATV Bike/Atv.html">ATV Bike</a>
-                    <a href="../../Special Effects/Laser Light/Laser.html">LaserLight</a>
-                    <a href="#"></a>
+                    <a href="../../Special Effects/Laser Light/Laser.html">Laser Light</a>
+                    <!-- <a href="#"></a> -->
                 </div>
             </div>
             <a href="../../Booking Form/Booking.html">Book Event</a>
@@ -64,42 +64,55 @@
 
         </div>
     </nav>
-    
+
     <div class="video-album">
-        <img src="Sparkle_1.jpg" alt="Sparkle Machine" style="width:100%; max-height:640px; object-fit:cover; margin-top:20px; border-radius:8px;">
-        <img src="Sparkle_2.jpg" alt="Sparkle Machine" style="width:100%; max-height:640px; object-fit:cover; margin-top:20px; border-radius:8px;">
         <video controls>
-            <source src="Sp_1.mp4" type="video/mp4">
+            <source src="Dholie_1.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
         <video controls>
-            <source src="Sp_2.mp4" type="video/mp4">
+            <source src="Dholie_2.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
         <video controls>
-            <source src="Sp_3.mp4" type="video/mp4">
+            <source src="Dholie_3.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <video controls>
+            <source src="Dholie_4.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <video controls>
+            <source src="Dholie_5.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
         <!-- Add more <video> tags as needed -->
     </div>
+
     <style>
         .video-album {
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-            align-items: center;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            /* 2 images per row */
+            gap: 16px;
+            justify-content: center;
             margin-top: 40px;
+            max-height: 500px;
+            /* Adjust height as needed */
+            overflow-y: auto;
+            /* Enable vertical scroll */
             padding: 16px;
             background: #fafafa;
         }
-
         .video-album video {
-            width: 90%;
-            max-width: 640px;
-            max-height: 360px;
-            border-radius: 12px;
+            max-width: 100%;
+            max-height: 600px;
+            /* Adjust as needed */
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            background: #000;
+            object-fit: cover;
             display: block;
             margin: 0 auto;
         }

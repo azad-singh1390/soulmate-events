@@ -1,0 +1,186 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Navbar */
+.navbar {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 20px 0;
+    background: rgba(0, 0, 0, 0.6);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    z-index: 10;
+}
+
+.nav-links {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+}
+
+.nav-links a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    position: relative;
+    transition: 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #ff007f;
+}
+
+.nav-links a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 0%;
+    height: 2px;
+    background: #ff007f;
+    transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+/* Background */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: url("background.jpeg") no-repeat center center/cover;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* so form starts from top, not center */
+    padding-top: 120px; /* pushes form below navbar */
+}
+
+/* Form container */
+.form-container {
+    background: rgba(0, 0, 0, 0.55); /* dark overlay */
+    padding: 30px;
+    border-radius: 15px;
+    width: 400px;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+}
+
+/* Heading */
+.form-container h2 {
+    font-size: 26px;
+    margin-bottom: 20px;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+/* Labels */
+.form-container label {
+    display: block;
+    text-align: left;
+    margin: 10px 0 5px;
+    font-weight: bold;
+    color: #ffffff;
+    font-size: 14px;
+}
+
+/* Inputs & Select */
+.form-container input,
+.form-container select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ff4ab3;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 14px;
+    outline: none;
+    appearance: none;
+    cursor: pointer;
+}
+
+/* Dropdown options */
+.form-container select option {
+    background: #222;  /* dark background */
+    color: #fff;       /* white text */
+    padding: 10px;
+}
+
+/* Hover effect on option */
+.form-container select option:hover {
+    background: #ff4ab3;
+    color: #fff;
+}
+
+.form-container input::placeholder {
+    color: #ddd;
+}
+
+.form-container input:focus,
+.form-container select:focus {
+    background: rgba(255, 255, 255, 0.35);
+    border: 1px solid #ff4ab3;
+}
+
+/* Submit button */
+.form-container button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #ff0077, #ff4ab3);
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.form-container button:hover {
+    background: linear-gradient(90deg, #ff4ab3, #ff0077);
+}
+
+
+
+/* Dropdown */
+.dropdown {
+    position: relative;
+}
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background: #222;
+    min-width: 180px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    border-radius: 6px;
+    top: 100%;
+    left: 0;
+    z-index: 99;
+}
+.dropdown-content a {
+    display: block;
+    padding: 10px;
+    color: white;
+}
+.dropdown-content a:hover {
+    background: #444;
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+    .nav-links {
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+}
