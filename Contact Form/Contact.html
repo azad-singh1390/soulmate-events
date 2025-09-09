@@ -9,10 +9,16 @@
 </head>
 
 <body>
+    <!-- Navbar -->
     <nav class="navbar">
+        <!-- Hamburger Button (only visible on mobile) -->
+        <div class="menu-toggle">☰</div>
+
+        <!-- Navigation Links -->
         <div class="nav-links">
             <a href="../index.html">Home</a>
-            <!-- 🎤 New Sound Setup Dropdown -->
+
+            <!-- 🎤 Sound Setup Dropdown -->
             <div class="dropdown">
                 <a href="#">Sound Setups ▾</a>
                 <div class="dropdown-content">
@@ -27,7 +33,7 @@
                 </div>
             </div>
 
-            <!-- 🎤 New Artist Dropdown -->
+            <!-- 🎤 Artist Dropdown -->
             <div class="dropdown">
                 <a href="#">Artist ▾</a>
                 <div class="dropdown-content">
@@ -39,7 +45,8 @@
                     <a href="../Artist/Bride Groom Artist/BrideGroom.html">Bride Groom Artists</a>
                 </div>
             </div>
-            <!-- 🎤 New Artist Dropdown -->
+
+            <!-- 🎤 Special Effects Dropdown -->
             <div class="dropdown">
                 <a href="#">Special Effects ▾</a>
                 <div class="dropdown-content">
@@ -62,10 +69,13 @@
             <a href="../View Form/View.html">View Bookings</a>
             <a href="#">Events</a>
             <a href="../Contact Form/Contact.html">Contact Us</a>
-
         </div>
     </nav>
+
+    <!-- Page Heading -->
     <h1>Contact Us</h1>
+
+    <!-- Contact Form -->
     <form action="">
         <div>
             <label for="name">Name</label>
@@ -81,11 +91,23 @@
         </div>
         <button type="submit">Submit</button>
     </form>
-    <p>
-        Phone: +91 9729035555<br>
-        Email: Soulmatevents0009@gmail.com<br>
-        Address: S.C.O 20 Model Town, Karnal -132001</p>
 
+    <!-- Contact Info -->
+    <p>
+        📞 Phone: +91 9729035555<br>
+        ✉ Email: Soulmatevents0009@gmail.com<br>
+        📍 Address: S.C.O 20 Model Town, Karnal -132001
+    </p>
+
+    <!-- JS for hamburger toggle -->
+    <script>
+        const menuToggle = document.querySelector(".menu-toggle");
+        const navLinks = document.querySelector(".nav-links");
+
+        menuToggle.addEventListener("click", () => {
+            navLinks.classList.toggle("active");
+        });
+    </script>
 </body>
 
 </html>
