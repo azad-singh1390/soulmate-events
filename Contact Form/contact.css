@@ -1,7 +1,3 @@
-html, body {
-    margin: 0;
-    padding: 0;
-}
 /* Reset some default styling */
 * {
     margin: 0;
@@ -15,18 +11,16 @@ html, body {
     position: fixed;
     top: 0;
     left: 0;
-    padding: 10px 0;
+    padding: 20px 0;
     background: rgba(0, 0, 0, 0.6);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
     z-index: 10;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    position: relative;
 }
 
-/* Nav links */
 .nav-links {
     display: flex;
     justify-content: center;
@@ -62,17 +56,6 @@ html, body {
     width: 100%;
 }
 
-/* Hamburger button */
-.menu-toggle {
-    display: none;
-    font-size: 1.8rem;
-    color: white;
-    cursor: pointer;
-    position: absolute;
-    right: 20px;
-    top: 25px;
-}
-
 /* Background styling */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -82,7 +65,8 @@ body {
     flex-direction: column;
     align-items: center;
     color: #fff;
-    padding: 0px 0px 10px;  /* top padding so content doesn’t hide behind navbar */
+    padding: 120px 20px 40px;
+    /* ⬅ Added top padding so content doesn’t hide behind navbar */
 }
 
 /* Main Heading */
@@ -91,18 +75,17 @@ h1 {
     margin-bottom: 20px;
     text-align: center;
     color: #f9f9f9;
-    text-shadow: 2px 2px 5px rgba(0,0,0,0.6);
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
 }
 
 /* Contact Form Styling */
 form {
-    background: rgba(0, 0, 0, 0.55);
-    backdrop-filter: blur(6px);
+    background: rgba(0, 0, 0, 0.6);
     padding: 25px 30px;
     border-radius: 12px;
     max-width: 450px;
     width: 100%;
-    box-shadow: 0 8px 18px rgba(0,0,0,0.4);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4);
     margin-bottom: 30px;
 }
 
@@ -118,7 +101,8 @@ label {
     color: #f0f0f0;
 }
 
-input, textarea {
+input,
+textarea {
     width: 100%;
     padding: 12px;
     border: none;
@@ -130,7 +114,8 @@ input, textarea {
     transition: 0.3s ease;
 }
 
-input:focus, textarea:focus {
+input:focus,
+textarea:focus {
     background: #fff;
     box-shadow: 0 0 6px rgba(0, 180, 255, 0.8);
 }
@@ -159,25 +144,21 @@ button:hover {
     transform: translateY(-2px);
 }
 
-button:active {
-    transform: scale(0.97);
-}
-
 /* Contact Info Section */
 h2 {
     margin-top: 20px;
     font-size: 1.8rem;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
     text-align: center;
 }
 
 p {
-    background: rgba(0,0,0,0.6);
+    background: rgba(0, 0, 0, 0.6);
     padding: 15px 20px;
     border-radius: 10px;
     max-width: 450px;
     text-align: center;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
     line-height: 1.6;
 }
 
@@ -185,25 +166,29 @@ p {
 .dropdown {
     position: relative;
 }
+
 .dropdown-content {
     display: none;
     position: absolute;
     background: #222;
     min-width: 180px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     border-radius: 6px;
     top: 100%;
     left: 0;
     z-index: 99;
 }
+
 .dropdown-content a {
     display: block;
     padding: 10px;
     color: white;
 }
+
 .dropdown-content a:hover {
     background: #444;
 }
+
 .dropdown:hover .dropdown-content {
     display: block;
 }
@@ -220,9 +205,6 @@ p {
         width: 70%;
         padding: 15px 0;
         gap: 10px;
-    }
-
-    .nav-links.active {
         display: flex;
     }
 
@@ -230,11 +212,8 @@ p {
         font-size: 2rem;
     }
 
-    form, p {
+    form,
+    p {
         max-width: 100%;
-    }
-
-    .menu-toggle {
-        display: block;
     }
 }
