@@ -17,13 +17,13 @@
     z-index: 10;
     display: flex;
     flex-wrap: wrap;
-    justify-content: left;
-    align-items: left;
+    justify-content: center;
+    align-items: center;
 }
 
 .nav-links {
     display: flex;
-    justify-content: left;
+    justify-content: center;
     gap: 50px;
 }
 
