@@ -96,14 +96,13 @@
             align-items: center;
             margin-top: 40px;
             padding: 16px;
-            background: #fafafa;
+            background: #1f0404;
         }
 
+        /* Keep normal size inside the page preview */
         .video-album video {
-            width: max-content;
-            height: max-content;
-            max-width: 640px;
-            max-height: 360px;
+            width: fit-content;
+            max-width: fit-content;
             border-radius: 12px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             background: #000;
@@ -111,6 +110,21 @@
             margin: 0 auto;
         }
     </style>
+
+    <script>
+        // Force fullscreen when play is pressed
+        document.querySelectorAll(".video-album video").forEach(video => {
+            video.addEventListener("play", () => {
+                if (video.requestFullscreen) {
+                    video.requestFullscreen();
+                } else if (video.webkitEnterFullscreen) {  // iPad/iPhone Safari
+                    video.webkitEnterFullscreen();
+                } else if (video.msRequestFullscreen) {
+                    video.msRequestFullscreen();
+                }
+            });
+        });
+    </script>
 
 
 </body>
