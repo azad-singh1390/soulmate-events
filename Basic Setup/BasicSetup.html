@@ -4,80 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thank You</title>
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f8ff;
-            font-family: Arial, sans-serif;
-        }
-
-        h1 {
-            color: #2e8b57;
-            margin-bottom: 10px;
-        }
-
-        p {
-            color: #333;
-            font-size: 1.2em;
-        }
-
-        /* Navbar */
-        .navbar {
-            width: 100%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            padding: 20px 0;
-            background: rgba(0, 0, 0, 0.6);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-            z-index: 10;
-        }
-
-        .nav-links {
-            display: flex;
-            justify-content: center;
-            gap: 50px;
-        }
-
-        .nav-links a {
-            color: #fff;
-            text-decoration: none;
-            font-size: 1rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            position: relative;
-            transition: 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: #ff007f;
-        }
-
-        .nav-links a::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            bottom: -6px;
-            width: 0%;
-            height: 2px;
-            background: #ff007f;
-            transition: width 0.3s ease;
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        /* Adjust body padding to prevent content from hiding behind navbar */
-        body {
-            padding-top: 60px;
-        }
-    </style>
+    <title>Basic Setup</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
@@ -86,9 +14,92 @@
             <a href="../index.html">Home</a>
         </div>
     </nav>
-    <h1>Thank You!</h1>
-    <p>Your submission has been received.<br>
-        We appreciate your interest in Soulmate Events.</p>
+    <!-- <h1>Thank You!</h1> -->
+
+<div class="video-album">
+        <img src="Basic_1.jpeg" alt="Sparkle Machine" style="width:100%; max-height:640px; object-fit:cover; margin-top:20px; border-radius:8px;">
+        <img src="Basic_2.jpeg" alt="Sparkle Machine" style="width:100%; max-height:640px; object-fit:cover; margin-top:20px; border-radius:8px;">
+        <img src="Basic_3.jpeg" alt="Sparkle Machine" style="width:100%; max-height:640px; object-fit:cover; margin-top:20px; border-radius:8px;">
+        <img src="Basic_4.jpeg" alt="Sparkle Machine" style="width:100%; max-height:640px; object-fit:cover; margin-top:20px; border-radius:8px;">
+        <img src="Basic_5.jpeg" alt="Sparkle Machine" style="width:100%; max-height:640px; object-fit:cover; margin-top:20px; border-radius:8px;">
+        <!-- <img src="Cocktail_6.jpeg" alt="Sparkle Machine" style="width:100%; max-height:640px; object-fit:cover; margin-top:20px; border-radius:8px;">
+        <img src="Cocktail_7.jpeg" alt="Sparkle Machine" style="width:100%; max-height:640px; object-fit:cover; margin-top:20px; border-radius:8px;">
+        <img src="Cocktail_8.jpeg" alt="Sparkle Machine" style="width:100%; max-height:640px; object-fit:cover; margin-top:20px; border-radius:8px;">
+        <img src="Cocktail_9.jpeg" alt="Sparkle Machine" style="width:100%; max-height:640px; object-fit:cover; margin-top:20px; border-radius:8px;">
+        <img src="Cocktail_10.jpeg" alt="Sparkle Machine" style="width:100%; max-height:640px; object-fit:cover; margin-top:20px; border-radius:8px;"> -->
+        
+        <video controls>
+            <source src="Basic_1.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <a href="Basic_1.mp4" download style="color: rgb(117, 64, 64); text-decoration: none; font-size: 16px; margin-bottom: 20px;">Download</a>
+        <video controls>
+            <source src="Basic_2.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <a href="Basic_2.mp4" download style="color: rgb(117, 64, 64); text-decoration: none; font-size: 16px; margin-bottom: 20px;">Download</a>
+        <!-- <video controls>
+            <source src="Cocktail_3.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <video controls>
+            <source src="Cocktail_4.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <video controls>
+            <source src="Cocktail_5.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <video controls>
+            <source src="Cocktail_6.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <video controls>
+            <source src="Cocktail_7.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <video controls>
+            <source src="Cocktail_8.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <video controls>
+            <source src="Cocktail_9.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <video controls>
+            <source src="Cocktail_10.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <video controls>
+            <source src="Cocktail_11.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video> -->
+        <!-- Add more <video> tags as needed -->
+    </div>
+    <style>
+        .video-album {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            align-items: center;
+            margin-top: 40px;
+            padding: 16px;
+            background: #fafafa;
+        }
+
+        .video-album video {
+            width: 90%;
+            max-width: 640px;
+            max-height: 360px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            background: #000;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+
+    
 </body>
 
 </html>
