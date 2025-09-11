@@ -69,28 +69,35 @@
             <source src="Ankit_1.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
+        <a href="Ankit_1.mp4" download style="color: rgb(117, 64, 64); text-decoration: none; font-size: 16px; margin-bottom: 20px;">Download</a>
         <video controls>
             <source src="Ankit_2.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
+        <a href="Ankit_2.mp4" download style="color: rgb(117, 64, 64); text-decoration: none; font-size: 16px; margin-bottom: 20px;">Download</a>
         <video controls>
             <source src="Ankit_3.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
+        <a href="Ankit_3.mp4" download style="color: rgb(117, 64, 64); text-decoration: none; font-size: 16px; margin-bottom: 20px;">Download</a>
         <video controls>
             <source src="Ankit_4.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
+        <a href="Ankit_4.mp4" download style="color: rgb(117, 64, 64); text-decoration: none; font-size: 16px; margin-bottom: 20px;">Download</a>
         <video controls>
             <source src="Ankit_5.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
+        <a href="Ankit_5.mp4" download style="color: rgb(117, 64, 64); text-decoration: none; font-size: 16px; margin-bottom: 20px;">Download</a>
         <video controls>
             <source src="Ankit_6.mp4" type="video/mp4">
             Your browser does not support the video tag.    
         </video>
+        <a href="Ankit_6.mp4" download style="color: rgb(117, 64, 64); text-decoration: none; font-size: 16px; margin-bottom: 20px;">Download</a>
         <!-- Add more <video> tags as needed -->
     </div>
+
 
     <style>
         .video-album {
@@ -100,13 +107,13 @@
             align-items: center;
             margin-top: 40px;
             padding: 16px;
-            background: #fafafa;
+            background: #c3bbbb;
         }
 
+        /* Keep normal size inside the page preview */
         .video-album video {
-            width: 100%;
-            max-width: 640px;
-            max-height: 360px;
+            width: fit-content;
+            max-width: fit-content;
             border-radius: 12px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             background: #000;
@@ -114,6 +121,21 @@
             margin: 0 auto;
         }
     </style>
+
+    <script>
+        // Force fullscreen when play is pressed
+        document.querySelectorAll(".video-album video").forEach(video => {
+            video.addEventListener("play", () => {
+                if (video.requestFullscreen) {
+                    video.requestFullscreen();
+                } else if (video.webkitEnterFullscreen) {  // iPad/iPhone Safari
+                    video.webkitEnterFullscreen();
+                } else if (video.msRequestFullscreen) {
+                    video.msRequestFullscreen();
+                }
+            });
+        });
+    </script>
 
 
 </body>
