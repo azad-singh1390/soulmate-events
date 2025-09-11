@@ -72,18 +72,22 @@
             <source src="Co2_1.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
+        <a href="Co2_1.mp4" download>Download Video</a>
         <video controls>
             <source src="Co2_2.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
+        <a href="Co2_2.mp4" download>Download Video</a>
         <video controls>
             <source src="Co2_3.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
+        <a href="Co2_3.mp4" download>Download Video</a>
         <video controls>
             <source src="Co2_4.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
+        <a href="Co2_4.mp4" download>Download Video</a>
         <!-- Add more <video> tags as needed -->
     </div>
     <style>
@@ -94,13 +98,13 @@
             align-items: center;
             margin-top: 40px;
             padding: 16px;
-            background: #fafafa;
+            background: #c3bbbb;
         }
 
+        /* Keep normal size inside the page preview */
         .video-album video {
-            width: 90%;
-            max-width: 640px;
-            max-height: 360px;
+            width: fit-content;
+            max-width: fit-content;
             border-radius: 12px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             background: #000;
@@ -108,6 +112,23 @@
             margin: 0 auto;
         }
     </style>
+
+    <script>
+        // Force fullscreen when play is pressed
+        document.querySelectorAll(".video-album video").forEach(video => {
+            video.addEventListener("play", () => {
+                if (video.requestFullscreen) {
+                    video.requestFullscreen();
+                } else if (video.webkitEnterFullscreen) {  // iPad/iPhone Safari
+                    video.webkitEnterFullscreen();
+                } else if (video.msRequestFullscreen) {
+                    video.msRequestFullscreen();
+                }
+            });
+        });
+    </script>
+
+
 
 
 </body>
