@@ -13,7 +13,7 @@
     <nav class="navbar">
         <div class="nav-links">
             <a href="../index.html">Home</a>
-            <!-- 🎤 New Sound Setup Dropdown -->
+            <!-- Sound Setups Dropdown -->
             <div class="dropdown">
                 <a href="#">Sound Setups ▾</a>
                 <div class="dropdown-content">
@@ -28,7 +28,7 @@
                 </div>
             </div>
 
-            <!-- 🎤 New Artist Dropdown -->
+            <!-- Artist Dropdown -->
             <div class="dropdown">
                 <a href="#">Artist ▾</a>
                 <div class="dropdown-content">
@@ -40,7 +40,8 @@
                     <a href="../Artist/Bride Groom Artist/BrideGroom.html">Bride Groom Artists</a>
                 </div>
             </div>
-            <!-- 🎤 New Artist Dropdown -->
+
+            <!-- Special Effects Dropdown -->
             <div class="dropdown">
                 <a href="#">Special Effects ▾</a>
                 <div class="dropdown-content">
@@ -62,111 +63,106 @@
             <a href="../Booking Form/Booking.html">Book Event</a>
             <a href="../View Form/View.html">View Bookings</a>
             <a href="../Contact Form/Contact.html">Contact Us</a>
-
         </div>
     </nav>
 
     <br><br><br>
     <div class="form-container">
-    
-<form id="bookingForm">
-    <label>Client Name</label>
-    <input type="text" name="clientname" placeholder="Enter Client Name" required>
+        <form id="bookingForm" enctype="multipart/form-data">
+            <label>Client Name</label>
+            <input type="text" name="clientname" placeholder="Enter Client Name" required>
 
-    <label>Client Number</label>
-    <input type="text" name="clientNumber" placeholder="Enter Client Number" required>
+            <label>Client Number</label>
+            <input type="text" name="clientNumber" placeholder="Enter Client Number" required>
 
-    <label>Date Of Event</label>
-    <input type="date" name="eventDate" required>
+            <label>Date Of Event</label>
+            <input type="date" name="eventDate" required>
 
-    <label>Time Of Event</label>
-    <input type="time" name="eventTime" required>
+            <label>Time Of Event</label>
+            <input type="time" name="eventTime" required>
 
-    <label>Event</label>
-    <select name="eventType" required>
-        <option value="" disabled selected hidden>Select Event</option>
-        <option>Birthday</option>
-        <option>Anniversary</option>
-        <option>Engagement</option>
-        <option>Sangeet</option>
-        <option>Ring Ceremony</option>
-        <option>Roka Ceremony</option>
-        <option>Wedding</option>
-        <option>Destination Wedding</option>
-        <option>Corporate</option>
-        <option>Get Together</option>
-        <option>Other</option>
-    </select>
+            <label>Event</label>
+            <select name="eventType" required>
+                <option value="" disabled selected hidden>Select Event</option>
+                <option>Birthday</option>
+                <option>Anniversary</option>
+                <option>Engagement</option>
+                <option>Sangeet</option>
+                <option>Ring Ceremony</option>
+                <option>Roka Ceremony</option>
+                <option>Wedding</option>
+                <option>Destination Wedding</option>
+                <option>Corporate</option>
+                <option>Get Together</option>
+                <option>Other</option>
+            </select>
 
-    <label>Venue</label>
-    <select name="venue" required>
-        <option value="" disabled selected hidden>Select Venue</option>
-        <option>Noor Mahal</option>
-        <option>Amani farms</option>
-        <option>Rutba</option>
-        <option>Eden</option>
-        <option>Prem Plaza</option>
-        <option>Jewels</option>
-        <option>Other</option>
-    </select>
+            <label>Venue</label>
+            <select name="venue" required>
+                <option value="" disabled selected hidden>Select Venue</option>
+                <option>Noor Mahal</option>
+                <option>Amani farms</option>
+                <option>Rutba</option>
+                <option>Eden</option>
+                <option>Prem Plaza</option>
+                <option>Jewels</option>
+                <option>Other</option>
+            </select>
 
-    <label> Upload Pdf</label>
-    <input type="file" name="pdfUpload" accept=".pdf">
-    
-    <label>Total Amount</label>
-    <input type="text" name="totalAmount" placeholder="Enter Booking Amount" required>
+            <label>Upload PDF</label>
+            <input type="file" name="pdfUpload" accept=".pdf" required>
 
-    <label>Advance Received</label>
-    <input type="text" name="advanceReceived" placeholder="Enter Advance Received" required>
+            <label>Total Amount</label>
+            <input type="text" name="totalAmount" placeholder="Enter Booking Amount" required>
 
-    <label>Advance Received by</label>
-    <select name="receivedBy" required>
-        <option value="" disabled selected hidden>Select Name</option>
-        <option>Azad Sandhu</option>
-        <option>Palki</option>
-        <option>Uday Maan</option>
-        <option>Ashwini</option>
-        <option>Other</option>
-    </select>
+            <label>Advance Received</label>
+            <input type="text" name="advanceReceived" placeholder="Enter Advance Received" required>
 
-    <button type="submit">Submit</button>
-</form>
+            <label>Advance Received by</label>
+            <select name="receivedBy" required>
+                <option value="" disabled selected hidden>Select Name</option>
+                <option>Azad Sandhu</option>
+                <option>Palki</option>
+                <option>Uday Maan</option>
+                <option>Ashwini</option>
+                <option>Other</option>
+            </select>
 
-<script>
-    async function submitBookingForm(event) {
-        event.preventDefault();
+            <button type="submit">Submit</button>
+        </form>
+    </div>
 
-        const form = event.target;
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
+    <script>
+        async function submitBookingForm(event) {
+            event.preventDefault();
 
-        try {
-            const response = await fetch('https://soulmate-backend-production.up.railway.app/book-event', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
+            const form = event.target;
+            const formData = new FormData(form); // keeps the PDF file
 
-            const result = await response.json();
+            try {
+                const response = await fetch('https://soulmate-backend-production.up.railway.app/book-event', {
+                    method: 'POST',
+                    body: formData // important: do NOT set Content-Type
+                });
 
-            if (result.message === "Success") {
-                // ✅ Clear the form
-                form.reset();
+                const result = await response.json();
 
-                // ✅ Redirect after short delay (optional)
-                setTimeout(() => {
-                    window.location.href = "../thankyou.html";
-                }, 500);
-            } else {
-                alert("Booking failed: " + (result.message || "Unknown error"));
+                if (result.message === "Success") {
+                    form.reset();
+                    alert("Booking submitted successfully!");
+                    setTimeout(() => {
+                        window.location.href = "../thankyou.html";
+                    }, 500);
+                } else {
+                    alert("Booking failed: " + (result.message || "Unknown error"));
+                }
+            } catch (err) {
+                alert("Booking failed: " + err.message);
             }
-        } catch (err) {
-            alert("Booking failed: " + err.message);
         }
-    }
 
-    document.querySelector('#bookingForm').addEventListener('submit', submitBookingForm);
-</script>
+        document.querySelector('#bookingForm').addEventListener('submit', submitBookingForm);
+    </script>
 </body>
 
 </html>

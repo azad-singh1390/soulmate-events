@@ -66,36 +66,134 @@
         </div>
     </nav>
 
-    <h1> Bride Groom </h1>
+
+    <div class="video-album">
+        <video controls>
+            <source src="BG_1.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <a href="BG_1.mp4" download
+            style="color: rgb(117, 64, 64); text-decoration: none; font-size: 16px; margin-bottom: 20px;">Download</a>
+        <video controls>
+            <source src="BG_2.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <a href="BG_2.mp4" download
+            style="color: rgb(117, 64, 64); text-decoration: none; font-size: 16px; margin-bottom: 20px;">Download</a>
+        <video controls>
+            <source src="BG_3.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <a href="BG_3.mp4" download
+            style="color: rgb(117, 64, 64); text-decoration: none; font-size: 16px; margin-bottom: 20px;">Download</a>
+        <video controls>
+            <source src="BG_4.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <a href="BG_4.mp4" download
+            style="color: rgb(117, 64, 64); text-decoration: none; font-size: 16px; margin-bottom: 20px;">Download</a>
+        <video controls>
+            <source src="BG_5.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <a href="BG_5.mp4" download
+            style="color: rgb(117, 64, 64); text-decoration: none; font-size: 16px; margin-bottom: 20px;">Download</a>
+        <video controls>
+            <source src="BG_6.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <a href="BG_6.mp4" download
+            style="color: rgb(117, 64, 64); text-decoration: none; font-size: 16px; margin-bottom: 20px;">Download</a>
+        <video controls>
+            <source src="BG_7.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <a href="BG_7.mp4" download
+            style="color: rgb(117, 64, 64); text-decoration: none; font-size: 16px; margin-bottom: 20px;">Download</a>
+        <video controls>
+            <source src="BG_8.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <a href="BG_8.mp4" download
+            style="color: rgb(117, 64, 64); text-decoration: none; font-size: 16px; margin-bottom: 20px;">Download</a>
+        <video controls>
+            <source src="BG_9.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <a href="BG_9.mp4" download
+            style="color: rgb(117, 64, 64); text-decoration: none; font-size: 16px; margin-bottom: 20px;">Download</a>
+        <video controls>
+            <source src="BG_10.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <a href="BG_10.mp4" download
+            style="color: rgb(117, 64, 64); text-decoration: none; font-size: 16px; margin-bottom: 20px;">Download</a>
+
+        <video controls>
+            <source src="BG_11.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <a href="BG_11.mp4" download
+            style="color: rgb(117, 64, 64); text-decoration: none; font-size: 16px; margin-bottom: 20px;">Download</a>
+        <video controls>
+            <source src="BG_12.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <a href="BG_12.mp4" download
+            style="color: rgb(117, 64, 64); text-decoration: none; font-size: 16px; margin-bottom: 20px;">Download</a>
+        <video controls>
+            <source src="BG_13.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <a href="BG_13.mp4" download
+            style="color: rgb(117, 64, 64); text-decoration: none; font-size: 16px; margin-bottom: 20px;">Download</a>
+        <video controls>
+            <source src="BG_14.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <a href="BG_14.mp4" download 
+        style="color: rgb(117, 64, 64); text-decoration: none; font-size: 16px; margin-bottom: 20px;">Download</a>
+    
+
+    </div>
 
     <style>
         .video-album {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            /* 2 images per row */
-            gap: 16px;
-            justify-content: center;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            align-items: center;
             margin-top: 40px;
-            max-height: 500px;
-            /* Adjust height as needed */
-            overflow-y: auto;
-            /* Enable vertical scroll */
             padding: 16px;
-            background: #fafafa;
+            background: #c3bbbb;
         }
+
+        /* Keep normal size inside the page preview */
         .video-album video {
-            max-width: 100%;
-            max-height: 600px;
-            /* Adjust as needed */
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
+            width: fit-content;
+            max-width: fit-content;
+            border-radius: 12px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            object-fit: cover;
+            background: #000;
             display: block;
             margin: 0 auto;
         }
     </style>
+
+    <script>
+        // Force fullscreen when play is pressed
+        document.querySelectorAll(".video-album video").forEach(video => {
+            video.addEventListener("play", () => {
+                if (video.requestFullscreen) {
+                    video.requestFullscreen();
+                } else if (video.webkitEnterFullscreen) {  // iPad/iPhone Safari
+                    video.webkitEnterFullscreen();
+                } else if (video.msRequestFullscreen) {
+                    video.msRequestFullscreen();
+                }
+            });
+        });
+    </script>
 
 
 </body>

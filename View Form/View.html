@@ -205,6 +205,8 @@
                 <th>Total Amount</th>
                 <th>Advance Received</th>
                 <th>Received By</th>
+                <th>Event Time</th>
+                <!-- <th>Pdf</th> -->
             </tr>
         </thead>
         <tbody></tbody>
@@ -238,6 +240,8 @@
                     <td>${row.total_amount}</td>
                     <td>${row.advance_received}</td>
                     <td>${row.received_by}</td>
+                    <td>${row.event_time}</td>
+
                 `;
                 tbody.appendChild(tr);
             });
