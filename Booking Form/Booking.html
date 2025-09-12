@@ -68,95 +68,105 @@
 
     <br><br><br>
     <div class="form-container">
-        <!-- <h2>Please Fill Details</h2> -->
-        <form action="https://soulmate-backend-production.up.railway.app/book-event" method="POST">
-            <label>Client Name</label>
-            <input type="text" name="clientname" placeholder="Enter Client Name" required>
+    
+<form id="bookingForm">
+    <label>Client Name</label>
+    <input type="text" name="clientname" placeholder="Enter Client Name" required>
 
-            <label>Client Number</label>
-            <input type="text" name="clientNumber" placeholder="Enter Client Number" required>
+    <label>Client Number</label>
+    <input type="text" name="clientNumber" placeholder="Enter Client Number" required>
 
-            <label>Date Of Event</label>
-            <input type="date" name="eventDate" required>
+    <label>Date Of Event</label>
+    <input type="date" name="eventDate" required>
 
-            <label>Event</label>
-            <select name="eventType" required>
-                <option value="" disabled selected hidden>Select Event</option>
-                <option>Birthday</option>
-                <option>Anniversary</option>
-                <option>Engagement</option>
-                <option>Sangeet</option>
-                <option>Ring Ceremony</option>
-                <option>Roka Ceremony</option>
-                <option>Wedding</option>
-                <option>Corporate</option>
-                <option>Get Together</option>
-                <option>Other</option>
+    <label>Time Of Event</label>
+    <input type="time" name="eventTime" required>
 
-            </select>
+    <label>Event</label>
+    <select name="eventType" required>
+        <option value="" disabled selected hidden>Select Event</option>
+        <option>Birthday</option>
+        <option>Anniversary</option>
+        <option>Engagement</option>
+        <option>Sangeet</option>
+        <option>Ring Ceremony</option>
+        <option>Roka Ceremony</option>
+        <option>Wedding</option>
+        <option>Destination Wedding</option>
+        <option>Corporate</option>
+        <option>Get Together</option>
+        <option>Other</option>
+    </select>
 
-            <label>Venue</label>
-            <select name="venue" required>
-                <option value="" disabled selected hidden>Select Venue</option>
-                <option>Noor Mahal</option>
-                <option>Amani farms</option>
-                <option>Rutba</option>
-                <option>Eden</option>
-                <option>Prem Plaza</option>
-                <option>Jewels</option>
-                <option>Other</option>
-            </select>
+    <label>Venue</label>
+    <select name="venue" required>
+        <option value="" disabled selected hidden>Select Venue</option>
+        <option>Noor Mahal</option>
+        <option>Amani farms</option>
+        <option>Rutba</option>
+        <option>Eden</option>
+        <option>Prem Plaza</option>
+        <option>Jewels</option>
+        <option>Other</option>
+    </select>
 
-       s     <label>Total Amount</label>
-            <input type="text" name="totalAmount" placeholder="Enter Booking Amount" required>
+    <label> Upload Pdf</label>
+    <input type="file" name="pdfUpload" accept=".pdf">
+    
+    <label>Total Amount</label>
+    <input type="text" name="totalAmount" placeholder="Enter Booking Amount" required>
 
-            <label>Advance Received</label>
-            <input type="text" name="advanceReceived" placeholder="Enter Advance Received" required>
+    <label>Advance Received</label>
+    <input type="text" name="advanceReceived" placeholder="Enter Advance Received" required>
 
-            <label>Advance Recieved by</label>
-            <select name="receivedBy" required>
-                <option value="" disabled selected hidden>Select Name</option>
-                <option>Azad Sandhu</option>
-                <option>Palki</option>
-                <option>Uday Maan</option>
-                <option>Ashwini</option>
-                <option>Other</option>
-            </select>
+    <label>Advance Received by</label>
+    <select name="receivedBy" required>
+        <option value="" disabled selected hidden>Select Name</option>
+        <option>Azad Sandhu</option>
+        <option>Palki</option>
+        <option>Uday Maan</option>
+        <option>Ashwini</option>
+        <option>Other</option>
+    </select>
 
-            <button type="submit">Submit</button>
-        </form>
-    </div>
-    <script>
-        async function submitBookingForm(event) {
-            event.preventDefault();
+    <button type="submit">Submit</button>
+</form>
 
-            // Collect form data (example, adjust as needed)
-            const form = event.target;
-            const formData = new FormData(form);
-            const data = Object.fromEntries(formData.entries());
+<script>
+    async function submitBookingForm(event) {
+        event.preventDefault();
 
-            try {
-                const response = await fetch('https://soulmate-backend-production.up.railway.app/book-event', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
+        const form = event.target;
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
 
-                // Try to parse JSON
-                const result = await response.json();
+        try {
+            const response = await fetch('https://soulmate-backend-production.up.railway.app/book-event', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
 
-                if (result.message === "Success") {
+            const result = await response.json();
+
+            if (result.message === "Success") {
+                // ✅ Clear the form
+                form.reset();
+
+                // ✅ Redirect after short delay (optional)
+                setTimeout(() => {
                     window.location.href = "../thankyou.html";
-                } else {
-                    alert("Booking failed: " + (result.message || "Unknown error"));
-                }
-            } catch (err) {
-                alert("Booking failed: " + err.message);
+                }, 500);
+            } else {
+                alert("Booking failed: " + (result.message || "Unknown error"));
             }
+        } catch (err) {
+            alert("Booking failed: " + err.message);
         }
+    }
 
-        document.querySelector('form').addEventListener('submit', submitBookingForm);
-    </script>
+    document.querySelector('#bookingForm').addEventListener('submit', submitBookingForm);
+</script>
 </body>
 
 </html>
