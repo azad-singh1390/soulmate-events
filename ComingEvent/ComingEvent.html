@@ -191,37 +191,34 @@
         </div>
     </nav>
 
-    <h1>📋 All Bookings</h1>
+    <h1>📋 Upcoming Events</h1>
 
     <table id="bookingsTable">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Client Name</th>
                 <th>Client Number</th>
                 <th>Event Date</th>
                 <th>Event Type</th>
                 <th>Venue</th>
-                <th>Total Amount</th>
-                <th>Advance Received</th>
-                <th>Received By</th>
             </tr>
         </thead>
         <tbody></tbody>
     </table>
-    <button onclick="resetBookings()">Reset All Bookings</button>
-<script>
+
+   <script>
     async function loadBookings() {
         try {
-            const res = await fetch("https://soulmate-backend-production.up.railway.app/bookings");
+            const res = await fetch("https://soulmate-backend-production.up.railway.app/comingbookings");
             const data = await res.json();
+            const bookings = data.rows || []; // ✅ get the array safely
             const tbody = document.querySelector("#bookingsTable tbody");
             tbody.innerHTML = "";
 
-            data.forEach(row => {
+            bookings.forEach(row => {
                 const tr = document.createElement("tr");
 
-                // ✅ Format as Day-Month-Year
+                // ✅ Format as Day-Month-Year (12-September-2025)
                 const eventDate = new Date(row.event_date).toLocaleDateString("en-GB", {
                     day: "2-digit",
                     month: "long",
@@ -229,15 +226,11 @@
                 }).replace(/\s/g, "-");
 
                 tr.innerHTML = `
-                    <td>${row.id}</td>
                     <td>${row.client_name}</td>
                     <td>${row.client_number}</td>
                     <td>${eventDate}</td>
                     <td>${row.event_type}</td>
                     <td>${row.venue}</td>
-                    <td>${row.total_amount}</td>
-                    <td>${row.advance_received}</td>
-                    <td>${row.received_by}</td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -245,23 +238,11 @@
             console.error("Error fetching bookings:", err);
         }
     }
-    async function resetBookings() {
-    if (!confirm("Are you sure you want to delete all bookings?")) return;
-
-    try {
-        const res = await fetch("https://soulmate-backend-production.up.railway.app/bookings/reset", {
-            method: "DELETE"
-        });
-        const data = await res.json();
-        alert(data.message);
-        loadBookings(); // refresh table
-    } catch (err) {
-        console.error("Error resetting bookings:", err);
-    }
-}
 
     loadBookings();
 </script>
 
+
+</body>
 
 </html>
