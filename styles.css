@@ -137,7 +137,34 @@ h1 {
         opacity: 1;
         transform: translateY(0);
     }
+
+
 }
+
+
+/* Notification Bell */
+.notification {
+    position: relative;
+    display: inline-block;
+    font-size: 22px;
+    margin-left: 20px;
+    cursor: pointer;
+    text-decoration: none; /* remove underline */
+    color: inherit; /* keep same color as text */
+}
+
+.notification .badge {
+    position: absolute;
+    top: -5px;
+    right: -8px;
+    padding: 2px 6px;
+    border-radius: 50%;
+    background: red;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+}
+
 
 /* Responsive */
 @media (max-width: 768px) {

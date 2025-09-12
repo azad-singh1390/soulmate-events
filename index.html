@@ -67,13 +67,32 @@
             <a href="Contact Form/Contact.html">Contact Us</a>
 
         </div>
+        <!-- 🔔 Notification Bell -->
+        <a href="ComingEvent/ComingEvent.html" class="notification">
+            <i class="bell">🔔</i>
+            <span class="badge">0</span> <!-- change number dynamically -->
+        </a>
+
     </nav>
-    <h2><a href="Basic Setup/BasicSetup.html" >Basic Setup</a></h2>
+    <h2><a href="Basic Setup/BasicSetup.html">Basic Setup</a></h2>
     <hr>
-    <h2><a href="Single Screen/SingleScreen.html" >Single Screen Setup</a></h2>
+    <h2><a href="Single Screen/SingleScreen.html">Single Screen Setup</a></h2>
     <hr>
-    <h2><a href="Double Screen/DoubleScreen.html" >Double Screen Setup</a></h2>
+    <h2><a href="Double Screen/DoubleScreen.html">Double Screen Setup</a></h2>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            fetch("https://soulmate-backend-production.up.railway.app/notifications/count")
+                .then(response => response.json())
+                .then(data => {
+                    document.querySelector(".badge").textContent = data.count;
+                })
+                .catch(err => console.error("Error fetching count:", err));
+        });
+    </script>
 
 </body>
+
 
 </html>
