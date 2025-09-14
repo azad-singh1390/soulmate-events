@@ -211,11 +211,12 @@
     <thead>
       <tr>
         <th>Client Name</th>
-        <th>Contact</th>
-        <th>Date</th>
-        <th>Type</th>
-        <th>Venue</th>
-        <th>Time</th>
+        <th>Client Contact</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Event Type</th>
+        <th>Event Venue</th>
+        <th>Time Of Event</th>
         <th>PDF</th>
       </tr>
     </thead>
@@ -223,6 +224,17 @@
   </table>
 
   <script>
+    function formatTime(timeString) {
+      const [hours, minutes] = timeString.split(':');
+      const date = new Date();
+      date.setHours(hours, minutes, 0, 0); // set local hours/minutes
+
+      return date.toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+      });
+    }
     async function loadBookings() {
       try {
         const res = await fetch("https://soulmate-backend-production.up.railway.app/comingbookings");
@@ -240,7 +252,13 @@
           const tr = document.createElement("tr");
 
           // ✅ Format date as 12-September-2025
-          const eventDate = new Date(row.event_date).toLocaleDateString("en-GB", {
+          const eventStartDate = new Date(row.event_start_date).toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "long",
+            year: "numeric"
+          }).replace(/\s/g, "-");
+          
+          const eventEndDate = new Date(row.event_start_date).toLocaleDateString("en-GB", {
             day: "2-digit",
             month: "long",
             year: "numeric"
@@ -258,7 +276,8 @@
           tr.innerHTML = `
             <td>${row.client_name}</td>
             <td>${row.client_number}</td>
-            <td>${eventDate}</td>
+            <td>${eventStartDate}</td>
+            <td>${eventEndDate}</td>
             <td>${row.event_type}</td>
             <td>${row.venue}</td>
             <td>${row.event_time || "-"}</td>

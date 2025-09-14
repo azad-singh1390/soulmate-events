@@ -166,9 +166,10 @@
                 <th>ID</th>
                 <th>Client Name</th>
                 <th>Client Number</th>
-                <th>Event Date</th>
+                <th>Event Start Date</th>
+                <th>Event End Date</th>
                 <th>Event Type</th>
-                <th>Venue</th>
+                <th>Event Venue</th>
                 <th>Total Amount</th>
                 <th>Advance Received</th>
                 <th>Received By</th>
@@ -182,6 +183,17 @@
     <button onclick="resetBookings()">Reset All Bookings</button>
 
     <script>
+        function formatTime(timeString) {
+            const [hours, minutes] = timeString.split(':');
+            const date = new Date();
+            date.setHours(hours, minutes, 0, 0); // set local hours/minutes
+
+            return date.toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+            });
+        }
         async function loadBookings() {
             try {
                 const res = await fetch("https://soulmate-backend-production.up.railway.app/bookings");
@@ -198,7 +210,13 @@
                     const tr = document.createElement("tr");
 
                     // ✅ Format as Day-Month-Year
-                    const eventDate = new Date(row.event_date).toLocaleDateString("en-GB", {
+                    const eventStartDate = new Date(row.event_start_date).toLocaleDateString("en-GB", {
+                        day: "2-digit",
+                        month: "long",
+                        year: "numeric"
+                    }).replace(/\s/g, "-");
+                    
+                    const eventEndDate = new Date(row.event_end_date).toLocaleDateString("en-GB", {
                         day: "2-digit",
                         month: "long",
                         year: "numeric"
@@ -217,13 +235,14 @@
             <td>${row.id}</td>
             <td>${row.client_name}</td>
             <td>${row.client_number}</td>
-            <td>${eventDate}</td>
+            <td>${eventStartDate}</td>
+            <td>${eventEndDate}</td>
             <td>${row.event_type}</td>
             <td>${row.venue}</td>
             <td>₹${parseFloat(row.total_amount).toLocaleString()}</td>
             <td>₹${parseFloat(row.advance_received).toLocaleString()}</td>
             <td>${row.received_by}</td>
-            <td>${row.event_time}</td>
+            <td>${formatTime(row.event_time)}</td>
             <td>${pdfLink}</td>
           `;
                     tbody.appendChild(tr);
