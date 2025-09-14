@@ -202,47 +202,58 @@
                 <th>Event Type</th>
                 <th>Venue</th>
                 <th>Time</th>
+                <th>Pdf</th>
             </tr>
         </thead>
         <tbody></tbody>
     </table>
 
-   <script>
-    async function loadBookings() {
-        try {
-            const res = await fetch("https://soulmate-backend-production.up.railway.app/comingbookings");
-            const data = await res.json();
-            const bookings = data.rows || []; // ✅ get the array safely
-            const tbody = document.querySelector("#bookingsTable tbody");
-            tbody.innerHTML = "";
+    <script>
+        async function loadBookings() {
+            try {
+                const res = await fetch("https://soulmate-backend-production.up.railway.app/comingbookings");
+                const data = await res.json();
+                const bookings = data.rows || []; // ✅ get the array safely
+                const tbody = document.querySelector("#bookingsTable tbody");
+                tbody.innerHTML = "";
 
-            bookings.forEach(row => {
-                const tr = document.createElement("tr");
+                if (bookings.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="11">No bookings found</td></tr>`;
+                    return;
+                }
 
-                // ✅ Format as Day-Month-Year (12-September-2025)
-                const eventDate = new Date(row.event_date).toLocaleDateString("en-GB", {
-                    day: "2-digit",
-                    month: "long",
-                    year: "numeric"
-                }).replace(/\s/g, "-");
+                bookings.forEach(row => {
+                    const tr = document.createElement("tr");
 
-                tr.innerHTML = `
+                    // ✅ Format as Day-Month-Year (12-September-2025)
+                    const eventDate = new Date(row.event_date).toLocaleDateString("en-GB", {
+                        day: "2-digit",
+                        month: "long",
+                        year: "numeric"
+                    }).replace(/\s/g, "-");
+
+                    tr.innerHTML = `
                     <td>${row.client_name}</td>
                     <td>${row.client_number}</td>
                     <td>${eventDate}</td>
                     <td>${row.event_type}</td>
                     <td>${row.venue}</td>
                     <td>${row.event_time}</td>
+                    <td>
+                ${row.pdf_file
+                                    ? `<a href="${row.pdf_file}" target="_blank">View PDF</a>`
+                                    : "No PDF"}
+                    </td>
                 `;
-                tbody.appendChild(tr);
-            });
-        } catch (err) {
-            console.error("Error fetching bookings:", err);
+                    tbody.appendChild(tr);
+                });
+            } catch (err) {
+                console.error("Error fetching bookings:", err);
+            }
         }
-    }
 
-    loadBookings();
-</script>
+        loadBookings();
+    </script>
 
 
 </body>
