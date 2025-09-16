@@ -137,6 +137,109 @@
                 flex-wrap: wrap;
             }
         }
+
+
+        /* Modal overlay */
+        #editModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            /* hidden by default */
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        /* Modal content */
+        #editModal .modal-content {
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            width: 450px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* Heading */
+        #editModal h2 {
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 20px;
+            color: #333;
+        }
+
+        /* Form styling */
+        #editBookingForm {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px 15px;
+        }
+
+        /* Labels */
+        #editBookingForm label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #444;
+            grid-column: span 2;
+            /* default full row */
+        }
+
+        /* Inputs & Select */
+        #editBookingForm input,
+        #editBookingForm select {
+            padding: 8px 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Buttons container */
+        #editBookingForm .actions {
+            grid-column: span 2;
+            text-align: right;
+            margin-top: 15px;
+        }
+
+        /* Buttons */
+        #editBookingForm button {
+            padding: 8px 14px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        #editBookingForm .save-btn {
+            background: #007bff;
+            color: #fff;
+            margin-right: 8px;
+        }
+
+        #editBookingForm .cancel-btn {
+            background: #dc3545;
+            color: #fff;
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 
@@ -179,6 +282,80 @@
         </thead>
         <tbody id="bookingsBody"></tbody>
     </table>
+    <!-- Edit Modal -->
+    <div id="editModal">
+        <div class="modal-content">
+            <h2>Edit Booking</h2>
+            <form id="editBookingForm">
+                <input type="hidden" id="editBookingId">
+
+                <label>Client Name</label>
+                <input type="text" id="editClientName" required>
+
+                <label>Client Number</label>
+                <input type="text" id="editClientNumber" required>
+
+                <label>Start Date Of Event</label>
+                <input type="date" id="editStartDate" required>
+
+                <label>End Date Of Event</label>
+                <input type="date" id="editEndDate" required>
+
+                <label>Time Of Event</label>
+                <input type="time" id="editEventTime" required>
+
+                <label>Event</label>
+                <select id="editEventType" required>
+                    <option>Birthday</option>
+                    <option>Anniversary</option>
+                    <option>Engagement</option>
+                    <option>Sangeet</option>
+                    <option>Ring Ceremony</option>
+                    <option>Roka Ceremony</option>
+                    <option>Wedding</option>
+                    <option>Destination Wedding</option>
+                    <option>Corporate</option>
+                    <option>Get Together</option>
+                    <option>Other</option>
+                </select>
+
+                <label>Venue</label>
+                <select id="editVenue" required>
+                    <option>Noor Mahal</option>
+                    <option>Amani farms</option>
+                    <option>Rutba</option>
+                    <option>Eden</option>
+                    <option>Prem Plaza</option>
+                    <option>Jewels</option>
+                    <option>Other</option>
+                </select>
+
+                <!-- ✅ PDF Upload Field -->
+                <!-- <label>Upload PDF</label>
+                <input type="file" name="pdfUpload" id="editPdfUpload" accept=".pdf"> -->
+
+                <label>Total Amount</label>
+                <input type="text" id="editTotalAmount" required>
+
+                <label>Advance Received</label>
+                <input type="text" id="editAdvanceReceived" required>
+
+                <label>Advance Received By</label>
+                <select id="editReceivedBy" required>
+                    <option>Azad Sandhu</option>
+                    <option>Palki</option>
+                    <option>Uday Maan</option>
+                    <option>Ashwini</option>
+                    <option>Other</option>
+                </select>
+
+                <div style="margin-top:15px; text-align:right;">
+                    <button type="button" class="save-btn" onclick="saveEdit()">Save</button>
+                    <button type="button" class="cancel-btn" onclick="closeModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <script>
         function formatTime(timeString) {
@@ -193,11 +370,22 @@
             });
         }
 
+        // ✅ Safe function to format event dates
+        function formatDate(dateStr) {
+            if (!dateStr) return "N/A";
+            const date = new Date(dateStr);
+            if (isNaN(date)) return "N/A"; // invalid date
+            return date.toLocaleDateString("en-GB", {
+                day: "2-digit",
+                month: "long",
+                year: "numeric"
+            }).replace(/\s/g, "-");
+        }
+
         async function loadBookings() {
             const tbody = document.querySelector("#bookingsTable tbody");
             const loader = document.getElementById("loader");
 
-            // Show loader
             loader.style.display = "flex";
 
             try {
@@ -213,17 +401,9 @@
                 data.forEach(row => {
                     const tr = document.createElement("tr");
 
-                    const eventStartDate = new Date(row.event_start_date).toLocaleDateString("en-GB", {
-                        day: "2-digit",
-                        month: "long",
-                        year: "numeric"
-                    }).replace(/\s/g, "-");
-
-                    const eventEndDate = new Date(row.event_end_date).toLocaleDateString("en-GB", {
-                        day: "2-digit",
-                        month: "long",
-                        year: "numeric"
-                    }).replace(/\s/g, "-");
+                    // ✅ Use helper here
+                    const eventStartDate = formatDate(row.event_start_date);
+                    const eventEndDate = formatDate(row.event_end_date);
 
                     let pdfLink = "No PDF";
                     if (row.pdf_file && row.pdf_file.data) {
@@ -234,86 +414,173 @@
                     }
 
                     tr.innerHTML = `
-            <td>${row.client_name}</td>
-            <td>${row.client_number}</td>
-            <td>${eventStartDate}</td>
-            <td>${eventEndDate}</td>
-            <td>${row.event_type}</td>
-            <td>${row.venue}</td>
-            <td>₹${parseFloat(row.total_amount).toLocaleString()}</td>
-            <td>₹${parseFloat(row.advance_received).toLocaleString()}</td>
-            <td>${row.received_by}</td>
-            <td>${formatTime(row.event_time)}</td>
-            <td>${pdfLink}</td>
-            <td>
-              <button class="edit-btn" onclick="editRow(this, ${row.id})">Edit</button>
-            </td>
-          `;
+                <td>${row.client_name}</td>
+                <td>${row.client_number}</td>
+                <td>${eventStartDate}</td>
+                <td>${eventEndDate}</td>
+                <td>${row.event_type}</td>
+                <td>${row.venue}</td>
+                <td>₹${parseFloat(row.total_amount).toLocaleString()}</td>
+                <td>₹${parseFloat(row.advance_received).toLocaleString()}</td>
+                <td>${row.received_by}</td>
+                <td>${formatTime(row.event_time)}</td>
+                <td>${pdfLink}</td>
+                <td>
+                  <button class="edit-btn" onclick="editRow(this, ${row.id})">Edit</button>
+                </td>
+            `;
                     tbody.appendChild(tr);
                 });
             } catch (err) {
                 console.error("Error fetching bookings:", err);
                 tbody.innerHTML = `<tr><td colspan="11">❌ Error fetching bookings</td></tr>`;
             } finally {
-                // Hide loader
                 loader.style.display = "none";
             }
         }
 
 
+        // Safe function to format date for <input type="date">
+        function formatDateForInput(dateString) {
+            if (!dateString) return "";
+            const date = new Date(dateString);
+            if (isNaN(date)) return ""; // invalid date
+            const yyyy = date.getFullYear();
+            const mm = String(date.getMonth() + 1).padStart(2, "0");
+            const dd = String(date.getDate()).padStart(2, "0");
+            return `${yyyy}-${mm}-${dd}`;
+        }
+
+        // Safe function to format time for <input type="time">
+        function formatTimeForInput(timeString) {
+            if (!timeString) return "";
+
+            // Remove any AM/PM and trim spaces
+            let t = timeString.trim();
+
+            // If it’s in "hh:mm AM/PM" format, convert to 24h
+            const ampmMatch = t.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+            if (ampmMatch) {
+                let hh = parseInt(ampmMatch[1], 10);
+                const mm = ampmMatch[2];
+                const ampm = ampmMatch[3].toUpperCase();
+
+                if (ampm === "PM" && hh !== 12) hh += 12;
+                if (ampm === "AM" && hh === 12) hh = 0;
+
+                return `${String(hh).padStart(2, "0")}:${mm}`;
+            }
+
+            // If already in HH:mm or HH:mm:ss format, just extract HH:mm
+            const parts = t.split(":");
+            if (parts.length >= 2) {
+                return `${parts[0].padStart(2, "0")}:${parts[1].padStart(2, "0")}`;
+            }
+
+            return ""; // fallback
+        }
+
+        let originalData = {}; // store original values when modal opens
+        // ✅ Open modal and populate with row data
         function editRow(btn, id) {
             const tr = btn.closest("tr");
             const tds = tr.querySelectorAll("td");
 
-            // store original values for cancel
-            tr.dataset.original = JSON.stringify(Array.from(tds).map(td => td.innerHTML));
+            originalData = {
+                client_name: tds[0].innerText.trim(),
+                client_number: tds[1].innerText.trim(),
+                event_start_date: formatDateForInput(tds[2].innerText.trim()),
+                event_end_date: formatDateForInput(tds[3].innerText.trim()),
+                event_type: tds[4].innerText.trim(),
+                venue: tds[5].innerText.trim(),
+                total_amount: tds[6].innerText.replace("₹", "").replace(/,/g, "").trim(),
+                advance_received: tds[7].innerText.replace("₹", "").replace(/,/g, "").trim(),
+                received_by: tds[8].innerText.trim(),
+                event_time: formatTimeForInput(tds[9].innerText.trim())
+            };
 
-            // Make editable (skip PDF + Action columns)
-            for (let i = 0; i < tds.length - 2; i++) {
-                const value = tds[i].innerText;
-                tds[i].innerHTML = `<input type="text" value="${value}" />`;
-            }
+            console.log("Original Data:", originalData);
 
-            // Replace action buttons
-            tds[tds.length - 1].innerHTML = `
-        <button class="save-btn" onclick="saveRow(this, ${id})">Save</button>
-        <button class="cancel-btn" onclick="cancelEdit(this)">Cancel</button>
-      `;
+            document.querySelector("#editBookingId").value = id;
+            document.querySelector("#editClientName").value = tds[0].innerText.trim();
+            document.querySelector("#editClientNumber").value = tds[1].innerText.trim();
+            document.querySelector("#editStartDate").value = formatDateForInput(tds[2].innerText.trim());
+            document.querySelector("#editEndDate").value = formatDateForInput(tds[3].innerText.trim());
+            document.querySelector("#editEventTime").value = formatTimeForInput(tds[9].innerText.trim());
+            document.querySelector("#editEventType").value = tds[4].innerText.trim();
+            document.querySelector("#editVenue").value = tds[5].innerText.trim();
+            document.querySelector("#editTotalAmount").value = tds[6].innerText.replace("₹", "").replace(/,/g, "").trim();
+            document.querySelector("#editAdvanceReceived").value = tds[7].innerText.replace("₹", "").replace(/,/g, "").trim();
+            document.querySelector("#editReceivedBy").value = tds[8].innerText.trim();
+
+            document.getElementById("editModal").style.display = "flex";
         }
 
-    //     async function saveRow(btn, id) {
-    //         const tr = btn.closest("tr");
-    //         const inputs = tr.querySelectorAll("input");
 
-    //         const updated = {
-    //             client_name: inputs[0].value,
-    //             client_number: inputs[1].value,
-    //             event_start_date: inputs[2].value,
-    //             event_end_date: inputs[3].value,
-    //             event_type: inputs[4].value,
-    //             venue: inputs[5].value,
-    //             total_amount: inputs[6].value,
-    //             advance_received: inputs[7].value,
-    //             received_by: inputs[8].value,
-    //             event_time: inputs[9].value,
-    //         };
+        // ✅ Close modal
+        function closeModal() {
+            document.getElementById("editModal").style.display = "none";
+        }
 
-    //         try {
-    //             const res = await fetch(`https://soulmate-backend-production.up.railway.app/bookings/${id}`, {
-    //                 method: "PUT",
-    //                 headers: { "Content-Type": "application/json" },
-    //                 body: JSON.stringify(updated)
-    //             });
+        // ✅ Save edited booking
+        async function saveEdit() {
+            const id = document.querySelector("#editBookingId").value;
 
-    //             if (!res.ok) throw new Error("Update failed");
+            // Current values from form
+            const current = {
+                client_name: document.querySelector("#editClientName").value.trim(),
+                client_number: document.querySelector("#editClientNumber").value.trim(),
+                event_start_date: document.querySelector("#editStartDate").value,
+                event_end_date: document.querySelector("#editEndDate").value,
+                event_time: document.querySelector("#editEventTime").value,
+                event_type: document.querySelector("#editEventType").value.trim(),
+                venue: document.querySelector("#editVenue").value.trim(),
+                total_amount: document.querySelector("#editTotalAmount").value,
+                advance_received: document.querySelector("#editAdvanceReceived").value,
+                received_by: document.querySelector("#editReceivedBy").value.trim(),
+            };
 
-    //             alert("✅ Booking updated!");
-    //             loadBookings();
-    //         } catch (err) {
-    //             alert("❌ Failed to update booking");
-    //             console.error(err);
-    //         }
-    //     }
+            console.log("Current Data:", current);
+            // Compare with originalData (populated in editRow)
+            const changes = {};
+            for (let key in current) {
+                console.log("Comparing key:", key);
+                console.log(current[key], originalData[key]);
+                if (current[key] !== originalData[key]) {
+                    changes[key] = current[key];
+                }
+            }
+
+            if (Object.keys(changes).length === 0) {
+                alert("No changes detected!");
+                return;
+            }
+
+            // Ask password from user
+            const password = prompt("Enter password to update:");
+            if (!password) {
+                alert("❌ Update cancelled (no password entered)");
+                return;
+            }
+            console.log("Changes to update:", changes);
+            try {
+                const res = await fetch(`https://soulmate-backend-production.up.railway.app/bookings/${id}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({changes, password}) // send only changed fields
+                });
+
+                if (!res.ok) throw new Error("Update failed");
+
+                alert("✅ Booking updated!");
+                closeModal();
+                loadBookings();
+            } catch (err) {
+                alert("❌ Failed to update booking");
+                console.error(err);
+            }
+        }
+
 
         function cancelEdit(btn) {
             const tr = btn.closest("tr");
