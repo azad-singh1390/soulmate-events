@@ -177,7 +177,11 @@
                 <th>PDF</th>
             </tr>
         </thead>
-        <tbody></tbody>
+        <tbody id="bookingsBody">
+            <tr>
+                <td colspan="12">⏳ Fetching records from database...</td>
+            </tr>
+        </tbody>
     </table>
 
     <!-- <button onclick="resetBookings()">Reset All Bookings</button> -->
@@ -195,6 +199,10 @@
             });
         }
         async function loadBookings() {
+            const tbody = document.querySelector("#bookingsTable tbody");
+
+            // Show loading message
+            tbody.innerHTML = `<tr><td colspan="12">⏳ Fetching records from database...</td></tr>`;
             try {
                 const res = await fetch("https://soulmate-backend-production.up.railway.app/bookings");
                 const data = await res.json();
@@ -215,7 +223,7 @@
                         month: "long",
                         year: "numeric"
                     }).replace(/\s/g, "-");
-                    
+
                     const eventEndDate = new Date(row.event_end_date).toLocaleDateString("en-GB", {
                         day: "2-digit",
                         month: "long",
