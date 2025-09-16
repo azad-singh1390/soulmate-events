@@ -114,6 +114,22 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
 
+
+        .edit-btn {
+            background: #28a745;
+            color: #fff;
+        }
+
+        .save-btn {
+            background: #007bff;
+            color: #fff;
+        }
+
+        .cancel-btn {
+            background: #dc3545;
+            color: #fff;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .nav-links {
@@ -158,6 +174,7 @@
                 <th>Received By</th>
                 <th>Event Time</th>
                 <th>PDF</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody id="bookingsBody"></tbody>
@@ -228,6 +245,9 @@
             <td>${row.received_by}</td>
             <td>${formatTime(row.event_time)}</td>
             <td>${pdfLink}</td>
+            <td>
+              <button class="edit-btn" onclick="editRow(this, ${row.id})">Edit</button>
+            </td>
           `;
                     tbody.appendChild(tr);
                 });
@@ -240,6 +260,74 @@
             }
         }
 
+
+        function editRow(btn, id) {
+            const tr = btn.closest("tr");
+            const tds = tr.querySelectorAll("td");
+
+            // store original values for cancel
+            tr.dataset.original = JSON.stringify(Array.from(tds).map(td => td.innerHTML));
+
+            // Make editable (skip PDF + Action columns)
+            for (let i = 0; i < tds.length - 2; i++) {
+                const value = tds[i].innerText;
+                tds[i].innerHTML = `<input type="text" value="${value}" />`;
+            }
+
+            // Replace action buttons
+            tds[tds.length - 1].innerHTML = `
+        <button class="save-btn" onclick="saveRow(this, ${id})">Save</button>
+        <button class="cancel-btn" onclick="cancelEdit(this)">Cancel</button>
+      `;
+        }
+
+    //     async function saveRow(btn, id) {
+    //         const tr = btn.closest("tr");
+    //         const inputs = tr.querySelectorAll("input");
+
+    //         const updated = {
+    //             client_name: inputs[0].value,
+    //             client_number: inputs[1].value,
+    //             event_start_date: inputs[2].value,
+    //             event_end_date: inputs[3].value,
+    //             event_type: inputs[4].value,
+    //             venue: inputs[5].value,
+    //             total_amount: inputs[6].value,
+    //             advance_received: inputs[7].value,
+    //             received_by: inputs[8].value,
+    //             event_time: inputs[9].value,
+    //         };
+
+    //         try {
+    //             const res = await fetch(`https://soulmate-backend-production.up.railway.app/bookings/${id}`, {
+    //                 method: "PUT",
+    //                 headers: { "Content-Type": "application/json" },
+    //                 body: JSON.stringify(updated)
+    //             });
+
+    //             if (!res.ok) throw new Error("Update failed");
+
+    //             alert("✅ Booking updated!");
+    //             loadBookings();
+    //         } catch (err) {
+    //             alert("❌ Failed to update booking");
+    //             console.error(err);
+    //         }
+    //     }
+
+        function cancelEdit(btn) {
+            const tr = btn.closest("tr");
+            const tds = tr.querySelectorAll("td");
+            const original = JSON.parse(tr.dataset.original);
+
+            original.forEach((val, i) => {
+                tds[i].innerHTML = val;
+            });
+
+            tds[tds.length - 1].innerHTML = `
+        <button class="edit-btn" onclick="editRow(this)">Edit</button>
+      `;
+        }
         // Call on page load
         loadBookings();
     </script>
