@@ -163,7 +163,7 @@
     <table id="bookingsTable">
         <thead>
             <tr>
-                <th>ID</th>
+                <!-- <th>ID</th> -->
                 <th>Client Name</th>
                 <th>Client Number</th>
                 <th>Event Start Date</th>
@@ -239,8 +239,8 @@
                         pdfLink = `<a href="${url}" target="_blank">View PDF</a>`;
                     }
 
+            // <td>${row.id}</td>
                     tr.innerHTML = `
-            <td>${row.id}</td>
             <td>${row.client_name}</td>
             <td>${row.client_number}</td>
             <td>${eventStartDate}</td>
