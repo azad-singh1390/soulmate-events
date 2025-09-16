@@ -266,6 +266,7 @@
     <table id="bookingsTable">
         <thead>
             <tr>
+                <th>S.No.</th>
                 <th>Client Name</th>
                 <th>Client Number</th>
                 <th>Event Start Date</th>
@@ -412,6 +413,8 @@
                     return;
                 }
 
+                let serial = 1;
+
                 data.forEach(row => {
                     const tr = document.createElement("tr");
                     const eventStartDate = formatDate(row.event_start_date);
@@ -426,6 +429,7 @@
                     }
 
                     tr.innerHTML = `
+                <td>${serial++}</td>
                 <td>${row.client_name}</td>
                 <td>${row.client_number}</td>
                 <td>${eventStartDate}</td>
@@ -499,16 +503,16 @@
             };
 
             document.querySelector("#editBookingId").value = id;
-            document.querySelector("#editClientName").value = tds[0].innerText.trim();
-            document.querySelector("#editClientNumber").value = tds[1].innerText.trim();
-            document.querySelector("#editStartDate").value = formatDateForInput(tds[2].innerText.trim());
-            document.querySelector("#editEndDate").value = formatDateForInput(tds[3].innerText.trim());
-            document.querySelector("#editEventTime").value = formatTimeForInput(tds[9].innerText.trim());
-            document.querySelector("#editEventType").value = tds[4].innerText.trim();
-            document.querySelector("#editVenue").value = tds[5].innerText.trim();
-            document.querySelector("#editTotalAmount").value = tds[6].innerText.replace("₹", "").replace(/,/g, "").trim();
-            document.querySelector("#editAdvanceReceived").value = tds[7].innerText.replace("₹", "").replace(/,/g, "").trim();
-            document.querySelector("#editReceivedBy").value = tds[8].innerText.trim();
+            document.querySelector("#editClientName").value = tds[1].innerText.trim();
+            document.querySelector("#editClientNumber").value = tds[2].innerText.trim();
+            document.querySelector("#editStartDate").value = formatDateForInput(tds[3].innerText.trim());
+            document.querySelector("#editEndDate").value = formatDateForInput(tds[4].innerText.trim());
+            document.querySelector("#editEventTime").value = formatTimeForInput(tds[10].innerText.trim());
+            document.querySelector("#editEventType").value = tds[5].innerText.trim();
+            document.querySelector("#editVenue").value = tds[6].innerText.trim();
+            document.querySelector("#editTotalAmount").value = tds[7].innerText.replace("₹", "").replace(/,/g, "").trim();
+            document.querySelector("#editAdvanceReceived").value = tds[8].innerText.replace("₹", "").replace(/,/g, "").trim();
+            document.querySelector("#editReceivedBy").value = tds[9].innerText.trim();
 
             document.getElementById("editModal").style.display = "flex";
         }
