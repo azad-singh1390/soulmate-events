@@ -283,7 +283,7 @@
             <td>${eventEndDate}</td>
             <td>${row.event_type}</td>
             <td>${row.venue}</td>
-            <td>${row.event_time || "-"}</td>
+            <td>${formatTime(row.event_time)}</td>
             <td>${pdfLink}</td>
           `;
           tbody.appendChild(tr);
@@ -292,6 +292,7 @@
         console.error("Error fetching bookings:", err);
       }
     }
+
 
     loadBookings();
   </script>
