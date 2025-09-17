@@ -80,13 +80,19 @@ h1 {
 
 
   h2 {
-    display: -webkit-flex;
-    gap: 30px;   /* controls spacing between links */
+    display: flex;
+    flex-direction: column; /* stack vertically */
+    gap: 15px;              /* spacing between links */
   }
   h2 a {
     text-decoration: none;
-    color: orange;
-    animation: fadeInDown 2s ease-out;
+    color: wheat;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px; /* spacing between icon and text */
+    
+    animation: fadeInDown 1.2s ease-out;
   }
 
 /* Call-to-action button */
