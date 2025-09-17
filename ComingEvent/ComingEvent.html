@@ -210,6 +210,7 @@
   <table id="bookingsTable">
     <thead>
       <tr>
+        <th>S.No.</th>
         <th>Client Name</th>
         <th>Client Contact</th>
         <th>Start Date</th>
@@ -243,6 +244,7 @@
         const tbody = document.querySelector("#bookingsTable tbody");
         tbody.innerHTML = "";
 
+        let count = 1;
         if (bookings.length === 0) {
           tbody.innerHTML = `<tr><td colspan="7">No upcoming events found</td></tr>`;
           return;
@@ -274,6 +276,7 @@
           }
 
           tr.innerHTML = `
+            <td>${count++}</td>
             <td>${row.client_name}</td>
             <td>${row.client_number}</td>
             <td>${eventStartDate}</td>
