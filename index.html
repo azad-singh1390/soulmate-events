@@ -88,18 +88,41 @@
         <a href="Double Screen/DoubleScreen.html">
             <i class="fas fa-tv"></i> Double Screen Setup
         </a>
+        <!-- <a href="CreateWord.html">
+            <i class="fas fa-tv"></i> Create Quotation
+        </a> -->
     </h2>
 
 
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
+        function fetchNotificationCount() {
             fetch("https://soulmate-backend-production.up.railway.app/notifications/count")
                 .then(response => response.json())
                 .then(data => {
                     document.querySelector(".badge").textContent = data.count;
                 })
                 .catch(err => console.error("Error fetching count:", err));
-        });
+                console.log("Notification count updated");
+        }
+
+        (function scheduleDailyApiCall() {
+            const now = new Date();
+
+            // Tomorrow at midnight (00:00:00)
+            const tomorrow = new Date(now);
+            tomorrow.setDate(now.getDate() + 1);
+            tomorrow.setHours(0, 0, 0, 0);
+
+            const msUntilMidnight = tomorrow.getTime() - now.getTime();
+
+            setTimeout(() => {
+                fetchNotificationCount();   // call API at midnight
+                scheduleDailyApiCall();     // reschedule for next day
+            }, msUntilMidnight);
+        })();
+
+        // 🔹 Call immediately on page load too
+        document.addEventListener("DOMContentLoaded", fetchNotificationCount);
     </script>
 
 </body>
