@@ -5,6 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Bookings</title>
+    <!-- Add this inside <head> OR just before your script -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx-populate/browser/xlsx-populate.min.js"></script>
+
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -82,7 +87,7 @@
 
         th {
             background: orange;
-            color:black;
+            color: black;
         }
 
         tr:nth-child(even) {
@@ -263,6 +268,11 @@
         </div>
     </div>
 
+    <button onclick="exportToExcel()" style="margin:15px 0; padding:10px 15px; background:#28a745; 
+               color:#fff; border:none; border-radius:6px; cursor:pointer;">
+        ⬇ Export to Excel
+    </button>
+
     <table id="bookingsTable">
         <thead>
             <tr>
@@ -345,7 +355,7 @@
                     <option>Ashwini</option>
                     <option>Other</option>
                 </select>
-                 <br>
+                <br>
                 <div style="margin-top:15px; text-align:right;">
                     <button type="button" class="save-btn" onclick="saveEdit()">Save</button>
                     <button type="button" class="cancel-btn" onclick="closeModal()">Cancel</button>
@@ -374,6 +384,76 @@
     </div>
 
     <script>
+
+        function exportToExcel() {
+            const table = document.getElementById("bookingsTable");
+
+            // Extract table data into array
+            let data = [];
+            for (let row of table.rows) {
+                let rowData = [];
+                for (let cell of row.cells) {
+                    rowData.push(cell.innerText);
+                }
+                data.push(rowData);
+            }
+
+            // Remove last 2 columns (PDF + Action)
+            data = data.map(r => r.slice(0, -2));
+
+            const rowCount = data.length;
+            const colCount = data[0].length;
+            const lastColLetter = String.fromCharCode(64 + colCount); // e.g., 11 -> K
+
+            XlsxPopulate.fromBlankAsync().then(workbook => {
+                let sheet = workbook.sheet(0);
+                sheet.cell("A1").value(data);
+                workbook.sheet(0).name("Bookings");
+
+                // Header styling
+                sheet.range(`A1:${lastColLetter}1`).style({
+                    bold: true,
+                    fill: "FFA500",
+                    fontColor: "000000",
+                    horizontalAlignment: "center",
+                    verticalAlignment: "center"
+                });
+
+                // Zebra row coloring ONLY within table range
+                for (let i = 2; i <= rowCount; i++) {
+                    if (i % 2 === 0) {
+                        sheet.range(`A${i}:${lastColLetter}${i}`).style("fill", "F2F2F2");
+                    }
+                }
+
+                // ₹ formatting for Total Amount (col 8) & Advance Received (col 9)
+                sheet.column(8).style("numberFormat", '"₹"#,##0');
+                sheet.column(9).style("numberFormat", '"₹"#,##0');
+
+                // Borders + center align only inside the table
+                sheet.range(`A1:${lastColLetter}${rowCount}`).style({
+                    horizontalAlignment: "center",
+                    verticalAlignment: "center",
+                    border: true,
+                    wrapText: true
+                });
+
+                // Autosize columns within data range
+                for (let c = 1; c <= colCount; c++) {
+                    sheet.column(c).width(20);
+                }
+
+                return workbook.outputAsync();
+            }).then(blob => {
+                let url = window.URL.createObjectURL(blob);
+                let a = document.createElement("a");
+                a.href = url;
+                a.download = "Bookings.xlsx";
+                a.click();
+                window.URL.revokeObjectURL(url);
+            });
+        }
+
         function formatTime(timeString) {
             const [hours, minutes] = timeString.split(':');
             const date = new Date();
