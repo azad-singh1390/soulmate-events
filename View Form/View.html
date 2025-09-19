@@ -516,8 +516,8 @@
                 <td>${eventEndDate}</td>
                 <td>${row.event_type}</td>
                 <td>${row.venue}</td>
-                <td>₹${parseFloat(row.total_amount).toLocaleString()}</td>
-                <td>₹${parseFloat(row.advance_received).toLocaleString()}</td>
+                <td>₹${parseFloat(row.total_amount).toLocaleString("en-IN")}/-</td>
+                <td>₹${parseFloat(row.advance_received).toLocaleString("en-IN")}/-</td>
                 <td>${row.received_by}</td>
                 <td>${formatTime(row.event_time)}</td>
                 <td>${pdfLink}</td>
