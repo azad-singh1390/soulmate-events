@@ -570,16 +570,16 @@
             const tds = tr.querySelectorAll("td");
 
             originalData = {
-                client_name: tds[0].innerText.trim(),
-                client_number: tds[1].innerText.trim(),
-                event_start_date: formatDateForInput(tds[2].innerText.trim()),
-                event_end_date: formatDateForInput(tds[3].innerText.trim()),
-                event_type: tds[4].innerText.trim(),
-                venue: tds[5].innerText.trim(),
-                total_amount: tds[6].innerText.replace("₹", "").replace(/,/g, "").trim(),
-                advance_received: tds[7].innerText.replace("₹", "").replace(/,/g, "").trim(),
-                received_by: tds[8].innerText.trim(),
-                event_time: formatTimeForInput(tds[9].innerText.trim())
+                client_name: tds[1].innerText.trim(),
+                client_number: tds[2].innerText.trim(),
+                event_start_date: formatDateForInput(tds[3].innerText.trim()),
+                event_end_date: formatDateForInput(tds[4].innerText.trim()),
+                event_type: tds[5].innerText.trim(),
+                venue: tds[6].innerText.trim(),
+                total_amount: tds[7].innerText.replace("₹", "").replace(/,/g, "").trim(),
+                advance_received: tds[8].innerText.replace("₹", "").replace(/,/g, "").trim(),
+                received_by: tds[9].innerText.trim(),
+                event_time: formatTimeForInput(tds[10].innerText.trim())
             };
 
             document.querySelector("#editBookingId").value = id;
@@ -620,6 +620,8 @@
                 event_time: document.querySelector("#editEventTime").value
             };
 
+            console.log("Original Data:", originalData);
+            console.log("Current Data:", current);
             let changes = {};
             for (const key in current) {
                 if (current[key] !== originalData[key]) {
@@ -631,7 +633,7 @@
                 alert("No changes detected!");
                 return;
             }
-
+            console.log("Changes detected for ID:", id, changes);
             // Open password modal instead of prompt
             askPassword(id, changes);
         }
@@ -657,6 +659,8 @@
                 return;
             }
 
+            console.log("Submitting update for ID:", pendingId, "with changes:", pendingChanges);
+            console.log("Password entered:", password);
             try {
                 const res = await fetch(`https://soulmate-backend-production.up.railway.app/bookings/${pendingId}`, {
                     method: "PUT",
