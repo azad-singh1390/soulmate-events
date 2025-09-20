@@ -283,7 +283,7 @@
             const pdfBytes = new Uint8Array(row.planning_pdf_file.data);
             const blob = new Blob([pdfBytes], { type: "application/pdf" });
             const url = URL.createObjectURL(blob);
-            pdfLink = `<a href="${url}" target="_blank">View PDF</a>`;
+            planningpdfLink = `<a href="${url}" target="_blank">View PDF</a>`;
           }
 
           tr.innerHTML = `
