@@ -287,7 +287,8 @@
                 <th>Advance Received</th>
                 <th>Received By</th>
                 <th>Time</th>
-                <th>PDF</th>
+                <th>Quotation PDF</th>
+                <th>Planning PDF</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -340,6 +341,12 @@
                     <option>Jewels</option>
                     <option>Other</option>
                 </select>
+
+                <label>Upload Quotation PDF</label>
+                <input type="file" id="editQuotationPdf" name="pdfUpload" accept=".pdf">
+
+                <label>Upload Planning PDF</label>
+                <input type="file" id="editPlanningPdf" name="planingpdfUpload" accept=".pdf">
 
                 <label>Total Amount</label>
                 <input type="text" id="editTotalAmount" required>
@@ -508,6 +515,16 @@
                         pdfLink = `<a href="${url}" target="_blank">View PDF</a>`;
                     }
 
+
+                    let planningpdfLink = "No PDF";
+                    if (row.planning_pdf_file && row.planning_pdf_file.data) {
+                        const pdfBytes = new Uint8Array(row.planning_pdf_file.data);
+                        const blob = new Blob([pdfBytes], { type: "application/pdf" });
+                        const url = URL.createObjectURL(blob);
+                        planningpdfLink = `<a href="${url}" target="_blank">View PDF</a>`;
+                    }
+
+
                     tr.innerHTML = `
                 <td>${serial++}</td>
                 <td>${row.client_name}</td>
@@ -521,6 +538,7 @@
                 <td>${row.received_by}</td>
                 <td>${formatTime(row.event_time)}</td>
                 <td>${pdfLink}</td>
+                <td>${planningpdfLink}</td>
                 <td>
                   <button class="edit-btn" onclick="editRow(this, ${row.id})">Edit</button>
                 </td>
@@ -629,10 +647,10 @@
                 }
             }
 
-            if (Object.keys(changes).length === 0) {
-                alert("No changes detected!");
-                return;
-            }
+            // if (Object.keys(changes).length === 0) {
+            //     alert("No changes detected!");
+            //     return;
+            // }
             console.log("Changes detected for ID:", id, changes);
             // Open password modal instead of prompt
             askPassword(id, changes);
@@ -659,13 +677,24 @@
                 return;
             }
 
-            console.log("Submitting update for ID:", pendingId, "with changes:", pendingChanges);
-            console.log("Password entered:", password);
             try {
+                const formData = new FormData();
+                formData.append("password", password);
+
+                // Add only changed fields (text values)
+                for (let key in pendingChanges) {
+                    formData.append(key, pendingChanges[key]);
+                }
+
+                // Add files if selected
+                const quotationFile = document.getElementById("editQuotationPdf").files[0];
+                const planningFile = document.getElementById("editPlanningPdf").files[0];
+                if (quotationFile) formData.append("pdfUpload", quotationFile);
+                if (planningFile) formData.append("planingpdfUpload", planningFile);
+
                 const res = await fetch(`https://soulmate-backend-production.up.railway.app/bookings/${pendingId}`, {
                     method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ changes: pendingChanges, password })
+                    body: formData
                 });
 
                 if (!res.ok) throw new Error("Update failed");
@@ -678,7 +707,12 @@
                 alert("❌ Failed to update booking");
                 console.error(err);
             }
+            
+            document.getElementById("editQuotationPdf").value = "";
+            document.getElementById("editPlanningPdf").value = "";
+
         }
+
 
         window.onload = loadBookings;
     </script>

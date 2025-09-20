@@ -73,7 +73,7 @@
             <input type="text" name="clientname" placeholder="Enter Client Name" required>
 
             <label>Client Number</label>
-            <input type="text" name="clientNumber" placeholder="Enter Client Number" required>
+            <input type="tel" name="clientNumber" placeholder="Enter Client Number" pattern="[0-9]{10}" required>
 
             <label>Start Date Of Event</label>
             <input type="date" name="startDate" required>
@@ -112,14 +112,19 @@
                 <option>Other</option>
             </select>
 
-            <label>Upload PDF</label>
-            <input type="file" name="pdfUpload" accept=".pdf" required>
+            <label>Upload Quotation PDF</label>
+            <input type="file" name="pdfUpload" accept=".pdf" required onchange="previewFile(this, 'quotationPreview')">
+            <small id="quotationPreview"></small>
+
+            <label>Upload Planning PDF</label>
+            <input type="file" name="planingpdfUpload" accept=".pdf" onchange="previewFile(this, 'planningPreview')">
+            <small id="planningPreview"></small>
 
             <label>Total Amount</label>
-            <input type="text" name="totalAmount" placeholder="Enter Booking Amount" required>
+            <input type="number" name="totalAmount" placeholder="Enter Booking Amount" min="0" required>
 
             <label>Advance Received</label>
-            <input type="text" name="advanceReceived" placeholder="Enter Advance Received" required>
+            <input type="number" name="advanceReceived" placeholder="Enter Advance Received" min="0" required>
 
             <label>Advance Received by</label>
             <select name="receivedBy" required>
@@ -136,6 +141,14 @@
     </div>
 
     <script>
+
+        function previewFile(input, previewId) {
+            const file = input.files[0];
+            if (file) {
+                document.getElementById(previewId).innerText = "Selected: " + file.name;
+            }
+        }
+
         function formatTime(timeString) {
             if (!timeString) return "";
 
