@@ -218,7 +218,8 @@
         <th>Event Type</th>
         <th>Event Venue</th>
         <th>Time Of Event</th>
-        <th>PDF</th>
+        <th>Quotation PDF</th>
+        <th>Planning PDF</th>
       </tr>
     </thead>
     <tbody></tbody>
@@ -275,6 +276,16 @@
             pdfLink = `<a href="${url}" target="_blank">View PDF</a>`;
           }
 
+          
+          // ✅ Convert buffer → Blob → URL for PDF
+          let planningpdfLink = "No PDF";
+          if (row.planning_pdf_file && row.planning_pdf_file.data) {
+            const pdfBytes = new Uint8Array(row.planning_pdf_file.data);
+            const blob = new Blob([pdfBytes], { type: "application/pdf" });
+            const url = URL.createObjectURL(blob);
+            pdfLink = `<a href="${url}" target="_blank">View PDF</a>`;
+          }
+
           tr.innerHTML = `
             <td>${count++}</td>
             <td>${row.client_name}</td>
@@ -285,6 +296,7 @@
             <td>${row.venue}</td>
             <td>${formatTime(row.event_time)}</td>
             <td>${pdfLink}</td>
+            <td>${planningpdfLink}</td>
           `;
           tbody.appendChild(tr);
         });
