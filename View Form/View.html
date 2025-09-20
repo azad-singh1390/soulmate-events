@@ -406,7 +406,7 @@
             }
 
             // Remove last 2 columns (PDF + Action)
-            data = data.map(r => r.slice(0, -2));
+            data = data.map(r => r.slice(0, -3));
 
             const rowCount = data.length;
             const colCount = data[0].length;
@@ -707,7 +707,7 @@
                 alert("❌ Failed to update booking");
                 console.error(err);
             }
-            
+
             document.getElementById("editQuotationPdf").value = "";
             document.getElementById("editPlanningPdf").value = "";
 
