@@ -130,6 +130,12 @@
             color: #fff;
         }
 
+
+        .delete-btn {
+            background: black;
+            color: #fff;
+        }
+
         .cancel-btn {
             background: #dc3545;
             color: #fff;
@@ -367,6 +373,11 @@
                     <button type="button" class="save-btn" onclick="saveEdit()">Save</button>
                     <button type="button" class="cancel-btn" onclick="closeModal()">Cancel</button>
                 </div>
+                <br>
+                <div style="margin-top:15px; text-align:right;">
+                    <button type="button" class="delete-btn"
+                        onclick="deleteEdit(document.getElementById('editBookingId').value)">Delete</button>
+                </div>
             </form>
         </div>
     </div>
@@ -389,6 +400,30 @@
             </div>
         </div>
     </div>
+
+    <!-- Delete Password Modal -->
+    <div id="deletePasswordModal" style="display:none; position:fixed; top:0; left:0;
+ width:100%; height:100%; background:rgba(0,0,0,0.6);
+ justify-content:center; align-items:center; z-index:2000;">
+        <div style="background:#fff; padding:20px; border-radius:10px; width:300px; text-align:center;
+     box-shadow:0 4px 15px rgba(0,0,0,0.3);">
+            <h3>Enter Password to Delete</h3>
+            <input type="password" id="deletePassword"
+                style="width:100%; padding:8px; margin:15px 0; border:1px solid #ccc; border-radius:6px;"
+                placeholder="Password">
+            <div>
+                <button onclick="submitDeletePassword()"
+                    style="background:black; color:#fff; padding:8px 14px; border:none; border-radius:6px; margin-right:8px; cursor:pointer;">
+                    Confirm Delete
+                </button>
+                <button onclick="closeDeletePasswordModal()"
+                    style="background:#dc3545; color:#fff; padding:8px 14px; border:none; border-radius:6px; cursor:pointer;">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
 
     <script>
 
@@ -533,8 +568,8 @@
                 <td>${eventEndDate}</td>
                 <td>${row.event_type}</td>
                 <td>${row.venue}</td>
-                <td>₹${parseFloat(row.total_amount).toLocaleString("en-IN")}/-</td>
-                <td>₹${parseFloat(row.advance_received).toLocaleString("en-IN")}/-</td>
+                <td>₹${parseFloat(row.total_amount).toLocaleString("en-IN")}</td>
+                <td>₹${parseFloat(row.advance_received).toLocaleString("en-IN")}</td>
                 <td>${row.received_by}</td>
                 <td>${formatTime(row.event_time)}</td>
                 <td>${pdfLink}</td>
@@ -547,7 +582,7 @@
                 });
             } catch (err) {
                 console.error("Error fetching bookings:", err);
-                tbody.innerHTML = `<tr><td colspan="11">❌ Error fetching bookings</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="14">❌ Error fetching bookings</td></tr>`;
             } finally {
                 loader.style.display = "none";
             }
@@ -715,6 +750,57 @@
 
 
         window.onload = loadBookings;
+
+
+        let pendingDeleteId = null;
+
+        function deleteEdit(id) {
+            pendingDeleteId = id;
+            document.getElementById("deletePassword").value = "";
+            document.getElementById("deletePasswordModal").style.display = "flex";
+        }
+
+        function closeDeletePasswordModal() {
+            document.getElementById("deletePasswordModal").style.display = "none";
+            pendingDeleteId = null;
+        }
+
+        async function submitDeletePassword() {
+            const password = document.getElementById("deletePassword").value.trim();
+            if (!password) {
+                alert("❌ Please enter password");
+                return;
+            }
+
+            try {
+                const res = await fetch(`https://soulmate-backend-production.up.railway.app/bookings/${pendingDeleteId}`, {
+                    method: "DELETE",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ password })
+                });
+
+                const result = await res.json();
+                if (res.ok && result.success) {
+                    alert("✅ Booking deleted successfully");
+                    closeDeletePasswordModal();
+                    closeModal();
+                    loadBookings();
+                } else {
+                    alert("❌ " + (result.message || "Failed to delete booking"));
+                }
+            } catch (err) {
+                console.error("Error deleting booking:", err);
+                alert("❌ Error deleting booking");
+            }
+        }
+
+
+        window.onclick = function (e) {
+            const modal = document.getElementById("editModal");
+            if (e.target === modal) {
+                closeModal();
+            }
+        };
     </script>
 
 </body>
