@@ -272,6 +272,21 @@
         }
 
 
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            /* enable horizontal scroll */
+            -webkit-overflow-scrolling: touch;
+            /* smooth scrolling on iOS */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+            /* keep minimum width so columns stay readable */
+        }
+
         /* Animation */
         @keyframes fadeIn {
             from {
@@ -315,27 +330,29 @@
         <a href="SOULMATE PRICE LIST.pdf" download class="btn">Download Price List (PDF)</a>
 
     </div>
-    <table id="bookingsTable">
-        <thead>
-            <tr>
-                <th>S.No.</th>
-                <th>Client Name</th>
-                <th>Client Number</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Event </th>
-                <th>Venue</th>
-                <th>Total Amount</th>
-                <th>Advance Received</th>
-                <th>Received By</th>
-                <th>Time</th>
-                <th>Quotation PDF</th>
-                <th>Planning PDF</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody id="bookingsBody"></tbody>
-    </table>
+    <div class="table-container">
+        <table id="bookingsTable">
+            <thead>
+                <tr>
+                    <th>S.No.</th>
+                    <th>Client Name</th>
+                    <th>Client Number</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Event </th>
+                    <th>Venue</th>
+                    <th>Total Amount</th>
+                    <th>Advance Received</th>
+                    <th>Received By</th>
+                    <th>Time</th>
+                    <th>Quotation PDF</th>
+                    <th>Planning PDF</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="bookingsBody"></tbody>
+        </table>
+    </div>
     <!-- Edit Modal -->
     <div id="editModal">
         <div class="modal-content">
