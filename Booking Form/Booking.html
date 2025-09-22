@@ -261,6 +261,15 @@
             event.preventDefault();
             openPasswordModal(event.target);
         });
+
+
+        window.onclick = function (e) {
+            const modal = document.getElementById("passwordModal");
+            if (e.target === modal) {
+                closePasswordModal();
+            }
+        };
+
     </script>
 
 </body>
