@@ -75,16 +75,14 @@
 
     th,
     td {
-      padding: 12px;
-      border: 1px solid #ddd;
+      padding: 10px;
+      border: 2px solid black;
       text-align: center;
-      font-size: 0.95rem;
     }
 
     th {
-      background: #007bff;
-      color: white;
-      text-transform: uppercase;
+      background: orange;
+      color: black;
     }
 
     tr:nth-child(even) {
@@ -260,7 +258,7 @@
             month: "long",
             year: "numeric"
           }).replace(/\s/g, "-");
-          
+
           const eventEndDate = new Date(row.event_start_date).toLocaleDateString("en-GB", {
             day: "2-digit",
             month: "long",
@@ -276,7 +274,7 @@
             pdfLink = `<a href="${url}" target="_blank">View PDF</a>`;
           }
 
-          
+
           // ✅ Convert buffer → Blob → URL for PDF
           let planningpdfLink = "No PDF";
           if (row.planning_pdf_file && row.planning_pdf_file.data) {
