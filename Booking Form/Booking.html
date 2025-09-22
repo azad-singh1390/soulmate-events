@@ -140,7 +140,54 @@
         </form>
     </div>
 
+    <!-- Password Modal -->
+    <div id="passwordModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <h3>Enter Password</h3>
+            <input type="password" id="submitPassword" placeholder="Password">
+            <div class="modal-buttons">
+                <button onclick="confirmPassword()">Submit</button>
+                <button onclick="closePasswordModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 300px;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 8px;
+            margin: 10px 0;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+
     <script>
+        let formPendingSubmit = null;
 
         function previewFile(input, previewId) {
             const file = input.files[0];
@@ -162,16 +209,36 @@
                 hour12: true
             });
         }
-        async function submitBookingForm(event) {
-            event.preventDefault();
 
-            const form = event.target;
-            const formData = new FormData(form); // keeps the PDF file
+        function openPasswordModal(form) {
+            formPendingSubmit = form;
+            document.getElementById("passwordModal").style.display = "flex";
+            document.getElementById("submitPassword").value = "";
+            document.getElementById("submitPassword").focus();
+        }
+
+        function closePasswordModal() {
+            document.getElementById("passwordModal").style.display = "none";
+            formPendingSubmit = null;
+        }
+
+        async function confirmPassword() {
+            const password = document.getElementById("submitPassword").value;
+            if (!password) {
+                alert("Password is required!");
+                return;
+            }
+
+            const form = formPendingSubmit;
+            closePasswordModal();
+
+            const formData = new FormData(form);
+            formData.append("password", password);
 
             try {
                 const response = await fetch('https://soulmate-backend-production.up.railway.app/book-event', {
                     method: 'POST',
-                    body: formData // important: do NOT set Content-Type
+                    body: formData
                 });
 
                 const result = await response.json();
@@ -190,8 +257,12 @@
             }
         }
 
-        document.querySelector('#bookingForm').addEventListener('submit', submitBookingForm);
+        document.querySelector('#bookingForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            openPasswordModal(event.target);
+        });
     </script>
+
 </body>
 
 </html>
