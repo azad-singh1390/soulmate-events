@@ -280,13 +280,6 @@
             /* smooth scrolling on iOS */
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 900px;
-            /* keep minimum width so columns stay readable */
-        }
-
         /* Animation */
         @keyframes fadeIn {
             from {
@@ -594,23 +587,32 @@
                     const tr = document.createElement("tr");
                     const eventStartDate = formatDate(row.event_start_date);
                     const eventEndDate = formatDate(row.event_end_date);
-
                     let pdfLink = "No PDF";
                     if (row.pdf_file && row.pdf_file.data) {
                         const pdfBytes = new Uint8Array(row.pdf_file.data);
-                        const blob = new Blob([pdfBytes], { type: "application/pdf" });
-                        const url = URL.createObjectURL(blob);
-                        pdfLink = `<a href="${url}" target="_blank">View PDF</a>`;
-                    }
+                        const fileName = `SoulmateEvents-${row.client_name}-${row.event_type}.pdf`;
+                        const file = new File([pdfBytes], fileName, { type: "application/pdf" });
+                        const url = URL.createObjectURL(file);
 
+                        pdfLink = `
+        <a href="${url}" target="_blank">View</a>
+        <a href="${url}" download="${fileName}">Download</a>
+    `;
+                    }
 
                     let planningpdfLink = "No PDF";
                     if (row.planning_pdf_file && row.planning_pdf_file.data) {
                         const pdfBytes = new Uint8Array(row.planning_pdf_file.data);
-                        const blob = new Blob([pdfBytes], { type: "application/pdf" });
-                        const url = URL.createObjectURL(blob);
-                        planningpdfLink = `<a href="${url}" target="_blank">View PDF</a>`;
+                        const fileName = `Planning-${row.client_name}-${row.event_type}.pdf`;
+                        const file = new File([pdfBytes], fileName, { type: "application/pdf" });
+                        const url = URL.createObjectURL(file);
+
+                        planningpdfLink = `
+        <a href="${url}" target="_blank">View</a>
+        <a href="${url}" download="${fileName}">Download</a>
+    `;
                     }
+
 
 
                     tr.innerHTML = `
