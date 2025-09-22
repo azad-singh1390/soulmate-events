@@ -587,32 +587,28 @@
                     const tr = document.createElement("tr");
                     const eventStartDate = formatDate(row.event_start_date);
                     const eventEndDate = formatDate(row.event_end_date);
+
                     let pdfLink = "No PDF";
                     if (row.pdf_file && row.pdf_file.data) {
                         const pdfBytes = new Uint8Array(row.pdf_file.data);
-                        const fileName = `SoulmateEvents-${row.client_name}-${row.event_type}.pdf`;
-                        const file = new File([pdfBytes], fileName, { type: "application/pdf" });
-                        const url = URL.createObjectURL(file);
-
+                        const blob = new Blob([pdfBytes], { type: "application/pdf" });
+                        const url = URL.createObjectURL(blob);
                         pdfLink = `
-        <a href="${url}" target="_blank">View</a>
-        <a href="${url}" download="${fileName}">Download</a>
-    `;
+                        <a href="${url}" target="_blank">View</a>
+                        <a href="${url}" download="SoulmateEvents-${row.client_name}-${row.event_type}.pdf">Download</a>
+                        `;
                     }
 
                     let planningpdfLink = "No PDF";
                     if (row.planning_pdf_file && row.planning_pdf_file.data) {
                         const pdfBytes = new Uint8Array(row.planning_pdf_file.data);
-                        const fileName = `Planning-${row.client_name}-${row.event_type}.pdf`;
-                        const file = new File([pdfBytes], fileName, { type: "application/pdf" });
-                        const url = URL.createObjectURL(file);
-
+                        const blob = new Blob([pdfBytes], { type: "application/pdf" });
+                        const url = URL.createObjectURL(blob);
                         planningpdfLink = `
-        <a href="${url}" target="_blank">View</a>
-        <a href="${url}" download="${fileName}">Download</a>
-    `;
+                        <a href="${url}" target="_blank">View</a> 
+                        <a href="${url}" download="Planning-${row.client_name}$-{row.event_type}.pdf">Download</a>
+                        `;
                     }
-
 
 
                     tr.innerHTML = `
