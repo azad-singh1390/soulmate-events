@@ -239,20 +239,38 @@
             color: #fff;
         }
 
-        .btn{
+        .btn {
             margin-left: 20px;
             padding: 10px 50px;
             border: 1px solid #333;
             text-decoration: none;
-            background:#28a745;
+            background: #28a745;
             color: white;
             border-radius: 4px;
-            font-size: 14px; 
+            font-size: 14px;
         }
 
-        .btn:hover{
+        .btn:hover {
             background: black;
         }
+
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            /* allow wrapping on small screens */
+            gap: 10px;
+            /* spacing between buttons */
+            justify-content: center;
+            /* optional: center align */
+        }
+
+        .button-container button {
+            flex: 1 1 auto;
+            /* buttons resize proportionally */
+            min-width: 120px;
+            /* keep readable size */
+        }
+
 
         /* Animation */
         @keyframes fadeIn {
@@ -289,12 +307,14 @@
         </div>
     </div>
 
-    <button onclick="exportToExcel()" class="btn">
-        ⬇ Export To Excel
-    </button>
-    <a href="SOULMATE PRICE LIST.docx" target="_blank" class="btn" >Download Price List (Word)</a>
-    <a href="SOULMATE PRICE LIST.pdf" download class="btn">Download Price List (PDF)</a>
+    <div class="button-container">
+        <button onclick="exportToExcel()" class="btn">
+            ⬇ Export To Excel
+        </button>
+        <a href="SOULMATE PRICE LIST.docx" target="_blank" class="btn">Download Price List (Word)</a>
+        <a href="SOULMATE PRICE LIST.pdf" download class="btn">Download Price List (PDF)</a>
 
+    </div>
     <table id="bookingsTable">
         <thead>
             <tr>
@@ -668,6 +688,8 @@
 
         function closeModal() {
             document.getElementById("editModal").style.display = "none";
+            document.getElementById("editQuotationPdf").value = "";
+            document.getElementById("editPlanningPdf").value = "";
         }
 
         // Store pending changes + id until password entered
