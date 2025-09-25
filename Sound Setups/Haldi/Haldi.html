@@ -97,39 +97,34 @@
             <source src="Haldi_3.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
-        <a href="BG_14.mp4" download style="color: rgb(117, 64, 64); text-decoration: none; font-size: 16px; margin-bottom: 20px;">Download</a>
+        <a href="Haldi_3.mp4" download
+            style="color: rgb(117, 64, 64); text-decoration: none; font-size: 16px; margin-bottom: 20px;">Download</a>
 
     </div>
+
     <style>
         .video-album {
-            /* display: flex; */
-            /* flex-wrap: wrap; */
-            /* Wrap to next row */
-            /* gap: 24px; */
-            /* Space between frames */
-            /* justify-content: flex-start; */
-            /* align-items: flex-start; */
-            /* margin-top: 40px; */
-            /* padding: 16px; */
-            /* background: #fafafa; */
-            height: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            align-items: center;
+            margin-top: 40px;
+            padding: 16px;
+            background: #c3bbbb;
         }
 
-        .video-album img,
+        /* Keep normal size inside the page preview */
         .video-album video {
-            width: 100%;
-            /* Take full width of container */
-            max-width: 700px;
-            /* Set frame width */
-            height: auto;
-            /* Keep aspect ratio */
-            /* border-radius: 12px; */
+            width: fit-content;
+            max-width: fit-content;
+            border-radius: 12px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            object-fit: cover;
+            background: #000;
             display: block;
+            margin: 0 auto;
         }
     </style>
-    
+
     <script>
         // Force fullscreen when play is pressed
         document.querySelectorAll(".video-album video").forEach(video => {
