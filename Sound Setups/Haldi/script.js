@@ -13,17 +13,20 @@ document.querySelectorAll(".video-album video").forEach(video => {
 
 // List of album files
 const albumFiles = [
-    "Haldi_9.jpeg",
+    "background.jpg",
+    "Haldi_1.jpg",
+    "Haldi_1.mp4",
     "Haldi_10.jpeg",
-    //"Haldi_1.jpg",
     "Haldi_2.jpg",
+    "Haldi_2.mp4",
     "Haldi_3.jpg",
+    "Haldi_3.mp4",
     "Haldi_4.jpg",
     "Haldi_5.jpg",
     "Haldi_6.jpg",
-    "Haldi_1.mp4",
-    "Haldi_2.mp4",
-    "Haldi_3.mp4"
+    "Haldi_7.jpg",
+    "Haldi_8.jpg",
+    "Haldi_9.jpeg"
 ];
 
 const album = document.getElementById("video-album");
