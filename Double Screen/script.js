@@ -13,7 +13,6 @@ document.querySelectorAll(".video-album video").forEach(video => {
 
 // List of album files
 const albumFiles = [
-    "background.jpg",
     "Double_1.jpeg",
     "Double_1.mp4",
     "Double_2.jpeg",

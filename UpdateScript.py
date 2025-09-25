@@ -5,7 +5,7 @@ import re
 parent_directories = [
     r'd:\soulmate-events\Sound Setups',
     r'd:\soulmate-events\Basic Setup',
-    r'd:\soulmate-events\Singe Screen',
+    r'd:\soulmate-events\Single Screen',
     r'd:\soulmate-events\Double Screen'
 ]
 
@@ -24,7 +24,7 @@ for parent_directory in parent_directories:
             if os.path.isdir(child_path):
                 album_files = [
                     f for f in os.listdir(child_path)
-                    if os.path.splitext(f)[1].lower() in extensions
+                    if os.path.splitext(f)[1].lower() in extensions and f.lower() != "background.jpg"
                 ]
 
                 script_path = os.path.join(child_path, 'script.js')
@@ -50,7 +50,7 @@ for parent_directory in parent_directories:
         # For other directories, update script.js directly in the path
         album_files = [
             f for f in os.listdir(parent_directory)
-            if os.path.splitext(f)[1].lower() in extensions
+            if os.path.splitext(f)[1].lower() in extensions and f.lower() != "background.jpg"
         ]
 
         script_path = os.path.join(parent_directory, 'script.js')
