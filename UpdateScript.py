@@ -4,6 +4,8 @@ import re
 # List of parent directories
 parent_directories = [
     r'd:\soulmate-events\Sound Setups',
+    r'd:\soulmate-events\Artist',
+    r'd:\soulmate-events\Special Effects',
     r'd:\soulmate-events\Basic Setup',
     r'd:\soulmate-events\Single Screen',
     r'd:\soulmate-events\Double Screen'
@@ -19,7 +21,7 @@ for parent_directory in parent_directories:
         continue
 
     # For "Sound Setups", process child directories
-    if parent_directory.endswith('Sound Setups'):
+    if parent_directory.endswith('Sound Setups') or parent_directory.endswith('Artist') or parent_directory.endswith('Special Effects'):
         for child in os.listdir(parent_directory):
             child_path = os.path.join(parent_directory, child)
             if os.path.isdir(child_path):

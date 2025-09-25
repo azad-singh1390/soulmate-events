@@ -13,9 +13,12 @@ document.querySelectorAll(".video-album video").forEach(video => {
 
 // List of album files
 const albumFiles = [
-    "C1.mp4",
-    "C2.mp4",
-    "C3.mp4"
+    "Ankit_1.mp4",
+    "Ankit_2.mp4",
+    "Ankit_3.mp4",
+    "Ankit_4.mp4",
+    "Ankit_5.mp4",
+    "Ankit_6.mp4"
 ];
 
 const album = document.getElementById("video-album");

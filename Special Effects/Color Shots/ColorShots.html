@@ -64,56 +64,9 @@
 
         </div>
     </nav>
-    <div class="video-album">
-        <video controls>
-            <source src="Color_shot_1.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
 
-        <video controls>
-            <source src="Color_shot_2.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-    </div>
-
-    <style>
-        .video-album {
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-            align-items: center;
-            margin-top: 40px;
-            background: #050000;
-        }
-
-        /* Keep normal size inside the page preview */
-        .video-album video {
-            width: fit-content;
-            max-width: fit-content;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            background: #000;
-            display: block;
-            margin: 0 auto;
-        }
-    </style>
-
-    <script>
-        // Force fullscreen when play is pressed
-        document.querySelectorAll(".video-album video").forEach(video => {
-            video.addEventListener("play", () => {
-                if (video.requestFullscreen) {
-                    video.requestFullscreen();
-                } else if (video.webkitEnterFullscreen) {  // iPad/iPhone Safari
-                    video.webkitEnterFullscreen();
-                } else if (video.msRequestFullscreen) {
-                    video.msRequestFullscreen();
-                }
-            });
-        });
-    </script>
-
-
+    <div id="video-album" class="video-album"></div>
+    <script src="script.js"></script>    
 </body>
 
 </html>
