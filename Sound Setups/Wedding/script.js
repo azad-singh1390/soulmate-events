@@ -13,11 +13,6 @@ document.querySelectorAll(".video-album video").forEach(video => {
 
 // List of album files
 const albumFiles = [
-    "Wedding_1.mp4",
-    "Wedding_2.mp4",
-    "Wedding_3.mp4",
-    "Wedding_4.mp4",
-    "Wedding_5.mp4",
     "Wedding_day_1.jpeg",
     "Wedding_day_2.jpeg",
     "Wedding_night_1.jpeg",
@@ -27,7 +22,12 @@ const albumFiles = [
     "Wedding_night_5.jpeg",
     "Wedding_night_6.jpeg",
     "Wedding_night_7.jpeg",
-    "Wedding_night_8.jpeg"
+    "Wedding_night_8.jpeg",
+    "Wedding_1.mp4",
+    "Wedding_2.mp4",
+    "Wedding_3.mp4",
+    "Wedding_4.mp4",
+    "Wedding_5.mp4"
 ];
 
 const album = document.getElementById("video-album");

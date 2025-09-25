@@ -10,7 +10,8 @@ parent_directories = [
 ]
 
 # Allowed extensions
-extensions = {'.jpeg', '.jpg', '.png', '.mp4'}
+image_exts = {'.jpeg', '.jpg', '.png', '.gif'}
+video_exts = {'.mp4'}
 
 for parent_directory in parent_directories:
     print(f"Processing directory: {parent_directory}")
@@ -22,10 +23,13 @@ for parent_directory in parent_directories:
         for child in os.listdir(parent_directory):
             child_path = os.path.join(parent_directory, child)
             if os.path.isdir(child_path):
-                album_files = [
+                files = [
                     f for f in os.listdir(child_path)
-                    if os.path.splitext(f)[1].lower() in extensions and f.lower() != "background.jpg"
+                    if f.lower() != "background.jpg"
                 ]
+                image_files = [f for f in files if os.path.splitext(f)[1].lower() in image_exts]
+                video_files = [f for f in files if os.path.splitext(f)[1].lower() in video_exts]
+                album_files = image_files + video_files
 
                 script_path = os.path.join(child_path, 'script.js')
                 if os.path.exists(script_path):
@@ -48,10 +52,13 @@ for parent_directory in parent_directories:
                     print(f"Updated albumFiles in {script_path}")
     else:
         # For other directories, update script.js directly in the path
-        album_files = [
+        files = [
             f for f in os.listdir(parent_directory)
-            if os.path.splitext(f)[1].lower() in extensions and f.lower() != "background.jpg"
+            if f.lower() != "background.jpg"
         ]
+        image_files = [f for f in files if os.path.splitext(f)[1].lower() in image_exts]
+        video_files = [f for f in files if os.path.splitext(f)[1].lower() in video_exts]
+        album_files = image_files + video_files
 
         script_path = os.path.join(parent_directory, 'script.js')
         if os.path.exists(script_path):
