@@ -16,6 +16,8 @@ const albumFiles = [
     "Picture1.jpg",
     "Picture2.jpg",
     "Picture3.jpg",
+    "Picture4.jpg",
+    "Picture5.jpg",
     "1.mp4"
 ];
 
