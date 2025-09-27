@@ -4,7 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>View Bookings</title>
+  <title>Coming Events</title>
+  
+    <!-- Add this inside <head> OR just before your script -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx-populate/browser/xlsx-populate.min.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -155,6 +159,30 @@
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     }
 
+
+    .button-container {
+      display: flex;
+      flex-wrap: wrap;
+      /* allow wrapping on small screens */
+      gap: 10px;
+      /* spacing between buttons */
+      justify-content: left;
+      /* optional: center align */
+    }
+
+    .btn {
+      background: green;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 5px;
+      text-decoration: none;
+      display: inline-block;
+      transition: background 0.3s ease;
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       .nav-links {
@@ -228,7 +256,7 @@
     </div>
   </nav>
 
-  <h1>📋 Upcoming Events</h1>
+  <h1>📋 Upcoming Events In Coming Week</h1>
 
   <!-- Loader Overlay -->
   <div id="loader" class="loader-overlay" style="display: none;">
@@ -237,6 +265,11 @@
     </div>
   </div>
 
+  <div class="button-container">
+    <button onclick="exportToExcel()" class="btn">
+      ⬇ Export To Excel
+    </button>
+  </div>
   <table id="bookingsTable">
     <thead>
       <tr>
@@ -301,27 +334,27 @@
           }).replace(/\s/g, "-");
 
 
-                    let pdfLink = "No PDF";
-                    if (row.pdf_file && row.pdf_file.data) {
-                        const pdfBytes = new Uint8Array(row.pdf_file.data);
-                        const blob = new Blob([pdfBytes], { type: "application/pdf" });
-                        const url = URL.createObjectURL(blob);
-                        pdfLink = `
+          let pdfLink = "No PDF";
+          if (row.pdf_file && row.pdf_file.data) {
+            const pdfBytes = new Uint8Array(row.pdf_file.data);
+            const blob = new Blob([pdfBytes], { type: "application/pdf" });
+            const url = URL.createObjectURL(blob);
+            pdfLink = `
                         <a href="${url}" target="_blank">View</a>
                         <a href="${url}" download="SoulmateEvents-${row.client_name}-${row.event_type}.pdf">Download</a>
                         `;
-                    }
+          }
 
-                    let planningpdfLink = "No PDF";
-                    if (row.planning_pdf_file && row.planning_pdf_file.data) {
-                        const pdfBytes = new Uint8Array(row.planning_pdf_file.data);
-                        const blob = new Blob([pdfBytes], { type: "application/pdf" });
-                        const url = URL.createObjectURL(blob);
-                        planningpdfLink = `
+          let planningpdfLink = "No PDF";
+          if (row.planning_pdf_file && row.planning_pdf_file.data) {
+            const pdfBytes = new Uint8Array(row.planning_pdf_file.data);
+            const blob = new Blob([pdfBytes], { type: "application/pdf" });
+            const url = URL.createObjectURL(blob);
+            planningpdfLink = `
                         <a href="${url}" target="_blank">View</a> 
                         <a href="${url}" download="Planning-${row.client_name}-${row.event_type}.pdf">Download</a>
                         `;
-                    }
+          }
 
           tr.innerHTML = `
             <td>${count++}</td>
@@ -344,6 +377,75 @@
       }
     }
 
+
+    function exportToExcel() {
+      const table = document.getElementById("bookingsTable");
+
+      // Extract table data into array
+      let data = [];
+      for (let row of table.rows) {
+        let rowData = [];
+        for (let cell of row.cells) {
+          rowData.push(cell.innerText);
+        }
+        data.push(rowData);
+      }
+
+      // Remove last 2 columns (PDF + Action)
+      data = data.map(r => r.slice(0, -3));
+
+      const rowCount = data.length;
+      const colCount = data[0].length;
+      const lastColLetter = String.fromCharCode(64 + colCount); // e.g., 11 -> K
+
+      XlsxPopulate.fromBlankAsync().then(workbook => {
+        let sheet = workbook.sheet(0);
+        sheet.cell("A1").value(data);
+        workbook.sheet(0).name("Bookings");
+
+        // Header styling
+        sheet.range(`A1:${lastColLetter}1`).style({
+          bold: true,
+          fill: "FFA500",
+          fontColor: "000000",
+          horizontalAlignment: "center",
+          verticalAlignment: "center"
+        });
+
+        // Zebra row coloring ONLY within table range
+        for (let i = 2; i <= rowCount; i++) {
+          if (i % 2 === 0) {
+            sheet.range(`A${i}:${lastColLetter}${i}`).style("fill", "F2F2F2");
+          }
+        }
+
+        // ₹ formatting for Total Amount (col 8) & Advance Received (col 9)
+        sheet.column(8).style("numberFormat", '"₹"#,##0');
+        sheet.column(9).style("numberFormat", '"₹"#,##0');
+
+        // Borders + center align only inside the table
+        sheet.range(`A1:${lastColLetter}${rowCount}`).style({
+          horizontalAlignment: "center",
+          verticalAlignment: "center",
+          border: true,
+          wrapText: true
+        });
+
+        // Autosize columns within data range
+        for (let c = 1; c <= colCount; c++) {
+          sheet.column(c).width(20);
+        }
+
+        return workbook.outputAsync();
+      }).then(blob => {
+        let url = window.URL.createObjectURL(blob);
+        let a = document.createElement("a");
+        a.href = url;
+        a.download = "Bookings.xlsx";
+        a.click();
+        window.URL.revokeObjectURL(url);
+      });
+    }
 
     loadBookings();
   </script>
