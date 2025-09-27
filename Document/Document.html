@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Add this inside <head> OR just before your script -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx-populate/browser/xlsx-populate.min.js"></script>
+
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            margin: 20px;
+            padding-top: 60px;
+        }
+
+        /* Navbar */
+        .navbar {
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 20px 0;
+            background: black;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            position: relative;
+            transition: 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #ff007f;
+        }
+
+        .nav-links a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -6px;
+            width: 0%;
+            height: 2px;
+            background: #ff007f;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        th,
+        td {
+            padding: 10px;
+            border: 2px solid black;
+            text-align: center;
+        }
+
+        th {
+            background: orange;
+            color: black;
+        }
+
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        /* Loader Overlay */
+        .loader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        /* Loader Box */
+        .loader-box {
+            background: #fff;
+            padding: 20px 40px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+
+        .edit-btn {
+            background: #28a745;
+            color: #fff;
+        }
+
+        .save-btn {
+            background: #007bff;
+            color: #fff;
+        }
+
+
+        .delete-btn {
+            background: black;
+            color: #fff;
+        }
+
+        .cancel-btn {
+            background: #dc3545;
+            color: #fff;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 20px;
+                flex-wrap: wrap;
+            }
+        }
+
+
+        /* Modal overlay */
+        #editModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            /* hidden by default */
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        /* Modal content */
+        #editModal .modal-content {
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            width: 450px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* Heading */
+        #editModal h2 {
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 20px;
+            color: #333;
+        }
+
+        /* Form styling */
+        #editBookingForm {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px 15px;
+        }
+
+        /* Labels */
+        #editBookingForm label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #444;
+            grid-column: span 2;
+            /* default full row */
+        }
+
+        /* Inputs & Select */
+        #editBookingForm input,
+        #editBookingForm select {
+            padding: 8px 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Buttons container */
+        #editBookingForm .actions {
+            grid-column: span 2;
+            text-align: right;
+            margin-top: 15px;
+        }
+
+        /* Buttons */
+        #editBookingForm button {
+            padding: 8px 14px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        #editBookingForm .save-btn {
+            background: #007bff;
+            color: #fff;
+            margin-right: 8px;
+        }
+
+        #editBookingForm .cancel-btn {
+            background: #dc3545;
+            color: #fff;
+        }
+
+        .btn {
+            margin-left: 20px;
+            padding: 10px 50px;
+            border: 1px solid #333;
+            text-decoration: none;
+            background: #28a745;
+            color: white;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .btn:hover {
+            background: black;
+        }
+
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            /* allow wrapping on small screens */
+            gap: 10px;
+            /* spacing between buttons */
+            justify-content: center;
+            /* optional: center align */
+        }
+
+        .button-container button {
+            flex: 1 1 auto;
+            /* buttons resize proportionally */
+            min-width: 120px;
+            /* keep readable size */
+        }
+
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            /* enable horizontal scroll */
+            -webkit-overflow-scrolling: touch;
+            /* smooth scrolling on iOS */
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="nav-links">
+            <a href="../index.html">Home</a>
+            <a href="../Booking Form/Booking.html">Book Event</a>
+            <a href="../View Form/View.html">View Bookings</a>
+            <a href="../Contact Form/Contact.html">Contact Us</a>
+        </div>
+    </nav>
+
+    <h1>📋 Documents</h1>
+
+    <!-- Loader Overlay -->
+    <div id="loader" class="loader-overlay" style="display: none;">
+        <div class="loader-box">
+            ⏳ Fetching records from database...
+        </div>
+    </div>
+
+    <div class="button-container">
+        <a href="SOULMATE PRICE LIST.docx" target="_blank" class="btn">Download Price List (Word)</a>
+        <a href="SOULMATE PRICE LIST.pdf" download class="btn">Download Price List (PDF)</a>
+        <a href="SampleBill.docx" download class="btn">Soulmate Sample Bill File</a>
+    </div>
+    <div class="button-container" style="margin-top: 10px;">
+        <a href="Maintainence Request.docx" download class="btn">Maintainence Request File</a>
+        <a href="Maintainence Request.docx" download class="btn">Amor Sample Bill File</a>
+    </div>
+    
+</body>
+
+</html>
