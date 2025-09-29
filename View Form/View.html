@@ -562,6 +562,11 @@
             }).replace(/\s/g, "-");
         }
 
+        // Helper to sanitize filename
+        function sanitizeFilename(name) {
+            return name.replace(/\s+/g, '_').replace(/[^\w\-]/g, '');
+        }
+
         async function loadBookings() {
             const tbody = document.querySelector("#bookingsTable tbody");
             const loader = document.getElementById("loader");
@@ -585,13 +590,16 @@
                     const eventStartDate = formatDate(row.event_start_date);
                     const eventEndDate = formatDate(row.event_end_date);
 
-                    // Check has_quotation_pdf and has_planning_pdf flags
+                    // Quotation PDF links
                     const pdfLink = row.has_quotation_pdf
-                        ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf" target="_blank">View</a>`
+                        ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf" target="_blank">View</a> | 
+       <a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf" download="${sanitizeFilename(row.client_name)}-quotation.pdf">Download</a>`
                         : "No PDF";
 
+                    // Planning PDF links
                     const planningpdfLink = row.has_planning_pdf
-                        ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf" target="_blank">View</a>`
+                        ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf" target="_blank">View</a> | 
+       <a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf" download="${sanitizeFilename(row.client_name)}-planning.pdf">Download</a>`
                         : "No PDF";
 
 
