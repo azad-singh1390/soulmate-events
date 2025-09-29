@@ -585,27 +585,14 @@
                     const eventStartDate = formatDate(row.event_start_date);
                     const eventEndDate = formatDate(row.event_end_date);
 
-                    let pdfLink = "No PDF";
-                    if (row.pdf_file && row.pdf_file.data) {
-                        const pdfBytes = new Uint8Array(row.pdf_file.data);
-                        const blob = new Blob([pdfBytes], { type: "application/pdf" });
-                        const url = URL.createObjectURL(blob);
-                        pdfLink = `
-                        <a href="${url}" target="_blank">View</a>
-                        <a href="${url}" download="SoulmateEvents-${row.client_name}-${row.event_type}.pdf">Download</a>
-                        `;
-                    }
+                    // Check has_quotation_pdf and has_planning_pdf flags
+                    const pdfLink = row.has_quotation_pdf
+                        ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf" target="_blank">View</a>`
+                        : "No PDF";
 
-                    let planningpdfLink = "No PDF";
-                    if (row.planning_pdf_file && row.planning_pdf_file.data) {
-                        const pdfBytes = new Uint8Array(row.planning_pdf_file.data);
-                        const blob = new Blob([pdfBytes], { type: "application/pdf" });
-                        const url = URL.createObjectURL(blob);
-                        planningpdfLink = `
-                        <a href="${url}" target="_blank">View</a> 
-                        <a href="${url}" download="Planning-${row.client_name}-${row.event_type}.pdf">Download</a>
-                        `;
-                    }
+                    const planningpdfLink = row.has_planning_pdf
+                        ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf" target="_blank">View</a>`
+                        : "No PDF";
 
 
                     tr.innerHTML = `
