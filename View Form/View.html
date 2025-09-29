@@ -562,6 +562,20 @@
             }).replace(/\s/g, "-");
         }
 
+
+        function downloadPDF(url, filename) {
+            fetch(url)
+                .then(resp => resp.blob())
+                .then(blob => {
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = filename;
+                    link.click();
+                    URL.revokeObjectURL(link.href);
+                })
+                .catch(err => console.error("Download failed", err));
+        }
+
         // Helper to sanitize filename
         function sanitizeFilename(name) {
             return name.replace(/\s+/g, '_').replace(/[^\w\-]/g, '');
@@ -590,18 +604,16 @@
                     const eventStartDate = formatDate(row.event_start_date);
                     const eventEndDate = formatDate(row.event_end_date);
 
-                    // Quotation PDF links
+
                     const pdfLink = row.has_quotation_pdf
                         ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf" target="_blank">View</a> | 
-       <a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf" download="${sanitizeFilename(row.client_name)}-quotation.pdf">Download</a>`
+       <a href="#" onclick="downloadPDF('https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf', '${sanitizeFilename(row.client_name)}-quotation.pdf')">Download</a>`
                         : "No PDF";
 
-                    // Planning PDF links
                     const planningpdfLink = row.has_planning_pdf
                         ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf" target="_blank">View</a> | 
-       <a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf" download="${sanitizeFilename(row.client_name)}-planning.pdf">Download</a>`
+       <a href="#" onclick="downloadPDF('https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf', '${sanitizeFilename(row.client_name)}-planning.pdf')">Download</a>`
                         : "No PDF";
-
 
                     tr.innerHTML = `
                 <td>${serial++}</td>
