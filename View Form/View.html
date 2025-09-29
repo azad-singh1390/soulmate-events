@@ -280,6 +280,37 @@
             /* smooth scrolling on iOS */
         }
 
+        /* Dropdown */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background: #222;
+            min-width: 180px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            border-radius: 6px;
+            top: 100%;
+            left: 0;
+            z-index: 99;
+        }
+
+        .dropdown-content a {
+            display: block;
+            padding: 10px;
+            color: white;
+        }
+
+        .dropdown-content a:hover {
+            background: #444;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
         /* Animation */
         @keyframes fadeIn {
             from {
@@ -300,8 +331,15 @@
     <nav class="navbar">
         <div class="nav-links">
             <a href="../index.html">Home</a>
-            <a href="../Booking Form/Booking.html">Book Event</a>
-            <a href="../View Form/View.html">View Bookings</a>
+
+            <div class="dropdown">
+                <a href="#">Event ▾</a>
+                <div class="dropdown-content">
+                    <a href="../Booking Form/Booking.html">Book Event</a>
+                    <a href="../View Form/View.html">View Bookings</a>
+                    <a href="../History/History.html">History Bookings</a>
+                </div>
+            </div>
             <a href="../Contact Form/Contact.html">Contact Us</a>
         </div>
     </nav>
