@@ -95,6 +95,12 @@
             <span class="bell">🔔</span>
             <span class="badge">0</span> <!-- change number dynamically -->
         </a>
+        <br>
+        <br>
+        <a href="TodayEvent/TodayEvent.html" class="notification">
+             <span class="warning">⚠️</span>
+            <span class="badge2">0</span> <!-- change number dynamically -->
+        </a>
 
     </nav>
     <h2>
@@ -123,6 +129,16 @@
                 .catch(err => console.error("Error fetching count:", err));
             console.log("Notification count updated");
         }
+        
+        function fetchTodayNotificationCount() {
+            fetch("https://soulmate-backend-production.up.railway.app/notifications/todaycount")
+                .then(response => response.json())
+                .then(data => {
+                    document.querySelector(".badge2").textContent = data.count;
+                })
+                .catch(err => console.error("Error fetching count:", err));
+            console.log("Today Notification count updated");
+        }
 
         (function scheduleDailyApiCall() {
             const now = new Date();
@@ -142,6 +158,7 @@
 
         // 🔹 Call immediately on page load too
         document.addEventListener("DOMContentLoaded", fetchNotificationCount);
+        document.addEventListener("DOMContentLoaded", fetchTodayNotificationCount);
     </script>
 
 </body>
