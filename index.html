@@ -151,7 +151,8 @@
             const msUntilMidnight = tomorrow.getTime() - now.getTime();
 
             setTimeout(() => {
-                fetchNotificationCount();   // call API at midnight
+                fetchNotificationCount();
+                fetchTodayNotificationCount();   // call API at midnight
                 scheduleDailyApiCall();     // reschedule for next day
             }, msUntilMidnight);
         })();
