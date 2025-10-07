@@ -10,6 +10,7 @@ parent_directories = [
     r'd:\soulmate-events\Basic Setup',
     r'd:\soulmate-events\Single Screen',
     r'd:\soulmate-events\Double Screen'
+    r'd:\soulmate-events\Rani Bagh'
 ]
 
 # Allowed extensions
