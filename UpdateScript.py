@@ -9,7 +9,7 @@ parent_directories = [
     r'd:\soulmate-events\Special Effects',
     r'd:\soulmate-events\Basic Setup',
     r'd:\soulmate-events\Single Screen',
-    r'd:\soulmate-events\Double Screen'
+    r'd:\soulmate-events\Double Screen',
     r'd:\soulmate-events\Rani Bagh'
 ]
 
@@ -20,6 +20,7 @@ video_exts = {'.mp4'}
 for parent_directory in parent_directories:
     print(f"Processing directory: {parent_directory}")
     if not os.path.exists(parent_directory):
+        print(f"Directory does not exist: {parent_directory}")
         continue
 
     # For "Sound Setups", process child directories
