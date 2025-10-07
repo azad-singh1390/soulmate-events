@@ -13,7 +13,7 @@ document.querySelectorAll(".video-album video").forEach(video => {
 
 // List of album files
 const albumFiles = [
-    
+    "IMG_1079.jpeg"
 ];
 
 const album = document.getElementById("video-album");
