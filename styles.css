@@ -9,15 +9,13 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: url("background.jpg") no-repeat center center/cover;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    min-height: 100vh;         /* ✅ allows page to grow beyond 1 screen */
+    display: block;            /* ✅ normal document flow, not flexbox */
     color: #fff;
     text-align: center;
-    overflow: hidden;
+    overflow-x: hidden;        /* ✅ allow scroll vertically */
 }
+
 
 /* Navbar */
 .navbar {
@@ -81,15 +79,18 @@ h1 {
 
   h2 {
     display: flex;
+    align-items: center;
+    justify-content: center;
     flex-direction: column; /* stack vertically */
     gap: 15px;              /* spacing between links */
   }
+
   h2 a {
     text-decoration: none;
     color: wheat;
     font-size: 1.5rem;
     display: flex;
-    align-items: center;
+    align-items: right; /* center vertically */
     gap: 10px; /* spacing between icon and text */
     
     animation: fadeInDown 1.2s ease-out;
@@ -148,6 +149,15 @@ h1 {
     display: block;
 }
 
+h1 a {
+    color: inherit;           /* Keeps same color as text */
+    text-decoration: none;    /* Removes underline */
+}
+
+h1 a:hover {
+    color: #ff007f;           /* Optional hover color */
+}
+
 /* Heading animation */
 @keyframes fadeInDown {
     from {
@@ -178,19 +188,6 @@ h1 {
 }
 
 .notification .badge {
-    position: absolute;
-    top: -5px;
-    right: -8px;
-    padding: 2px 6px;
-    border-radius: 50%;
-    background: red;
-    color: white;
-    font-size: 12px;
-    font-weight: bold;
-}
-
-
-.notification .badge2 {
     position: absolute;
     top: -5px;
     right: -8px;

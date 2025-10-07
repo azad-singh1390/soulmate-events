@@ -13,7 +13,7 @@
 <body>
 
     <head>
-        <h1>Welcome to Soulmate Events</h1>
+        
     </head>
     <nav class="navbar">
         <div class="nav-links">
@@ -95,14 +95,11 @@
             <span class="bell">🔔</span>
             <span class="badge">0</span> <!-- change number dynamically -->
         </a>
-        <br>
-        <br>
-        <a href="TodayEvent/TodayEvent.html" class="notification">
-             <span class="warning">⚠️</span>
-            <span class="badge2">0</span> <!-- change number dynamically -->
-        </a>
 
     </nav>
+    <br><br><br><br><br><br><br><br>
+
+    <h1>Welcome to Soulmate Events</h1>
     <h2>
         <a href="Basic Setup/BasicSetup.html">
             <i class="fas fa-cogs"></i> Basic Setup
@@ -117,6 +114,17 @@
             <i class="fas fa-tv"></i> Create Quotation
         </a> -->
     </h2>
+    <br>
+    <hr>
+    <h1>
+        <a href="Rani Bagh/RaniBagh.html">
+            <i class="fas fa-tree"></i> Rani Bagh
+        </a>
+    </h1>
+    <footer>
+        <p>&copy; 2024 Soulmate Events. All rights reserved.</p>
+        <p>Designed by Soulmate Events</p>
+    </footer>
 
 
     <script>
@@ -128,16 +136,6 @@
                 })
                 .catch(err => console.error("Error fetching count:", err));
             console.log("Notification count updated");
-        }
-        
-        function fetchTodayNotificationCount() {
-            fetch("https://soulmate-backend-production.up.railway.app/notifications/todaycount")
-                .then(response => response.json())
-                .then(data => {
-                    document.querySelector(".badge2").textContent = data.count;
-                })
-                .catch(err => console.error("Error fetching count:", err));
-            console.log("Today Notification count updated");
         }
 
         (function scheduleDailyApiCall() {
@@ -151,15 +149,13 @@
             const msUntilMidnight = tomorrow.getTime() - now.getTime();
 
             setTimeout(() => {
-                fetchNotificationCount();
-                fetchTodayNotificationCount();   // call API at midnight
+                fetchNotificationCount();   // call API at midnight
                 scheduleDailyApiCall();     // reschedule for next day
             }, msUntilMidnight);
         })();
 
         // 🔹 Call immediately on page load too
         document.addEventListener("DOMContentLoaded", fetchNotificationCount);
-        document.addEventListener("DOMContentLoaded", fetchTodayNotificationCount);
     </script>
 
 </body>
