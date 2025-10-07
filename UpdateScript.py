@@ -3,14 +3,14 @@ import re
 
 # List of parent directories
 parent_directories = [
-    r'd:\soulmate-events\Sound Setups',
-    r'd:\soulmate-events\Artist',
-    r'd:\soulmate-events\Barat',
-    r'd:\soulmate-events\Special Effects',
-    r'd:\soulmate-events\Basic Setup',
-    r'd:\soulmate-events\Single Screen',
-    r'd:\soulmate-events\Double Screen',
-    r'd:\soulmate-events\Rani Bagh'
+    r'D:\SOULMATE\Website\soulmate-events\Sound Setups',
+    r'D:\SOULMATE\Website\soulmate-events\Artist',
+    r'D:\SOULMATE\Website\soulmate-events\Barat',
+    r'D:\SOULMATE\Website\soulmate-events\Special Effects',
+    r'D:\SOULMATE\Website\soulmate-events\Basic Setup',
+    r'D:\SOULMATE\Website\soulmate-events\Single Screen',
+    r'D:\SOULMATE\Website\soulmate-events\Double Screen',
+    r'D:\SOULMATE\Website\soulmate-events\Rani Bagh'
 ]
 
 # Allowed extensions
