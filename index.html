@@ -158,7 +158,7 @@
         }
         
         function fetchNotificationUpcomingSeasonCount() {
-            fetch("https://soulmate-backend-production.up.railway.app/notifications/todaycount")
+            fetch("https://soulmate-backend-production.up.railway.app/notifications/upcomingcount")
                 .then(response => response.json())
                 .then(data => {
                     document.querySelector(".badge3").textContent = data.count;
