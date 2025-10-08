@@ -91,6 +91,12 @@
         </div>
         <!-- 🔔 Notification Bell -->
         <br>
+
+        <a href="UpcomingSeasonEvents/UpcomingSeasonEvent.html" class="notification">
+            <span class="bell">📢</span>
+            <span class="badge3">0</span> <!-- change number dynamically -->
+        </a>
+
         <a href="ComingEvent/ComingEvent.html" class="notification">
             <span class="bell">🔔</span>
             <span class="badge">0</span> <!-- change number dynamically -->
@@ -150,6 +156,16 @@
                 .catch(err => console.error("Error fetching count:", err));
             console.log("Notification count updated");
         }
+        
+        function fetchNotificationUpcomingSeasonCount() {
+            fetch("https://soulmate-backend-production.up.railway.app/notifications/todaycount")
+                .then(response => response.json())
+                .then(data => {
+                    document.querySelector(".badge3").textContent = data.count;
+                })
+                .catch(err => console.error("Error fetching count:", err));
+            console.log("Notification count updated");
+        }
 
 
         (function scheduleDailyApiCall() {
@@ -165,6 +181,7 @@
             setTimeout(() => {
                 fetchNotificationCount();
                 fetchNotificationTodayCount()   // call API at midnight
+                fetchNotificationUpcomingSeasonCount()
                 scheduleDailyApiCall();     // reschedule for next day
             }, msUntilMidnight);
         })();
@@ -172,6 +189,8 @@
         // 🔹 Call immediately on page load too
         document.addEventListener("DOMContentLoaded", fetchNotificationCount);
         document.addEventListener("DOMContentLoaded", fetchNotificationTodayCount);
+        document.addEventListener("DOMContentLoaded", fetchNotificationUpcomingSeasonCount);
+        
     </script>
 
 </body>
