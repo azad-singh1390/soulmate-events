@@ -261,7 +261,7 @@
       </div>
   </nav>
 
-  <h1>📋 Events In Next 24 Hours</h1>
+  <h1>📋 Upcoming Events </h1>
 
   <!-- Loader Overlay -->
   <div id="loader" class="loader-overlay" style="display: none;">
@@ -329,7 +329,7 @@
 
       loader.style.display = "flex";
       try {
-        const res = await fetch("https://soulmate-backend-production.up.railway.app/todaybookings");
+        const res = await fetch("https://soulmate-backend-production.up.railway.app/upcomingbookings");
         const data = await res.json();
         const bookings = data.rows || []; // ✅ ensure it's always an array
         const tbody = document.querySelector("#bookingsTable tbody");
