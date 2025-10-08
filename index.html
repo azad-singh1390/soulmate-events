@@ -13,7 +13,7 @@
 <body>
 
     <head>
-        
+
     </head>
     <nav class="navbar">
         <div class="nav-links">
@@ -63,7 +63,7 @@
                     <a href="Special Effects/Laser Light/Laser.html">Laser Light</a>
                 </div>
             </div>
-        
+
             <div class="dropdown">
                 <a href="#">Barat ▾</a>
                 <div class="dropdown-content">
@@ -94,6 +94,10 @@
         <a href="ComingEvent/ComingEvent.html" class="notification">
             <span class="bell">🔔</span>
             <span class="badge">0</span> <!-- change number dynamically -->
+        </a>
+        <a href="TodayEvent/TodayEvent.html" class="notification">
+            <span class="bell">📅</span>
+            <span class="badge2">0</span> <!-- change number dynamically -->
         </a>
 
     </nav>
@@ -137,6 +141,16 @@
                 .catch(err => console.error("Error fetching count:", err));
             console.log("Notification count updated");
         }
+        function fetchNotificationTodayCount() {
+            fetch("https://soulmate-backend-production.up.railway.app/notifications/todaycount")
+                .then(response => response.json())
+                .then(data => {
+                    document.querySelector(".badge2").textContent = data.count;
+                })
+                .catch(err => console.error("Error fetching count:", err));
+            console.log("Notification count updated");
+        }
+
 
         (function scheduleDailyApiCall() {
             const now = new Date();
@@ -149,13 +163,15 @@
             const msUntilMidnight = tomorrow.getTime() - now.getTime();
 
             setTimeout(() => {
-                fetchNotificationCount();   // call API at midnight
+                fetchNotificationCount();
+                fetchNotificationTodayCount()   // call API at midnight
                 scheduleDailyApiCall();     // reschedule for next day
             }, msUntilMidnight);
         })();
 
         // 🔹 Call immediately on page load too
         document.addEventListener("DOMContentLoaded", fetchNotificationCount);
+        document.addEventListener("DOMContentLoaded", fetchNotificationTodayCount);
     </script>
 
 </body>
