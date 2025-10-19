@@ -358,16 +358,14 @@
           }).replace(/\s/g, "-");
 
 
-
           const pdfLink = row.has_quotation_pdf
-            ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf" target="_blank">View</a> | 
-       <a href="#" onclick="downloadPDF('https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf', '${sanitizeFilename(row.client_name)}-quotation.pdf')">Download</a>`
+            ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf" target="_blank">View</a>`
             : "No PDF";
 
           const planningpdfLink = row.has_planning_pdf
-            ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf" target="_blank">View</a> | 
-       <a href="#" onclick="downloadPDF('https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf', '${sanitizeFilename(row.client_name)}-planning.pdf')">Download</a>`
+            ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf" target="_blank">View</a>`
             : "No PDF";
+
 
 
 
