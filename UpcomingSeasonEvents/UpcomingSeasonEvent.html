@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Upcoming  Season Events</title>
+  <title>Upcoming Season Events</title>
 
   <!-- Add this inside <head> OR just before your script -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -360,14 +360,13 @@
 
 
           const pdfLink = row.has_quotation_pdf
-            ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf" target="_blank">View</a> | 
-       <a href="#" onclick="downloadPDF('https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf', '${sanitizeFilename(row.client_name)}-quotation.pdf')">Download</a>`
+            ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf" target="_blank">View</a>`
             : "No PDF";
 
           const planningpdfLink = row.has_planning_pdf
-            ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf" target="_blank">View</a> | 
-       <a href="#" onclick="downloadPDF('https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf', '${sanitizeFilename(row.client_name)}-planning.pdf')">Download</a>`
+            ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf" target="_blank">View</a>`
             : "No PDF";
+
 
 
 
