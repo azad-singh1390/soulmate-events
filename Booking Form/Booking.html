@@ -252,6 +252,10 @@
             const formData = new FormData(form);
             formData.append("password", password);
 
+            // Show uploading message
+
+            document.getElementById("uploadingMessage").style.display = "flex";
+
             try {
                 const response = await fetch('https://soulmate-backend-production.up.railway.app/book-event', {
                     method: 'POST',
@@ -259,10 +263,12 @@
                 });
 
                 const result = await response.json();
+                // Hide uploading message
+                document.getElementById("uploadingMessage").style.display = "none";
 
                 if (result.message === "Success") {
                     form.reset();
-                    alert("Booking submitted successfully!");
+                    // alert("Booking submitted successfully!");
                     setTimeout(() => {
                         window.location.href = "../thankyou.html";
                     }, 500);
@@ -289,6 +295,12 @@
 
     </script>
 
+    <!-- Uploading Message Overlay -->
+    <div id="uploadingMessage" class="uploading-overlay" style="display:none;">
+        <div class="uploading-box">
+            <p>Uploading the booking details...</p>
+        </div>
+    </div>
 </body>
 
 </html>
