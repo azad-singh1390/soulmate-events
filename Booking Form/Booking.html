@@ -203,6 +203,12 @@
         }
     </style>
 
+    <!-- Uploading Message Overlay -->
+    <div id="uploadingMessage" class="uploading-overlay" style="display:none;">
+        <div class="uploading-box">
+            <p>Uploading the booking details...</p>
+        </div>
+    </div>
     <script>
         let formPendingSubmit = null;
 
@@ -263,19 +269,26 @@
                 });
 
                 const result = await response.json();
-                // Hide uploading message
-                document.getElementById("uploadingMessage").style.display = "none";
 
                 if (result.message === "Success") {
                     form.reset();
                     // alert("Booking submitted successfully!");
                     setTimeout(() => {
+
+                        // Hide uploading message
+                        document.getElementById("uploadingMessage").style.display = "none";
                         window.location.href = "../thankyou.html";
                     }, 500);
                 } else {
+
+                    // Hide uploading message
+                    document.getElementById("uploadingMessage").style.display = "none";
                     alert("Booking failed: " + (result.message || "Unknown error"));
                 }
             } catch (err) {
+
+                // Hide uploading message
+                document.getElementById("uploadingMessage").style.display = "none";
                 alert("Booking failed: " + err.message);
             }
         }
@@ -294,13 +307,6 @@
         };
 
     </script>
-
-    <!-- Uploading Message Overlay -->
-    <div id="uploadingMessage" class="uploading-overlay" style="display:none;">
-        <div class="uploading-box">
-            <p>Uploading the booking details...</p>
-        </div>
-    </div>
 </body>
 
 </html>
