@@ -324,6 +324,19 @@
       return name.replace(/\s+/g, '_').replace(/[^\w\-]/g, '');
     }
 
+
+    function downloadFile(url, filename) {
+      fetch(url)
+        .then(response => response.blob())
+        .then(blob => {
+          const link = document.createElement("a");
+          link.href = URL.createObjectURL(blob);
+          link.download = filename;
+          link.click();
+          URL.revokeObjectURL(link.href);
+        });
+    }
+
     async function loadBookings() {
       const loader = document.getElementById("loader");
 
@@ -360,11 +373,23 @@
 
 
           const pdfLink = row.has_quotation_pdf
-            ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf" target="_blank">View</a>`
+            ? `
+    <a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf" target="_blank">View</a> |
+    <a href="#" onclick="downloadFile(
+      'https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf',
+      '${row.client_name}-${eventStartDate}-quotation.pdf'
+    )">Download</a>
+  `
             : "No PDF";
 
           const planningpdfLink = row.has_planning_pdf
-            ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf" target="_blank">View</a>`
+            ? `
+    <a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf" target="_blank">View</a> |
+    <a href="#" onclick="downloadFile(
+      'https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf',
+      '${row.client_name}-${eventStartDate}-planning.pdf'
+    )">Download</a>
+  `
             : "No PDF";
 
 
