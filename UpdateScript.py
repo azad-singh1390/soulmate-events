@@ -15,7 +15,7 @@ parent_directories = [
 
 # Allowed extensions
 image_exts = {'.jpeg', '.jpg', '.png', '.gif'}
-video_exts = {'.mp4'}
+video_exts = {'.mp4', '.mov'}
 
 for parent_directory in parent_directories:
     print(f"Processing directory: {parent_directory}")
@@ -63,6 +63,7 @@ for parent_directory in parent_directories:
         ]
         image_files = [f for f in files if os.path.splitext(f)[1].lower() in image_exts]
         video_files = [f for f in files if os.path.splitext(f)[1].lower() in video_exts]
+        print("video_files:", video_files)
         album_files = image_files + video_files
 
         script_path = os.path.join(parent_directory, 'script.js')

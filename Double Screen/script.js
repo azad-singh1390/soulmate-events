@@ -29,7 +29,8 @@ const albumFiles = [
     "Double_3.mp4",
     "Double_4.mp4",
     "Double_5.mp4",
-    "Double_6.mp4"
+    "Double_6.mp4",
+    "IMG_4818.mov"
 ];
 
 const album = document.getElementById("video-album");

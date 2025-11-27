@@ -18,7 +18,8 @@ const albumFiles = [
     "b63c0dd0-5cfd-4ef7-93bb-33afaba8192d.jpeg",
     "SingleScreen_1.jpeg",
     "SL_1.mp4",
-    "SL_2.mp4"
+    "SL_2.mp4",
+    "Video_Led.mov"
 ];
 
 const album = document.getElementById("video-album");

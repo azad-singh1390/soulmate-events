@@ -13,7 +13,9 @@ document.querySelectorAll(".video-album video").forEach(video => {
 
 // List of album files
 const albumFiles = [
-    "IMG_1079.jpeg"
+    "IMG_1079.jpeg",
+    "e20ffd33-cf5a-41fb-9b4b-d8816a7ca9f6.mov",
+    "IMG_1224.mov"
 ];
 
 const album = document.getElementById("video-album");
@@ -29,7 +31,8 @@ albumFiles.forEach(file => {
         img.className = "album-img"; // style in CSS instead of inline
         album.appendChild(img);
 
-    } else if (ext === "mp4") {
+    } 
+    else if (["mov", "mp4"].includes(ext)) {
         // Create <video>
         const video = document.createElement("video");
         video.controls = true;
