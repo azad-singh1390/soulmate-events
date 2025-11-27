@@ -1,68 +1,93 @@
 
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="utf-8" />
-        <title>Quotation Document List</title>
-        <style>
-            body {
-                text-align: center;
-                font-family: Arial, sans-serif;
-            }
-            table {
-                width: 90%;
-                margin: 20px auto;
-                border-collapse: collapse;
-                text-align: center;
-            }
-            th, td {
-                border: 1px solid #ccc;
-                padding: 10px;
-                text-align: center;
-            }
-            th {
-                background: #f2f2f2;
-                font-weight: bold;
-            }
-            a {
-                text-decoration: none;
-                color: blue;
-            }
-            /* Responsive small-screen tweak */
-            @media (max-width: 700px) {
-                table { width: 100%; font-size: 14px; }
-            }
-        </style>
-    </head>
-    <body>
-        <h2>Quotation Document List </h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>S.NO</th>
-                    <th>Name</th>
-                    <th>PDF</th>
-                    <th>Word</th>
-                </tr>
-            </thead>
-            <tbody>
-                
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Quotation Document List</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f6f9;
+  margin: 20px;
+  padding-top: 70px;
+}
+
+h2 {
+  text-align: center;
+  color: #333;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+th, td {
+  padding: 10px;
+  border: 2px solid black;
+  text-align: center;
+}
+
+th {
+  background: orange;
+  color: black;
+}
+
+tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+a.pdf-link {
+  color: #007bff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+a.pdf-link:hover {
+  color: #ff007f;
+}
+
+@media (max-width: 768px) {
+  table {
+    font-size: 0.85rem;
+  }
+}
+</style>
+</head>
+
+<body>
+    <h2>Quotation Document List</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>S.NO</th>
+                <th>Name</th>
+                <th>PDF</th>
+                <th>Word</th>
+            </tr>
+        </thead>
+        <tbody>
+            
             <tr>
                 <td>1</td>
                 <td>Gaurav 9_10 Feb 2026</td>
-                <td><a href="Gaurav 9_10 Feb 2026/SoulmateEvents-Mr.GauravKathuria.pdf" target="_blank">SoulmateEvents-Mr.GauravKathuria.pdf</a></td>
-                <td><a href="Gaurav 9_10 Feb 2026/Quotation Without Budget.docx" target="_blank">Quotation Without Budget.docx</a></td>
+                <td><a class="pdf-link" href="Gaurav 9_10 Feb 2026/SoulmateEvents-Mr.GauravKathuria.pdf" target="_blank">SoulmateEvents-Mr.GauravKathuria.pdf</a></td>
+                <td><a class="pdf-link" href="Gaurav 9_10 Feb 2026/Quotation Without Budget.docx" target="_blank">Quotation Without Budget.docx</a></td>
             </tr>
         
             <tr>
                 <td>2</td>
                 <td>Anurima 28 December</td>
-                <td><a href="Anurima 28 December/SoulmateEvents-Anurima.pdf" target="_blank">SoulmateEvents-Anurima.pdf</a></td>
-                <td><a href="Anurima 28 December/EventDetails.docx" target="_blank">EventDetails.docx</a></td>
+                <td><a class="pdf-link" href="Anurima 28 December/SoulmateEvents-Anurima.pdf" target="_blank">SoulmateEvents-Anurima.pdf</a></td>
+                <td><a class="pdf-link" href="Anurima 28 December/EventDetails.docx" target="_blank">EventDetails.docx</a></td>
             </tr>
         
-            </tbody>
-        </table>
-    </body>
-    </html>
-    
+        </tbody>
+    </table>
+</body>
+</html>

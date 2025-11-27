@@ -19,20 +19,21 @@ def generate_html():
     for subdir in subdirs_sorted:
         # Find PDF (first one)
         pdf_files = [f for f in subdir.iterdir() if f.suffix.lower() == ".pdf"]
+
         # Find Word (first one)
         word_files = [f for f in subdir.iterdir() if f.suffix.lower() in (".doc", ".docx")]
 
         pdf_link = (
-            f'<a href="{subdir.name}/{pdf_files[0].name}" target="_blank">{pdf_files[0].name}</a>'
+            f'<a class="pdf-link" href="{subdir.name}/{pdf_files[0].name}" target="_blank">{pdf_files[0].name}</a>'
             if pdf_files else "No PDF"
         )
 
         word_link = (
-            f'<a href="{subdir.name}/{word_files[0].name}" target="_blank">{word_files[0].name}</a>'
+            f'<a class="pdf-link" href="{subdir.name}/{word_files[0].name}" target="_blank">{word_files[0].name}</a>'
             if word_files else "No Word"
         )
 
-        # Folder last updated time (based on folder mtime)
+        # Folder last updated time
         last_updated = datetime.fromtimestamp(subdir.stat().st_mtime).strftime("%Y-%m-%d %H:%M:%S")
 
         rows.append(f"""
@@ -43,63 +44,90 @@ def generate_html():
                 <td>{word_link}</td>
             </tr>
         """)
+
         s_no += 1
 
-    # HTML output
+    # HTML Template
     html = f"""
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="utf-8" />
-        <title>Quotation Document List</title>
-        <style>
-            body {{
-                text-align: center;
-                font-family: Arial, sans-serif;
-            }}
-            table {{
-                width: 90%;
-                margin: 20px auto;
-                border-collapse: collapse;
-                text-align: center;
-            }}
-            th, td {{
-                border: 1px solid #ccc;
-                padding: 10px;
-                text-align: center;
-            }}
-            th {{
-                background: #f2f2f2;
-                font-weight: bold;
-            }}
-            a {{
-                text-decoration: none;
-                color: blue;
-            }}
-            /* Responsive small-screen tweak */
-            @media (max-width: 700px) {{
-                table {{ width: 100%; font-size: 14px; }}
-            }}
-        </style>
-    </head>
-    <body>
-        <h2>Quotation Document List </h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>S.NO</th>
-                    <th>Name</th>
-                    <th>PDF</th>
-                    <th>Word</th>
-                </tr>
-            </thead>
-            <tbody>
-                {''.join(rows)}
-            </tbody>
-        </table>
-    </body>
-    </html>
-    """
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Quotation Document List</title>
+
+<style>
+body {{
+  font-family: Arial, sans-serif;
+  background: #f4f6f9;
+  margin: 20px;
+  padding-top: 70px;
+}}
+
+h2 {{
+  text-align: center;
+  color: #333;
+}}
+
+table {{
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}}
+
+th, td {{
+  padding: 10px;
+  border: 2px solid black;
+  text-align: center;
+}}
+
+th {{
+  background: orange;
+  color: black;
+}}
+
+tr:nth-child(even) {{
+  background: #f9f9f9;
+}}
+
+a.pdf-link {{
+  color: #007bff;
+  font-weight: 600;
+  text-decoration: none;
+}}
+
+a.pdf-link:hover {{
+  color: #ff007f;
+}}
+
+@media (max-width: 768px) {{
+  table {{
+    font-size: 0.85rem;
+  }}
+}}
+</style>
+</head>
+
+<body>
+    <h2>Quotation Document List</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>S.NO</th>
+                <th>Name</th>
+                <th>PDF</th>
+                <th>Word</th>
+            </tr>
+        </thead>
+        <tbody>
+            {''.join(rows)}
+        </tbody>
+    </table>
+</body>
+</html>
+"""
 
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         f.write(html)
