@@ -19,7 +19,7 @@ def generate_html():
     for subdir in subdirs_sorted:
         # Find PDF (first one)
         pdf_files = [f for f in subdir.iterdir() if f.suffix.lower() == ".pdf"]
-
+        print(pdf_files) 
         # Find Word (first one)
         word_files = [f for f in subdir.iterdir() if f.suffix.lower() in (".doc", ".docx")]
 
