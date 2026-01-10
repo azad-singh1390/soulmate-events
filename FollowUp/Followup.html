@@ -18,15 +18,40 @@
             padding-top: 60px;
         }
 
-        .month-header-row td {
-            background: #f1f5f9;
-            font-weight: 700;
-            font-size: 15px;
-            color: #1e293b;
-            padding: 10px;
-            text-align: left;
-            border-top: 2px solid #cbd5e1;
+        .status-cell {
+            font-weight: 600;
+            text-transform: capitalize;
+            text-align: center;
         }
+
+        .status-confirmed {
+            background-color: #dcfce7;
+            /* light green */
+            color: #166534;
+            /* dark green */
+        }
+
+        .status-other {
+            background-color: #fee2e2;
+            /* light red */
+            color: #991b1b;
+            /* dark red */
+        }
+
+
+        .month-header {
+            background: white;
+            color: black;
+            font-weight: bold;
+            font-size: 26px;
+        }
+
+        .month-header td {
+            background-color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
 
         /* Navbar */
         .navbar {
@@ -489,7 +514,10 @@
                 <td>${row.event_type}</td>
                 <td>${row.booker_name}</td>
                 <td>${row.decorator}</td>
-                <td>${row.booking_status}</td>
+                <td class="status-cell ${row.booking_status?.toLowerCase() === 'confirmed' ? 'status-confirmed' : 'status-other'}">
+    ${row.booking_status}
+</td>
+
                 <td>${pdfLink}</td>
                 <td>
                     <button class="edit-btn" onclick="editRow(this, ${row.id})">Edit</button>
