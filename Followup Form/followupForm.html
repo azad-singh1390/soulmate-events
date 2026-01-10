@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soulmate Events FollowUp Form</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="nav-links">
+            <a href="../index.html">Home</a>
+            <!-- Sound Setups Dropdown -->
+            <div class="dropdown">
+                <a href="#">Sound Setups ▾</a>
+                <div class="dropdown-content">
+                    <a href="../Sound Setups/Haldi/Haldi.html">Haldi</a>
+                    <a href="../Sound Setups/Cocktail/Cocktail.html">Cocktail</a>
+                    <a href="../Sound Setups/Wedding/Wedding.html">Wedding</a>
+                    <a href="../Sound Setups/AfterParty/AfterPatrty.html">After Party</a>
+                    <a href="../Sound Setups/LiveBand/LiveBand.html">Live Band</a>
+                    <a href="../Sound Setups/Corporate/Corporate.html">Corporate</a>
+                    <a href="../Sound Setups/BigSound/BigSound.html">Big Sound Setups</a>
+                    <a href="../Sound Setups/Reels/Reel.html">Reels</a>
+                </div>
+            </div>
+
+            <!-- Artist Dropdown -->
+            <div class="dropdown">
+                <a href="#">Artist ▾</a>
+                <div class="dropdown-content">
+                    <a href="../Artist/Jockey/Jockey.html">Jockey</a>
+                    <a href="../Artist/Dholies/Dholies.html">Dholies</a>
+                    <a href="../Artist/Rajasthani Artist/Rajasthani.html">Rajasthani Artist</a>
+                    <a href="../Artist/Flute Artist/Flute.html">Flute Artist</a>
+                    <a href="../Artist/Indian Classical Artist/Classical.html">Indian Classical Artist</a>
+                    <a href="../Artist/Bride Groom Artist/BrideGroom.html">Bride Groom Artists</a>
+                </div>
+            </div>
+
+            <!-- Special Effects Dropdown -->
+            <div class="dropdown">
+                <a href="#">Special Effects ▾</a>
+                <div class="dropdown-content">
+                    <a href="../Special Effects/Sparkle Machine/SpecialEffects.html">Sparkle Machines</a>
+                    <a href="../Special Effects/Bubble Machine/Bubble.html">Bubble Machine</a>
+                    <a href="../Special Effects/Co2 Jets/Co2Jets.html">Co2 Jets</a>
+                    <a href="../Special Effects/Co2 Gun/Co2Gun.html">Co2 Gun</a>
+                    <a href="../Special Effects/Low Fog/LowFog.html">Low Fog</a>
+                    <a href="../Special Effects/Confeti Shower/Confeti.html">Confetti Shower</a>
+                    <a href="../Special Effects/Flower Shower/Flower.html">Flower Shower</a>
+                    <a href="../Special Effects/Cold Pyros/ColdPyros.html">Cold Pyros</a>
+                    <a href="../Special Effects/Pyro Gun/PyroGun.html">Pyro Guns</a>
+                    <a href="../Special Effects/Color Shots/ColorShots.html">Color Shots</a>
+                    <a href="../Special Effects/ATV Bike/Atv.html">ATV Bike</a>
+                    <a href="../Special Effects/Laser Light/Laser.html">Laser Light</a>
+                </div>
+            </div>
+        </div>
+        <div class="nav-links">
+
+            <div class="dropdown">
+                <a href="#">Event ▾</a>
+                <div class="dropdown-content">
+                    <a href="../Booking Form/Booking.html">Book Event</a>
+                    <a href="../View Form/View.html">View Bookings</a>
+                    <a href="../History/History.html">History Bookings</a>
+                </div>
+            </div>
+            <!-- <a href="../Contact Form/Contact.html">Contact Us</a> -->
+        </div>
+    </nav>
+
+    <br><br><br>
+    <div class="form-container">
+        <form id="followupForm" enctype="multipart/form-data">
+            <label>Client Name</label>
+            <input type="text" name="clientname" placeholder="Enter Client Name" required>
+
+            <label>Client Number</label>
+            <input type="tel" name="clientNumber" placeholder="Enter Client Number" pattern="[0-9]{10}" required>
+
+            <label>Event Date</label>
+            <input type="date" name="eventDate" required>
+
+            <label>Event</label>
+            <select name="eventType" required>
+                <option value="" disabled selected hidden>Select Event</option>
+                <option>Birthday</option>
+                <option>Anniversary</option>
+                <option>Engagement</option>
+                <option>Sangeet</option>
+                <option>Ring Ceremony</option>
+                <option>Roka Ceremony</option>
+                <option>Wedding</option>
+                <option>Destination Wedding</option>
+                <option>Corporate</option>
+                <option>Get Together</option>
+                <option>Other</option>
+            </select>
+
+            <label>Booker Name</label>
+            <select name="bookerName" required>
+                <option value="" disabled selected hidden>Select Booker Name</option>
+                <option>tarun</option>
+                <option>Madhu</option>
+                <option>sachin</option>
+                <option>kapil</option>
+                <option>Other</option>
+            </select>
+
+            
+            <label>Decorator</label>
+            <select name="decorator" required>
+                <option value="" disabled selected hidden>Select Decorator</option>
+                <option>Anshul</option>
+                <option>Ashima</option>
+                <option>Namarta</option>
+                <option>Jedi</option>
+                <option>Other</option>
+            </select>
+
+            
+            
+            <label>Booking Status</label>
+            <select name="bookingStatus" required>
+                <option value="" disabled selected hidden>Select Booking Status</option>
+                <option>Confirmed</option>
+                <option>Pending</option>
+                <option>Cancelled</option>
+                <option>In Line [Following]</option>
+                <option>In Dicussuion</option>
+                <option>Azad Sandhu Is Following</option>
+                <option>uday Is Following</option>
+                <option>palki Is Following</option>
+                <option>In Dicussuion</option>
+                <option>Booked By Other</option>
+            </select>
+
+            <label>Upload Quotation PDF</label>
+            <input type="file" name="pdfUpload" accept=".pdf" onchange="previewFile(this, 'quotationPreview')">
+            <small id="quotationPreview"></small>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <!-- Password Modal -->
+    <div id="passwordModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <h3>Enter Password</h3>
+            <input type="password" id="submitPassword" placeholder="Password">
+            <div class="modal-buttons">
+                <button onclick="confirmPassword()">Submit</button>
+                <button onclick="closePasswordModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 300px;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 8px;
+            margin: 10px 0;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+
+    <!-- Uploading Message Overlay -->
+    <div id="uploadingMessage" class="uploading-overlay" style="display:none;">
+        <div class="uploading-box">
+            <p>Uploading the booking details...</p>
+        </div>
+    </div>
+    <script>
+        let formPendingSubmit = null;
+
+        function previewFile(input, previewId) {
+            const file = input.files[0];
+            if (file) {
+                document.getElementById(previewId).innerText = "Selected: " + file.name;
+            }
+        }
+
+        function formatTime(timeString) {
+            if (!timeString) return "";
+
+            const [hours, minutes] = timeString.split(':');
+            const date = new Date();
+            date.setHours(hours, minutes, 0, 0);
+
+            return date.toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+            });
+        }
+
+        function openPasswordModal(form) {
+            formPendingSubmit = form;
+            document.getElementById("passwordModal").style.display = "flex";
+            document.getElementById("submitPassword").value = "";
+            document.getElementById("submitPassword").focus();
+        }
+
+        function closePasswordModal() {
+            document.getElementById("passwordModal").style.display = "none";
+            formPendingSubmit = null;
+        }
+
+        async function confirmPassword() {
+            const password = document.getElementById("submitPassword").value;
+            if (!password) {
+                alert("Password is required!");
+                return;
+            }
+
+            const form = formPendingSubmit;
+            closePasswordModal();
+
+            const formData = new FormData(form);
+            formData.append("password", password);
+
+            // Show uploading message
+
+            document.getElementById("uploadingMessage").style.display = "flex";
+
+            try {
+                const response = await fetch('https://soulmate-backend-production.up.railway.app/follow-event', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.message === "Success") {
+                    form.reset();
+                    // alert("Booking submitted successfully!");
+                    setTimeout(() => {
+
+                        // Hide uploading message
+                        document.getElementById("uploadingMessage").style.display = "none";
+                        window.location.href = "../thankyou.html";
+                    }, 500);
+                } else {
+
+                    // Hide uploading message
+                    document.getElementById("uploadingMessage").style.display = "none";
+                    alert("Followup failed: " + (result.message || "Unknown error"));
+                }
+            } catch (err) {
+
+                // Hide uploading message
+                document.getElementById("uploadingMessage").style.display = "none";
+                alert("Followup failed: " + err.message);
+            }
+        }
+
+        document.querySelector('#followupForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            openPasswordModal(event.target);
+        });
+
+
+        window.onclick = function (e) {
+            const modal = document.getElementById("passwordModal");
+            if (e.target === modal) {
+                closePasswordModal();
+            }
+        };
+
+    </script>
+</body>
+
+</html>

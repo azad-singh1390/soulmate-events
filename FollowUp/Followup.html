@@ -18,6 +18,16 @@
             padding-top: 60px;
         }
 
+        .month-header-row td {
+            background: #f1f5f9;
+            font-weight: 700;
+            font-size: 15px;
+            color: #1e293b;
+            padding: 10px;
+            text-align: left;
+            border-top: 2px solid #cbd5e1;
+        }
+
         /* Navbar */
         .navbar {
             width: 100%;
@@ -361,9 +371,10 @@
                     <th>S.No.</th>
                     <th>Client Name</th>
                     <th>Client Number</th>
-                    <th>Event Type</th>
                     <th>Event Date</th>
+                    <th>Event type</th>
                     <th>Booker Name </th>
+                    <th>Decorator</th>
                     <th>Booking Status</th>
                     <th>Quotation Delivered</th>
                     <th>Action</th>
@@ -372,210 +383,9 @@
             <tbody id="bookingsBody"></tbody>
         </table>
     </div>
-    <!-- Edit Modal -->
-    <div id="editModal">
-        <div class="modal-content">
-            <h2>Edit Booking</h2>
-            <form id="editBookingForm">
-                <input type="hidden" id="editBookingId">
-
-                <label>Client Name</label>
-                <input type="text" id="editClientName" required>
-
-                <label>Client Number</label>
-                <input type="text" id="editClientNumber" required>
-
-                <label>Start Date Of Event</label>
-                <input type="date" id="editStartDate" required>
-
-                <label>End Date Of Event</label>
-                <input type="date" id="editEndDate" required>
-
-                <label>Time Of Event</label>
-                <input type="time" id="editEventTime" required>
-
-                <label>Event</label>
-                <select id="editEventType" required>
-                    <option>Birthday</option>
-                    <option>Anniversary</option>
-                    <option>Engagement</option>
-                    <option>Sangeet</option>
-                    <option>Ring Ceremony</option>
-                    <option>Roka Ceremony</option>
-                    <option>Wedding</option>
-                    <option>Destination Wedding</option>
-                    <option>Corporate</option>
-                    <option>Get Together</option>
-                    <option>Other</option>
-                </select>
-
-                <label>Venue</label>
-                <select id="editVenue" required>
-                    <option>Noor Mahal [Destination]</option>
-                    <option>Noor Mahal, Darbar Hall</option>
-                    <option>Noor Mahal, Sheesh Mahal</option>
-                    <option>Noor Mahal, Rang Mahal</option>
-                    <option>Noor Mahal, Rani Bagh</option>
-                    <option>Noor Mahal, Dera</option>
-                    <option>Noor Mahal, Raja Bagh</option>
-                    <option>Noor Mahal, Ballroom</option>
-                    <option>Noor Mahal, Mischief</option>
-                    <option>Noor Mahal, Deewan-E-Aam</option>
-                    <option>Amani farms</option>
-                    <option>Rutba</option>
-                    <option>Eden</option>
-                    <option>Prem Plaza</option>
-                    <option>Jewels</option>
-                    <option>Other</option>
-                </select>
-
-                <label>Upload Quotation PDF</label>
-                <input type="file" id="editQuotationPdf" name="pdfUpload" accept=".pdf">
-
-                <label>Upload Planning PDF</label>
-                <input type="file" id="editPlanningPdf" name="planingpdfUpload" accept=".pdf">
-
-                <label>Total Amount</label>
-                <input type="text" id="editTotalAmount" required>
-
-                <label>Advance Received</label>
-                <input type="text" id="editAdvanceReceived" required>
-
-                <label>Advance Received By</label>
-                <select id="editReceivedBy" required>
-                    <option>Azad Sandhu</option>
-                    <option>Palki</option>
-                    <option>Uday Maan</option>
-                    <option>Ashwini</option>
-                    <option>Other</option>
-                </select>
-                <br>
-                <div style="margin-top:15px; text-align:right;">
-                    <button type="button" class="save-btn" onclick="saveEdit()">Save</button>
-                    <button type="button" class="cancel-btn" onclick="closeModal()">Cancel</button>
-                </div>
-                <br>
-                <div style="margin-top:15px; text-align:right;">
-                    <button type="button" class="delete-btn"
-                        onclick="deleteEdit(document.getElementById('editBookingId').value)">Delete</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Password Modal -->
-    <div id="passwordModal" style="display:none; position:fixed; top:0; left:0;
-     width:100%; height:100%; background:rgba(0,0,0,0.6);
-     justify-content:center; align-items:center; z-index:2000;">
-        <div
-            style="background:#fff; padding:20px; border-radius:10px; width:300px; text-align:center; box-shadow:0 4px 15px rgba(0,0,0,0.3);">
-            <h3>Enter Password</h3>
-            <input type="password" id="updatePassword"
-                style="width:100%; padding:8px; margin:15px 0; border:1px solid #ccc; border-radius:6px;"
-                placeholder="Password">
-            <div>
-                <button onclick="submitPassword()"
-                    style="background:#007bff; color:#fff; padding:8px 14px; border:none; border-radius:6px; margin-right:8px; cursor:pointer;">Submit</button>
-                <button onclick="closePasswordModal()"
-                    style="background:#dc3545; color:#fff; padding:8px 14px; border:none; border-radius:6px; cursor:pointer;">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Delete Password Modal -->
-    <div id="deletePasswordModal" style="display:none; position:fixed; top:0; left:0;
- width:100%; height:100%; background:rgba(0,0,0,0.6);
- justify-content:center; align-items:center; z-index:2000;">
-        <div style="background:#fff; padding:20px; border-radius:10px; width:300px; text-align:center;
-     box-shadow:0 4px 15px rgba(0,0,0,0.3);">
-            <h3>Enter Password to Delete</h3>
-            <input type="password" id="deletePassword"
-                style="width:100%; padding:8px; margin:15px 0; border:1px solid #ccc; border-radius:6px;"
-                placeholder="Password">
-            <div>
-                <button onclick="submitDeletePassword()"
-                    style="background:black; color:#fff; padding:8px 14px; border:none; border-radius:6px; margin-right:8px; cursor:pointer;">
-                    Confirm Delete
-                </button>
-                <button onclick="closeDeletePasswordModal()"
-                    style="background:#dc3545; color:#fff; padding:8px 14px; border:none; border-radius:6px; cursor:pointer;">
-                    Cancel
-                </button>
-            </div>
-        </div>
-    </div>
-
 
     <script>
 
-        function exportToExcel() {
-            const table = document.getElementById("bookingsTable");
-
-            // Extract table data into array
-            let data = [];
-            for (let row of table.rows) {
-                let rowData = [];
-                for (let cell of row.cells) {
-                    rowData.push(cell.innerText);
-                }
-                data.push(rowData);
-            }
-
-            // Remove last 2 columns (PDF + Action)
-            data = data.map(r => r.slice(0, -3));
-
-            const rowCount = data.length;
-            const colCount = data[0].length;
-            const lastColLetter = String.fromCharCode(64 + colCount); // e.g., 11 -> K
-
-            XlsxPopulate.fromBlankAsync().then(workbook => {
-                let sheet = workbook.sheet(0);
-                sheet.cell("A1").value(data);
-                workbook.sheet(0).name("Bookings");
-
-                // Header styling
-                sheet.range(`A1:${lastColLetter}1`).style({
-                    bold: true,
-                    fill: "FFA500",
-                    fontColor: "000000",
-                    horizontalAlignment: "center",
-                    verticalAlignment: "center"
-                });
-
-                // Zebra row coloring ONLY within table range
-                for (let i = 2; i <= rowCount; i++) {
-                    if (i % 2 === 0) {
-                        sheet.range(`A${i}:${lastColLetter}${i}`).style("fill", "F2F2F2");
-                    }
-                }
-
-                // ₹ formatting for Total Amount (col 8) & Advance Received (col 9)
-                sheet.column(8).style("numberFormat", '"₹"#,##0');
-                sheet.column(9).style("numberFormat", '"₹"#,##0');
-
-                // Borders + center align only inside the table
-                sheet.range(`A1:${lastColLetter}${rowCount}`).style({
-                    horizontalAlignment: "center",
-                    verticalAlignment: "center",
-                    border: true,
-                    wrapText: true
-                });
-
-                // Autosize columns within data range
-                for (let c = 1; c <= colCount; c++) {
-                    sheet.column(c).width(20);
-                }
-
-                return workbook.outputAsync();
-            }).then(blob => {
-                let url = window.URL.createObjectURL(blob);
-                let a = document.createElement("a");
-                a.href = url;
-                a.download = "Bookings.xlsx";
-                a.click();
-                window.URL.revokeObjectURL(url);
-            });
-        }
 
         function formatTime(timeString) {
             const [hours, minutes] = timeString.split(':');
@@ -619,6 +429,14 @@
             return name.replace(/\s+/g, '_').replace(/[^\w\-]/g, '');
         }
 
+        function getMonthYear(dateStr) {
+            const d = new Date(dateStr);
+            return d.toLocaleString("en-IN", {
+                month: "long",
+                year: "numeric"
+            }); // e.g. January 2026
+        }
+
         async function loadBookings() {
             const tbody = document.querySelector("#bookingsTable tbody");
             const loader = document.getElementById("loader");
@@ -626,50 +444,64 @@
             loader.style.display = "flex";
 
             try {
-                const res = await fetch("https://soulmate-backend-production.up.railway.app/bookings");
+                const res = await fetch("https://soulmate-backend-production.up.railway.app/followups");
                 const data = await res.json();
                 tbody.innerHTML = "";
 
                 if (data.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="11">No bookings found</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="10">No bookings found</td></tr>`;
                     return;
                 }
 
                 let serial = 1;
+                let lastMonth = "";
 
                 data.forEach(row => {
-                    const tr = document.createElement("tr");
-                    const eventStartDate = formatDate(row.event_start_date);
-                    const eventEndDate = formatDate(row.event_end_date);
+                    const eventDate = formatDate(row.event_date);
+                    const currentMonth = getMonthYear(row.event_date);
 
+                    // 🔹 Month Header Row
+                    if (currentMonth !== lastMonth) {
+                        const monthRow = document.createElement("tr");
+                        monthRow.classList.add("month-header-row");
+
+                        monthRow.innerHTML = `
+                    <td colspan="10" class="month-header">
+                        ${currentMonth}
+                    </td>
+                `;
+
+                        tbody.appendChild(monthRow);
+                        lastMonth = currentMonth;
+                    }
+
+                    const tr = document.createElement("tr");
 
                     const pdfLink = row.has_quotation_pdf
-                        ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf" target="_blank">View</a>`
+                        ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/followup-quotation-pdf" target="_blank">View</a>`
                         : "No PDF";
-
-                    const planningpdfLink = row.has_planning_pdf
-                        ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf" target="_blank">View</a>`
-                        : "No PDF";
-
 
                     tr.innerHTML = `
                 <td>${serial++}</td>
                 <td>${row.client_name}</td>
                 <td>${row.client_number}</td>
+                <td>${eventDate}</td>
                 <td>${row.event_type}</td>
-                <td>${eventStartDate} to ${eventEndDate}</td>
-                <td>${row.booked_by}</td>
+                <td>${row.booker_name}</td>
+                <td>${row.decorator}</td>
                 <td>${row.booking_status}</td>
                 <td>${pdfLink}</td>
                 <td>
-                  <button class="edit-btn" onclick="editRow(this, ${row.id})">Edit</button>
+                    <button class="edit-btn" onclick="editRow(this, ${row.id})">Edit</button>
                 </td>
             `;
+
                     tbody.appendChild(tr);
                 });
+
             } catch (err) {
                 console.error("Error fetching bookings:", err);
-                tbody.innerHTML = `<tr><td colspan="14">❌ Error fetching bookings</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="10">❌ Error fetching bookings</td></tr>`;
             } finally {
                 loader.style.display = "none";
             }
