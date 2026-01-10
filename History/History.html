@@ -17,6 +17,19 @@
       padding-top: 70px;
     }
 
+    .month-header {
+            background: white;
+            color: black;
+            font-weight: bold;
+            font-size: 26px;
+        }
+
+        .month-header td {
+            background-color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        
     /* Navbar */
     .navbar {
       width: 100%;
@@ -327,65 +340,114 @@
 
     async function loadBookings() {
       const loader = document.getElementById("loader");
+      const tbody = document.querySelector("#bookingsTable tbody");
 
       loader.style.display = "flex";
+
       try {
         const res = await fetch("https://soulmate-backend-production.up.railway.app/historybookings");
         const data = await res.json();
-        const bookings = data.rows || []; // ✅ ensure it's always an array
-        const tbody = document.querySelector("#bookingsTable tbody");
+        const bookings = data.rows || [];
         tbody.innerHTML = "";
 
-        let count = 1;
         if (bookings.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="9">No upcoming events found</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="10">No history bookings found</td></tr>`;
           return;
         }
 
+        // 🔹 Sort by start date
+        bookings.sort(
+          (a, b) => new Date(a.event_start_date) - new Date(b.event_start_date)
+        );
+
+        // 🔹 Count events per month
+        const monthCounts = {};
         bookings.forEach(row => {
-          const tr = document.createElement("tr");
-
-          // ✅ Format date as 12-September-2025
-          const eventStartDate = new Date(row.event_start_date).toLocaleDateString("en-GB", {
-            day: "2-digit",
+          const key = new Date(row.event_start_date).toLocaleDateString("en-US", {
             month: "long",
             year: "numeric"
-          }).replace(/\s/g, "-");
+          });
+          monthCounts[key] = (monthCounts[key] || 0) + 1;
+        });
 
-          const eventEndDate = new Date(row.event_end_date).toLocaleDateString("en-GB", {
-            day: "2-digit",
+        let currentMonth = "";
+        let count = 1;
+
+        bookings.forEach(row => {
+          const startDateObj = new Date(row.event_start_date);
+          const monthYear = startDateObj.toLocaleDateString("en-US", {
             month: "long",
             year: "numeric"
-          }).replace(/\s/g, "-");
+          });
 
+          // 🔹 Month header with event count
+          if (monthYear !== currentMonth) {
+            currentMonth = monthYear;
+            count = 1;
+
+            const monthRow = document.createElement("tr");
+            monthRow.className = "month-header";
+            monthRow.innerHTML = `
+          <td colspan="10">
+            📅 ${monthYear} - [ ${monthCounts[monthYear]} Event${monthCounts[monthYear] > 1 ? "s" : ""} ]
+          </td>
+        `;
+            tbody.appendChild(monthRow);
+          }
+
+          // 🔹 Date formatting
+          const eventStartDate = startDateObj
+            .toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "long",
+              year: "numeric"
+            })
+            .replace(/\s/g, "-");
+
+          const eventEndDate = new Date(row.event_end_date)
+            .toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "long",
+              year: "numeric"
+            })
+            .replace(/\s/g, "-");
 
           const pdfLink = row.has_quotation_pdf
             ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf" target="_blank">View</a> | 
-       <a href="#" onclick="downloadPDF('https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf', '${sanitizeFilename(row.client_name)}-quotation.pdf')">Download</a>`
+           <a href="#" onclick="downloadPDF(
+             'https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf',
+             '${sanitizeFilename(row.client_name)}-quotation.pdf'
+           )">Download</a>`
             : "No PDF";
 
           const planningpdfLink = row.has_planning_pdf
             ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf" target="_blank">View</a> | 
-       <a href="#" onclick="downloadPDF('https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf', '${sanitizeFilename(row.client_name)}-planning.pdf')">Download</a>`
+           <a href="#" onclick="downloadPDF(
+             'https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf',
+             '${sanitizeFilename(row.client_name)}-planning.pdf'
+           )">Download</a>`
             : "No PDF";
 
-
+          const tr = document.createElement("tr");
           tr.innerHTML = `
-            <td>${count++}</td>
-            <td>${row.client_name}</td>
-            <td>${row.client_number}</td>
-            <td>${eventStartDate}</td>
-            <td>${eventEndDate}</td>
-            <td>${row.event_type}</td>
-            <td>${row.venue}</td>
-            <td>${formatTime(row.event_time)}</td>
-            <td>${pdfLink}</td>
-            <td>${planningpdfLink}</td>
-          `;
+        <td>${count++}</td>
+        <td>${row.client_name}</td>
+        <td>${row.client_number}</td>
+        <td>${eventStartDate}</td>
+        <td>${eventEndDate}</td>
+        <td>${row.event_type}</td>
+        <td>${row.venue}</td>
+        <td>${formatTime(row.event_time)}</td>
+        <td>${pdfLink}</td>
+        <td>${planningpdfLink}</td>
+      `;
+
           tbody.appendChild(tr);
         });
+
       } catch (err) {
-        console.error("Error fetching bookings:", err);
+        console.error("Error fetching history bookings:", err);
+        tbody.innerHTML = `<tr><td colspan="10">❌ Error loading history bookings</td></tr>`;
       } finally {
         loader.style.display = "none";
       }
