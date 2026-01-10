@@ -625,39 +625,60 @@
         }
 
         async function loadBookings() {
-            const tbody = document.querySelector("#bookingsTable tbody");
-            const loader = document.getElementById("loader");
+    const tbody = document.querySelector("#bookingsTable tbody");
+    const loader = document.getElementById("loader");
 
-            loader.style.display = "flex";
+    loader.style.display = "flex";
 
-            try {
-                const res = await fetch("https://soulmate-backend-production.up.railway.app/bookings");
-                const data = await res.json();
-                tbody.innerHTML = "";
+    try {
+        const res = await fetch("https://soulmate-backend-production.up.railway.app/bookings");
+        const data = await res.json();
+        tbody.innerHTML = "";
 
-                if (data.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="11">No bookings found</td></tr>`;
-                    return;
-                }
+        if (data.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="14">No bookings found</td></tr>`;
+            return;
+        }
 
-                let serial = 1;
+        // 🔹 Sort by start date
+        data.sort((a, b) => new Date(a.event_start_date) - new Date(b.event_start_date));
 
-                data.forEach(row => {
-                    const tr = document.createElement("tr");
-                    const eventStartDate = formatDate(row.event_start_date);
-                    const eventEndDate = formatDate(row.event_end_date);
+        let currentMonth = "";
+        let serial = 1;
 
+        data.forEach(row => {
+            const startDate = new Date(row.event_start_date);
+            const monthYear = startDate.toLocaleDateString("en-US", {
+                month: "long",
+                year: "numeric"
+            });
 
-                    const pdfLink = row.has_quotation_pdf
-                        ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf" target="_blank">View</a>`
-                        : "No PDF";
+            // 🔹 Insert Month Header
+            if (monthYear !== currentMonth) {
+                currentMonth = monthYear;
+                serial = 1;
 
-                    const planningpdfLink = row.has_planning_pdf
-                        ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf" target="_blank">View</a>`
-                        : "No PDF";
+                const monthRow = document.createElement("tr");
+                monthRow.className = "month-header";
+                monthRow.innerHTML = `
+                    <td colspan="14">📅 ${monthYear}</td>
+                `;
+                tbody.appendChild(monthRow);
+            }
 
+            const eventStartDate = formatDate(row.event_start_date);
+            const eventEndDate = formatDate(row.event_end_date);
 
-                    tr.innerHTML = `
+            const pdfLink = row.has_quotation_pdf
+                ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf" target="_blank">View</a>`
+                : "No PDF";
+
+            const planningpdfLink = row.has_planning_pdf
+                ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf" target="_blank">View</a>`
+                : "No PDF";
+
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
                 <td>${serial++}</td>
                 <td>${row.client_name}</td>
                 <td>${row.client_number}</td>
@@ -672,18 +693,21 @@
                 <td>${pdfLink}</td>
                 <td>${planningpdfLink}</td>
                 <td>
-                  <button class="edit-btn" onclick="editRow(this, ${row.id})">Edit</button>
+                    <button class="edit-btn" onclick="editRow(this, ${row.id})">Edit</button>
                 </td>
             `;
-                    tbody.appendChild(tr);
-                });
-            } catch (err) {
-                console.error("Error fetching bookings:", err);
-                tbody.innerHTML = `<tr><td colspan="14">❌ Error fetching bookings</td></tr>`;
-            } finally {
-                loader.style.display = "none";
-            }
-        }
+
+            tbody.appendChild(tr);
+        });
+
+    } catch (err) {
+        console.error("Error fetching bookings:", err);
+        tbody.innerHTML = `<tr><td colspan="14">❌ Error fetching bookings</td></tr>`;
+    } finally {
+        loader.style.display = "none";
+    }
+}
+
 
         function formatDateForInput(dateString) {
             if (!dateString) return "";

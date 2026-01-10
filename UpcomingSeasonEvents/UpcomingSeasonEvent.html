@@ -17,6 +17,18 @@
       padding-top: 70px;
     }
 
+    .month-header {
+      background: white;
+      color: orange;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .month-header td {
+      padding: 12px;
+      text-align: left;
+    }
+
     /* Navbar */
     .navbar {
       width: 100%;
@@ -339,77 +351,107 @@
 
     async function loadBookings() {
       const loader = document.getElementById("loader");
+      const tbody = document.querySelector("#bookingsTable tbody");
 
       loader.style.display = "flex";
+
       try {
         const res = await fetch("https://soulmate-backend-production.up.railway.app/upcomingbookings");
         const data = await res.json();
-        const bookings = data.rows || []; // ✅ ensure it's always an array
-        const tbody = document.querySelector("#bookingsTable tbody");
+        const bookings = data.rows || [];
         tbody.innerHTML = "";
 
-        let count = 1;
         if (bookings.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="10">No events today</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="10">No upcoming events</td></tr>`;
           return;
         }
 
+        // 🔹 Sort by start date
+        bookings.sort(
+          (a, b) => new Date(a.event_start_date) - new Date(b.event_start_date)
+        );
+
+        let currentMonth = "";
+        let count = 1;
+
         bookings.forEach(row => {
-          const tr = document.createElement("tr");
+          const startDateObj = new Date(row.event_start_date);
 
-          // ✅ Format date as 12-September-2025
-          const eventStartDate = new Date(row.event_start_date).toLocaleDateString("en-GB", {
-            day: "2-digit",
+          // 🔹 Month Header (e.g. September 2025)
+          const monthYear = startDateObj.toLocaleDateString("en-US", {
             month: "long",
             year: "numeric"
-          }).replace(/\s/g, "-");
+          });
 
-          const eventEndDate = new Date(row.event_end_date).toLocaleDateString("en-GB", {
-            day: "2-digit",
-            month: "long",
-            year: "numeric"
-          }).replace(/\s/g, "-");
+          if (monthYear !== currentMonth) {
+            currentMonth = monthYear;
+            count = 1;
 
+            const monthRow = document.createElement("tr");
+            monthRow.className = "month-header";
+            monthRow.innerHTML = `
+          <td colspan="10">📅 ${monthYear}</td>
+        `;
+            tbody.appendChild(monthRow);
+          }
 
+          // 🔹 Format dates (12-September-2025)
+          const eventStartDate = startDateObj
+            .toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "long",
+              year: "numeric"
+            })
+            .replace(/\s/g, "-");
+
+          const eventEndDate = new Date(row.event_end_date)
+            .toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "long",
+              year: "numeric"
+            })
+            .replace(/\s/g, "-");
 
           const pdfLink = row.has_quotation_pdf
             ? `
-    <a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf" target="_blank">View</a> |
-    <a href="#" onclick="downloadFile(
-      'https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf',
-      '${row.client_name}-${eventStartDate}-quotation.pdf'
-    )">Download</a>
-  `
+          <a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf" target="_blank">View</a> |
+          <a href="#" onclick="downloadFile(
+            'https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf',
+            '${row.client_name}-${eventStartDate}-quotation.pdf'
+          )">Download</a>
+        `
             : "No PDF";
 
           const planningpdfLink = row.has_planning_pdf
             ? `
-    <a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf" target="_blank">View</a> |
-    <a href="#" onclick="downloadFile(
-      'https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf',
-      '${row.client_name}-${eventStartDate}-planning.pdf'
-    )">Download</a>
-  `
+          <a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf" target="_blank">View</a> |
+          <a href="#" onclick="downloadFile(
+            'https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf',
+            '${row.client_name}-${eventStartDate}-planning.pdf'
+          )">Download</a>
+        `
             : "No PDF";
 
-
-
+          const tr = document.createElement("tr");
           tr.innerHTML = `
-            <td>${count++}</td>
-            <td>${row.client_name}</td>
-            <td>${row.client_number}</td>
-            <td>${eventStartDate}</td>
-            <td>${eventEndDate}</td>
-            <td>${row.event_type}</td>
-            <td>${row.venue}</td>
-            <td>${formatTime(row.event_time)}</td>
-            <td>${pdfLink}</td>
-            <td>${planningpdfLink}</td>
-          `;
+        <td>${count++}</td>
+        <td>${row.client_name}</td>
+        <td>${row.client_number}</td>
+        <td>${eventStartDate}</td>
+        <td>${eventEndDate}</td>
+        <td>${row.event_type}</td>
+        <td>${row.venue}</td>
+        <td>${formatTime(row.event_time)}</td>
+        <td>${pdfLink}</td>
+        <td>${planningpdfLink}</td>
+      `;
+
           tbody.appendChild(tr);
         });
+
       } catch (err) {
         console.error("Error fetching bookings:", err);
+        tbody.innerHTML = `<tr><td colspan="10">❌ Error loading bookings</td></tr>`;
       } finally {
         loader.style.display = "none";
       }
