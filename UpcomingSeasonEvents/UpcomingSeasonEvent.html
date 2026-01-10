@@ -19,14 +19,14 @@
 
     .month-header {
       background: white;
-      color: orange;
+      color: black;
       font-weight: bold;
-      font-size: 16px;
+      font-size: 26px;
     }
 
     .month-header td {
       padding: 12px;
-      text-align: left;
+      text-align: center;
     }
 
     /* Navbar */
@@ -371,18 +371,27 @@
           (a, b) => new Date(a.event_start_date) - new Date(b.event_start_date)
         );
 
+        // 🔹 Count events per month
+        const monthCounts = {};
+        bookings.forEach(b => {
+          const key = new Date(b.event_start_date).toLocaleDateString("en-US", {
+            month: "long",
+            year: "numeric"
+          });
+          monthCounts[key] = (monthCounts[key] || 0) + 1;
+        });
+
         let currentMonth = "";
         let count = 1;
 
         bookings.forEach(row => {
           const startDateObj = new Date(row.event_start_date);
-
-          // 🔹 Month Header (e.g. September 2025)
           const monthYear = startDateObj.toLocaleDateString("en-US", {
             month: "long",
             year: "numeric"
           });
 
+          // 🔹 Month Header with count
           if (monthYear !== currentMonth) {
             currentMonth = monthYear;
             count = 1;
@@ -390,12 +399,14 @@
             const monthRow = document.createElement("tr");
             monthRow.className = "month-header";
             monthRow.innerHTML = `
-          <td colspan="10">📅 ${monthYear}</td>
+          <td colspan="10">
+            📅 ${monthYear} (${monthCounts[monthYear]} Event${monthCounts[monthYear] > 1 ? "s" : ""})
+          </td>
         `;
             tbody.appendChild(monthRow);
           }
 
-          // 🔹 Format dates (12-September-2025)
+          // 🔹 Date formatting
           const eventStartDate = startDateObj
             .toLocaleDateString("en-GB", {
               day: "2-digit",
@@ -456,7 +467,6 @@
         loader.style.display = "none";
       }
     }
-
 
     function exportToExcel() {
       const table = document.getElementById("bookingsTable");

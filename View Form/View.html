@@ -18,6 +18,18 @@
             padding-top: 60px;
         }
 
+        .month-header {
+            background: white;
+            color: black;
+            font-weight: bold;
+            font-size: 26px;
+        }
+
+        .month-header td {
+            padding: 12px;
+            text-align: center;
+        }
+
         /* Navbar */
         .navbar {
             width: 100%;
@@ -625,60 +637,72 @@
         }
 
         async function loadBookings() {
-    const tbody = document.querySelector("#bookingsTable tbody");
-    const loader = document.getElementById("loader");
+            const tbody = document.querySelector("#bookingsTable tbody");
+            const loader = document.getElementById("loader");
 
-    loader.style.display = "flex";
+            loader.style.display = "flex";
 
-    try {
-        const res = await fetch("https://soulmate-backend-production.up.railway.app/bookings");
-        const data = await res.json();
-        tbody.innerHTML = "";
+            try {
+                const res = await fetch("https://soulmate-backend-production.up.railway.app/bookings");
+                const data = await res.json();
+                tbody.innerHTML = "";
 
-        if (data.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="14">No bookings found</td></tr>`;
-            return;
-        }
+                if (data.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="14">No bookings found</td></tr>`;
+                    return;
+                }
 
-        // 🔹 Sort by start date
-        data.sort((a, b) => new Date(a.event_start_date) - new Date(b.event_start_date));
+                // 🔹 Sort by start date
+                data.sort((a, b) => new Date(a.event_start_date) - new Date(b.event_start_date));
 
-        let currentMonth = "";
-        let serial = 1;
+                // 🔹 Count events per month
+                const monthCounts = {};
+                data.forEach(row => {
+                    const key = new Date(row.event_start_date).toLocaleDateString("en-US", {
+                        month: "long",
+                        year: "numeric"
+                    });
+                    monthCounts[key] = (monthCounts[key] || 0) + 1;
+                });
 
-        data.forEach(row => {
-            const startDate = new Date(row.event_start_date);
-            const monthYear = startDate.toLocaleDateString("en-US", {
-                month: "long",
-                year: "numeric"
-            });
+                let currentMonth = "";
+                let serial = 1;
 
-            // 🔹 Insert Month Header
-            if (monthYear !== currentMonth) {
-                currentMonth = monthYear;
-                serial = 1;
+                data.forEach(row => {
+                    const startDate = new Date(row.event_start_date);
+                    const monthYear = startDate.toLocaleDateString("en-US", {
+                        month: "long",
+                        year: "numeric"
+                    });
 
-                const monthRow = document.createElement("tr");
-                monthRow.className = "month-header";
-                monthRow.innerHTML = `
-                    <td colspan="14">📅 ${monthYear}</td>
+                    // 🔹 Insert Month Header with count
+                    if (monthYear !== currentMonth) {
+                        currentMonth = monthYear;
+                        serial = 1;
+
+                        const monthRow = document.createElement("tr");
+                        monthRow.className = "month-header";
+                        monthRow.innerHTML = `
+                    <td colspan="14">
+                        📅 ${monthYear} (${monthCounts[monthYear]} Event${monthCounts[monthYear] > 1 ? "s" : ""})
+                    </td>
                 `;
-                tbody.appendChild(monthRow);
-            }
+                        tbody.appendChild(monthRow);
+                    }
 
-            const eventStartDate = formatDate(row.event_start_date);
-            const eventEndDate = formatDate(row.event_end_date);
+                    const eventStartDate = formatDate(row.event_start_date);
+                    const eventEndDate = formatDate(row.event_end_date);
 
-            const pdfLink = row.has_quotation_pdf
-                ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf" target="_blank">View</a>`
-                : "No PDF";
+                    const pdfLink = row.has_quotation_pdf
+                        ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf" target="_blank">View</a>`
+                        : "No PDF";
 
-            const planningpdfLink = row.has_planning_pdf
-                ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf" target="_blank">View</a>`
-                : "No PDF";
+                    const planningpdfLink = row.has_planning_pdf
+                        ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf" target="_blank">View</a>`
+                        : "No PDF";
 
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `
                 <td>${serial++}</td>
                 <td>${row.client_name}</td>
                 <td>${row.client_number}</td>
@@ -697,16 +721,16 @@
                 </td>
             `;
 
-            tbody.appendChild(tr);
-        });
+                    tbody.appendChild(tr);
+                });
 
-    } catch (err) {
-        console.error("Error fetching bookings:", err);
-        tbody.innerHTML = `<tr><td colspan="14">❌ Error fetching bookings</td></tr>`;
-    } finally {
-        loader.style.display = "none";
-    }
-}
+            } catch (err) {
+                console.error("Error fetching bookings:", err);
+                tbody.innerHTML = `<tr><td colspan="14">❌ Error fetching bookings</td></tr>`;
+            } finally {
+                loader.style.display = "none";
+            }
+        }
 
 
         function formatDateForInput(dateString) {
