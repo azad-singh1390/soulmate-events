@@ -400,7 +400,7 @@
             monthRow.className = "month-header";
             monthRow.innerHTML = `
           <td colspan="10">
-            📅 ${monthYear} (${monthCounts[monthYear]} Event${monthCounts[monthYear] > 1 ? "s" : ""})
+            📅 ${monthYear} - [ ${monthCounts[monthYear]} Event${monthCounts[monthYear] > 1 ? "s" : ""} ]
           </td>
         `;
             tbody.appendChild(monthRow);

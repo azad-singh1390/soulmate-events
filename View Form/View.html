@@ -26,6 +26,7 @@
         }
 
         .month-header td {
+            background-color: white;
             padding: 12px;
             text-align: left;
         }
@@ -684,7 +685,7 @@
                         monthRow.className = "month-header";
                         monthRow.innerHTML = `
                     <td colspan="14">
-                        📅 ${monthYear} (${monthCounts[monthYear]} Event${monthCounts[monthYear] > 1 ? "s" : ""})
+                        📅 ${monthYear} - [ ${monthCounts[monthYear]} Event${monthCounts[monthYear] > 1 ? "s" : ""} ]
                     </td>
                 `;
                         tbody.appendChild(monthRow);
