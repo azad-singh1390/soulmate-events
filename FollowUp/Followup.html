@@ -409,6 +409,131 @@
         </table>
     </div>
 
+    <div id="editModal">
+        <div class="modal-content">
+            <h2>Edit Booking</h2>
+            <form id="editBookingForm">
+                <input type="hidden" id="editBookingId">
+
+                <label>Client Name</label>
+                <input type="text" id="editClientName" required>
+
+                <label>Client Number</label>
+                <input type="text" id="editClientNumber" required>
+
+                <label>Event Event</label>
+                <input type="date" id="editEventDate" required>
+
+                <label>Event</label>
+                <select id="editEvent" required>
+                    <option>Birthday</option>
+                    <option>Anniversary</option>
+                    <option>Engagement</option>
+                    <option>Sangeet</option>
+                    <option>Ring Ceremony</option>
+                    <option>Roka Ceremony</option>
+                    <option>Wedding</option>
+                    <option>Destination Wedding</option>
+                    <option>Corporate</option>
+                    <option>Get Together</option>
+                    <option>Other</option>
+                </select>
+
+                <label>Booker Name</label>
+                <select id="editBookerName" required>
+                    <option>tarun</option>
+                    <option>Madhu</option>
+                    <option>sachin</option>
+                    <option>kapil</option>
+                    <option>Other</option>
+                </select>
+
+
+                <label>Decorator</label>
+                <select id="editDecorator" required>
+                    <option>Anshul</option>
+                    <option>Ashima</option>
+                    <option>Namarta</option>
+                    <option>Jedi</option>
+                    <option>Other</option>
+                </select>
+
+
+                <label>Booking Status </label>
+                <select id="editBookingStatus" required>
+                    <option>Confirmed</option>
+                    <option>Pending</option>
+                    <option>Cancelled</option>
+                    <option>In Line [Following]</option>
+                    <option>In Dicussuion</option>
+                    <option>Azad Sandhu Is Following</option>
+                    <option>uday Is Following</option>
+                    <option>palki Is Following</option>
+                    <option>In Dicussuion</option>
+                    <option>Booked By Other</option>
+                </select>
+
+                <label>Upload Quotation PDF</label>
+                <input type="file" id="editQuotationPdf" name="pdfUpload" accept=".pdf">
+
+                <br>
+                <div style="margin-top:15px; text-align:right;">
+                    <button type="button" class="save-btn" onclick="saveEdit()">Save</button>
+                    <button type="button" class="cancel-btn" onclick="closeModal()">Cancel</button>
+                </div>
+                <br>
+                <div style="margin-top:15px; text-align:right;">
+                    <button type="button" class="delete-btn"
+                        onclick="deleteEdit(document.getElementById('editBookingId').value)">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="passwordModal" style="display:none; position:fixed; top:0; left:0;
+     width:100%; height:100%; background:rgba(0,0,0,0.6);
+     justify-content:center; align-items:center; z-index:2000;">
+        <div
+            style="background:#fff; padding:20px; border-radius:10px; width:300px; text-align:center; box-shadow:0 4px 15px rgba(0,0,0,0.3);">
+            <h3>Enter Password</h3>
+            <input type="password" id="updatePassword"
+                style="width:100%; padding:8px; margin:15px 0; border:1px solid #ccc; border-radius:6px;"
+                placeholder="Password">
+            <div>
+                <button onclick="submitPassword()"
+                    style="background:#007bff; color:#fff; padding:8px 14px; border:none; border-radius:6px; margin-right:8px; cursor:pointer;">Submit</button>
+                <button onclick="closePasswordModal()"
+                    style="background:#dc3545; color:#fff; padding:8px 14px; border:none; border-radius:6px; cursor:pointer;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Password Modal -->
+    <div id="deletePasswordModal" style="display:none; position:fixed; top:0; left:0;
+ width:100%; height:100%; background:rgba(0,0,0,0.6);
+ justify-content:center; align-items:center; z-index:2000;">
+        <div style="background:#fff; padding:20px; border-radius:10px; width:300px; text-align:center;
+     box-shadow:0 4px 15px rgba(0,0,0,0.3);">
+            <h3>Enter Password to Delete</h3>
+            <input type="password" id="deletePassword"
+                style="width:100%; padding:8px; margin:15px 0; border:1px solid #ccc; border-radius:6px;"
+                placeholder="Password">
+            <div>
+                <button onclick="submitDeletePassword()"
+                    style="background:black; color:#fff; padding:8px 14px; border:none; border-radius:6px; margin-right:8px; cursor:pointer;">
+                    Confirm Delete
+                </button>
+                <button onclick="closeDeletePasswordModal()"
+                    style="background:#dc3545; color:#fff; padding:8px 14px; border:none; border-radius:6px; cursor:pointer;">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+
+
     <script>
 
 
@@ -517,7 +642,6 @@
                 <td class="status-cell ${row.booking_status?.toLowerCase() === 'confirmed' ? 'status-confirmed' : 'status-other'}">
     ${row.booking_status}
 </td>
-
                 <td>${pdfLink}</td>
                 <td>
                     <button class="edit-btn" onclick="editRow(this, ${row.id})">Edit</button>
@@ -565,34 +689,31 @@
         }
 
         let originalData = {};
-        function editRow(btn, id) {
+        function editRow(btn, id)
+        {
+
             const tr = btn.closest("tr");
             const tds = tr.querySelectorAll("td");
 
             originalData = {
                 client_name: tds[1].innerText.trim(),
                 client_number: tds[2].innerText.trim(),
-                event_start_date: formatDateForInput(tds[3].innerText.trim()),
-                event_end_date: formatDateForInput(tds[4].innerText.trim()),
-                event_type: tds[5].innerText.trim(),
-                venue: tds[6].innerText.trim(),
-                total_amount: tds[7].innerText.replace("₹", "").replace(/,/g, "").trim(),
-                advance_received: tds[8].innerText.replace("₹", "").replace(/,/g, "").trim(),
-                received_by: tds[9].innerText.trim(),
-                event_time: formatTimeForInput(tds[10].innerText.trim())
+                event_date: formatDateForInput(tds[3].innerText.trim()),
+                event_type: tds[4].innerText.trim(),
+                booker_name: tds[5].innerText.trim(),
+                decorator: tds[6].innerText.trim(),
+                booking_status: tds[7].innerText.replace("₹", "").replace(/,/g, "").trim()
             };
+
 
             document.querySelector("#editBookingId").value = id;
             document.querySelector("#editClientName").value = tds[1].innerText.trim();
             document.querySelector("#editClientNumber").value = tds[2].innerText.trim();
-            document.querySelector("#editStartDate").value = formatDateForInput(tds[3].innerText.trim());
-            document.querySelector("#editEndDate").value = formatDateForInput(tds[4].innerText.trim());
-            document.querySelector("#editEventTime").value = formatTimeForInput(tds[10].innerText.trim());
-            document.querySelector("#editEventType").value = tds[5].innerText.trim();
-            document.querySelector("#editVenue").value = tds[6].innerText.trim();
-            document.querySelector("#editTotalAmount").value = tds[7].innerText.replace("₹", "").replace(/,/g, "").trim();
-            document.querySelector("#editAdvanceReceived").value = tds[8].innerText.replace("₹", "").replace(/,/g, "").trim();
-            document.querySelector("#editReceivedBy").value = tds[9].innerText.trim();
+            document.querySelector("#editEventDate").value = formatDateForInput(tds[3].innerText.trim());
+            document.querySelector("#editEvent").value = tds[4].innerText.trim();
+            document.querySelector("#editBookerName").value = tds[5].innerText.trim();
+            document.querySelector("#editDecorator").value = tds[6].innerText.trim();
+            document.querySelector("#editBookingStatus").value = tds[7].innerText.trim();
 
             document.getElementById("editModal").style.display = "flex";
         }
@@ -600,7 +721,6 @@
         function closeModal() {
             document.getElementById("editModal").style.display = "none";
             document.getElementById("editQuotationPdf").value = "";
-            document.getElementById("editPlanningPdf").value = "";
         }
 
         // Store pending changes + id until password entered
@@ -612,14 +732,11 @@
             const current = {
                 client_name: document.querySelector("#editClientName").value.trim(),
                 client_number: document.querySelector("#editClientNumber").value.trim(),
-                event_start_date: document.querySelector("#editStartDate").value,
-                event_end_date: document.querySelector("#editEndDate").value,
-                event_type: document.querySelector("#editEventType").value,
-                venue: document.querySelector("#editVenue").value,
-                total_amount: document.querySelector("#editTotalAmount").value,
-                advance_received: document.querySelector("#editAdvanceReceived").value,
-                received_by: document.querySelector("#editReceivedBy").value,
-                event_time: document.querySelector("#editEventTime").value
+                event_date: document.querySelector("#editEventDate").value,
+                event_type: document.querySelector("#editEvent").value,
+                booker_name: document.querySelector("#editBookerName").value,
+                decorator: document.querySelector("#editDecorator").value,
+                booking_status: document.querySelector("#editBookingStatus").value
             };
 
             console.log("Original Data:", originalData);
@@ -720,9 +837,9 @@
                 alert("❌ Please enter password");
                 return;
             }
-
+            console.log("Deleting ID:", pendingDeleteId);
             try {
-                const res = await fetch(`https://soulmate-backend-production.up.railway.app/bookings/${pendingDeleteId}`, {
+                const res = await fetch(`https://soulmate-backend-production.up.railway.app/followups/${pendingDeleteId}`, {
                     method: "DELETE",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ password })
@@ -730,16 +847,16 @@
 
                 const result = await res.json();
                 if (res.ok && result.success) {
-                    alert("✅ Booking deleted successfully");
+                    alert("✅ Follow-up deleted successfully");
                     closeDeletePasswordModal();
                     closeModal();
                     loadBookings();
                 } else {
-                    alert("❌ " + (result.message || "Failed to delete booking"));
+                    alert("❌ " + (result.message || "Failed to delete follow-up"));
                 }
             } catch (err) {
-                console.error("Error deleting booking:", err);
-                alert("❌ Error deleting booking");
+                console.error("Error deleting follow-up:", err);
+                alert("❌ Error deleting follow-up");
             }
         }
 
