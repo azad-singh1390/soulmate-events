@@ -789,11 +789,9 @@
 
                 // Add files if selected
                 const quotationFile = document.getElementById("editQuotationPdf").files[0];
-                const planningFile = document.getElementById("editPlanningPdf").files[0];
                 if (quotationFile) formData.append("pdfUpload", quotationFile);
-                if (planningFile) formData.append("planingpdfUpload", planningFile);
 
-                const res = await fetch(`https://soulmate-backend-production.up.railway.app/bookings/${pendingId}`, {
+                const res = await fetch(`https://soulmate-backend-production.up.railway.app/followups/${pendingId}`, {
                     method: "PUT",
                     body: formData
                 });
@@ -810,7 +808,6 @@
             }
 
             document.getElementById("editQuotationPdf").value = "";
-            document.getElementById("editPlanningPdf").value = "";
 
         }
 
