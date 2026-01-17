@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Events In Next 24 Hours</title>
+  <title>Upcoming Season Events</title>
 
   <!-- Add this inside <head> OR just before your script -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -386,7 +386,7 @@
       </div>
   </nav>
 
-  <h1>📋 Upcoming Events With-In  A Week</h1>
+  <h1>📋 Upcoming Events </h1>
 
   <!-- Loader Overlay -->
   <div id="loader" class="loader-overlay" style="display: none;">
@@ -420,150 +420,179 @@
     <tbody></tbody>
   </table>
   </div>
-<!-- Edit Modal -->
-    <div id="editModal">
-        <div class="modal-content">
-            <h2>Edit Booking</h2>
-            <form id="editBookingForm">
-                <input type="hidden" id="editBookingId">
+  <!-- Edit Modal -->
+  <div id="editModal">
+    <div class="modal-content">
+      <h2>Edit Booking</h2>
+      <form id="editBookingForm">
+        <input type="hidden" id="editBookingId">
 
-                <label>Client Name</label>
-                <input type="text" id="editClientName" required>
+        <label>Client Name</label>
+        <input type="text" id="editClientName" required>
 
-                <label>Client Number</label>
-                <input type="text" id="editClientNumber" required>
+        <label>Client Number</label>
+        <input type="text" id="editClientNumber" required>
 
-                <label>Start Date Of Event</label>
-                <input type="date" id="editStartDate" required>
+        <label>Start Date Of Event</label>
+        <input type="date" id="editStartDate" required>
 
-                <label>End Date Of Event</label>
-                <input type="date" id="editEndDate" required>
+        <label>End Date Of Event</label>
+        <input type="date" id="editEndDate" required>
 
-                <label>Time Of Event</label>
-                <input type="time" id="editEventTime" required>
+        <label>Time Of Event</label>
+        <input type="time" id="editEventTime" required>
 
-                <label>Event</label>
-                <select id="editEventType" required>
-                    <option>Birthday</option>
-                    <option>Anniversary</option>
-                    <option>Engagement</option>
-                    <option>Sangeet</option>
-                    <option>Ring Ceremony</option>
-                    <option>Roka Ceremony</option>
-                    <option>Wedding</option>
-                    <option>Destination Wedding</option>
-                    <option>Corporate</option>
-                    <option>Get Together</option>
-                    <option>Other</option>
-                </select>
+        <label>Event</label>
+        <select id="editEventType" required>
+          <option>Birthday</option>
+          <option>Anniversary</option>
+          <option>Engagement</option>
+          <option>Sangeet</option>
+          <option>Ring Ceremony</option>
+          <option>Roka Ceremony</option>
+          <option>Wedding</option>
+          <option>Destination Wedding</option>
+          <option>Corporate</option>
+          <option>Get Together</option>
+          <option>Other</option>
+        </select>
 
-                <label>Venue</label>
-                <select id="editVenue" required>
-                    <option>Noor Mahal [Destination]</option>
-                    <option>Noor Mahal, Darbar Hall</option>
-                    <option>Noor Mahal, Sheesh Mahal</option>
-                    <option>Noor Mahal, Rang Mahal</option>
-                    <option>Noor Mahal, Rani Bagh</option>
-                    <option>Noor Mahal, Dera</option>
-                    <option>Noor Mahal, Raja Bagh</option>
-                    <option>Noor Mahal, Ballroom</option>
-                    <option>Noor Mahal, Mischief</option>
-                    <option>Noor Mahal, Deewan-E-Aam</option>
-                    <option>Amani farms</option>
-                    <option>Rutba</option>
-                    <option>Eden</option>
-                    <option>Prem Plaza</option>
-                    <option>Jewels</option>
-                    <option>Other</option>
-                </select>
+        <label>Venue</label>
+        <select id="editVenue" required>
+          <option>Noor Mahal [Destination]</option>
+          <option>Noor Mahal, Darbar Hall</option>
+          <option>Noor Mahal, Sheesh Mahal</option>
+          <option>Noor Mahal, Rang Mahal</option>
+          <option>Noor Mahal, Rani Bagh</option>
+          <option>Noor Mahal, Dera</option>
+          <option>Noor Mahal, Raja Bagh</option>
+          <option>Noor Mahal, Ballroom</option>
+          <option>Noor Mahal, Mischief</option>
+          <option>Noor Mahal, Deewan-E-Aam</option>
+          <option>Amani farms</option>
+          <option>Rutba</option>
+          <option>Eden</option>
+          <option>Prem Plaza</option>
+          <option>Jewels</option>
+          <option>Other</option>
+        </select>
 
-                <label>Upload Quotation PDF</label>
-                <input type="file" id="editQuotationPdf" name="pdfUpload" accept=".pdf">
+        <label>Upload Quotation PDF</label>
+        <input type="file" id="editQuotationPdf" name="pdfUpload" accept=".pdf">
 
-                <label>Upload Planning PDF</label>
-                <input type="file" id="editPlanningPdf" name="planingpdfUpload" accept=".pdf">
-                <br>
-                <div style="margin-top:15px; text-align:right;">
-                    <button type="button" class="save-btn" onclick="saveEdit()">Save</button>
-                    <button type="button" class="cancel-btn" onclick="closeModal()">Cancel</button>
-                </div>
-                <br>
-                <div style="margin-top:15px; text-align:right;">
-                    <button type="button" class="delete-btn"
-                        onclick="deleteEdit(document.getElementById('editBookingId').value)">Delete</button>
-                </div>
-            </form>
+        <label>Upload Planning PDF</label>
+        <input type="file" id="editPlanningPdf" name="planingpdfUpload" accept=".pdf">
+        <br>
+        <div style="margin-top:15px; text-align:right;">
+          <button type="button" class="save-btn" onclick="saveEdit()">Save</button>
+          <button type="button" class="cancel-btn" onclick="closeModal()">Cancel</button>
         </div>
+        <br>
+        <div style="margin-top:15px; text-align:right;">
+          <button type="button" class="delete-btn"
+            onclick="deleteEdit(document.getElementById('editBookingId').value)">Delete</button>
+        </div>
+      </form>
     </div>
+  </div>
 
-    <!-- Password Modal -->
-    <div id="passwordModal" style="display:none; position:fixed; top:0; left:0;
+  <!-- Password Modal -->
+  <div id="passwordModal" style="display:none; position:fixed; top:0; left:0;
      width:100%; height:100%; background:rgba(0,0,0,0.6);
      justify-content:center; align-items:center; z-index:2000;">
-        <div
-            style="background:#fff; padding:20px; border-radius:10px; width:300px; text-align:center; box-shadow:0 4px 15px rgba(0,0,0,0.3);">
-            <h3>Enter Password</h3>
-            <input type="password" id="updatePassword"
-                style="width:100%; padding:8px; margin:15px 0; border:1px solid #ccc; border-radius:6px;"
-                placeholder="Password">
-            <div>
-                <button onclick="submitPassword()"
-                    style="background:#007bff; color:#fff; padding:8px 14px; border:none; border-radius:6px; margin-right:8px; cursor:pointer;">Submit</button>
-                <button onclick="closePasswordModal()"
-                    style="background:#dc3545; color:#fff; padding:8px 14px; border:none; border-radius:6px; cursor:pointer;">Cancel</button>
-            </div>
-        </div>
+    <div
+      style="background:#fff; padding:20px; border-radius:10px; width:300px; text-align:center; box-shadow:0 4px 15px rgba(0,0,0,0.3);">
+      <h3>Enter Password</h3>
+      <input type="password" id="updatePassword"
+        style="width:100%; padding:8px; margin:15px 0; border:1px solid #ccc; border-radius:6px;"
+        placeholder="Password">
+      <div>
+        <button onclick="submitPassword()"
+          style="background:#007bff; color:#fff; padding:8px 14px; border:none; border-radius:6px; margin-right:8px; cursor:pointer;">Submit</button>
+        <button onclick="closePasswordModal()"
+          style="background:#dc3545; color:#fff; padding:8px 14px; border:none; border-radius:6px; cursor:pointer;">Cancel</button>
+      </div>
     </div>
+  </div>
 
-    <!-- Delete Password Modal -->
-    <div id="deletePasswordModal" style="display:none; position:fixed; top:0; left:0;
+  <!-- Delete Password Modal -->
+  <div id="deletePasswordModal" style="display:none; position:fixed; top:0; left:0;
  width:100%; height:100%; background:rgba(0,0,0,0.6);
  justify-content:center; align-items:center; z-index:2000;">
-        <div style="background:#fff; padding:20px; border-radius:10px; width:300px; text-align:center;
+    <div style="background:#fff; padding:20px; border-radius:10px; width:300px; text-align:center;
      box-shadow:0 4px 15px rgba(0,0,0,0.3);">
-            <h3>Enter Password to Delete</h3>
-            <input type="password" id="deletePassword"
-                style="width:100%; padding:8px; margin:15px 0; border:1px solid #ccc; border-radius:6px;"
-                placeholder="Password">
-            <div>
-                <button onclick="submitDeletePassword()"
-                    style="background:black; color:#fff; padding:8px 14px; border:none; border-radius:6px; margin-right:8px; cursor:pointer;">
-                    Confirm Delete
-                </button>
-                <button onclick="closeDeletePasswordModal()"
-                    style="background:#dc3545; color:#fff; padding:8px 14px; border:none; border-radius:6px; cursor:pointer;">
-                    Cancel
-                </button>
-            </div>
-        </div>
+      <h3>Enter Password to Delete</h3>
+      <input type="password" id="deletePassword"
+        style="width:100%; padding:8px; margin:15px 0; border:1px solid #ccc; border-radius:6px;"
+        placeholder="Password">
+      <div>
+        <button onclick="submitDeletePassword()"
+          style="background:black; color:#fff; padding:8px 14px; border:none; border-radius:6px; margin-right:8px; cursor:pointer;">
+          Confirm Delete
+        </button>
+        <button onclick="closeDeletePasswordModal()"
+          style="background:#dc3545; color:#fff; padding:8px 14px; border:none; border-radius:6px; cursor:pointer;">
+          Cancel
+        </button>
+      </div>
     </div>
+  </div>
 
   <script>
 
     function exportToExcel() {
       const table = document.getElementById("bookingsTable");
 
-      // Extract table data into array
       let data = [];
+      console.log(table.rows);
       for (let row of table.rows) {
         let rowData = [];
+        console.log("Row:", row);
         for (let cell of row.cells) {
-          rowData.push(cell.innerText);
+          let text = cell.innerText.trim();
+
+          // Convert ₹ values to numbers
+          if (/₹/.test(text)) {
+            text = Number(text.replace(/[₹,]/g, ""));
+          }
+
+          rowData.push(text);
         }
         data.push(rowData);
       }
 
+      console.log("Extracted Data:", data);
+      for(let i=0; i<data.length; i++){
+        console.log("Row "+i+" Length: "+data[i].length);
+        if (data[i].length > 10) {
+          // Remove last 2 columns (PDF + Action)
+          data[i] = data[i].slice(0, -3);
+        }
+      }
       // Remove last 2 columns (PDF + Action)
-      data = data.map(r => r.slice(0, -3));
-
+      // data = data.map(r => r.slice(0, -3));
+      console.log("removed Extracted Data:", data);
       const rowCount = data.length;
       const colCount = data[0].length;
-      const lastColLetter = String.fromCharCode(64 + colCount); // e.g., 11 -> K
+
+      // Excel-safe column letter generator
+      function getColLetter(n) {
+        let s = "";
+        while (n > 0) {
+          let m = (n - 1) % 26;
+          s = String.fromCharCode(65 + m) + s;
+          n = Math.floor((n - 1) / 26);
+        }
+        return s;
+      }
+
+      const lastColLetter = getColLetter(colCount);
 
       XlsxPopulate.fromBlankAsync().then(workbook => {
-        let sheet = workbook.sheet(0);
+        const sheet = workbook.sheet(0);
+        sheet.name("Bookings");
+
         sheet.cell("A1").value(data);
-        workbook.sheet(0).name("Bookings");
 
         // Header styling
         sheet.range(`A1:${lastColLetter}1`).style({
@@ -574,38 +603,43 @@
           verticalAlignment: "center"
         });
 
-        // Zebra row coloring ONLY within table range
+        // Zebra striping
         for (let i = 2; i <= rowCount; i++) {
           if (i % 2 === 0) {
             sheet.range(`A${i}:${lastColLetter}${i}`).style("fill", "F2F2F2");
           }
         }
 
-        // ₹ formatting for Total Amount (col 8) & Advance Received (col 9)
-        sheet.column(8).style("numberFormat", '"₹"#,##0');
-        sheet.column(9).style("numberFormat", '"₹"#,##0');
+        // Currency formatting
+        sheet.column(8).style({
+          numberFormat: '"₹"#,##0',
+          horizontalAlignment: "right"
+        });
+        sheet.column(9).style({
+          numberFormat: '"₹"#,##0',
+          horizontalAlignment: "right"
+        });
 
-        // Borders + center align only inside the table
+        // Borders + wrapping (table only)
         sheet.range(`A1:${lastColLetter}${rowCount}`).style({
-          horizontalAlignment: "center",
-          verticalAlignment: "center",
           border: true,
+          verticalAlignment: "center",
           wrapText: true
         });
 
-        // Autosize columns within data range
+        // Column widths
         for (let c = 1; c <= colCount; c++) {
-          sheet.column(c).width(20);
+          sheet.column(c).width(30);
         }
 
         return workbook.outputAsync();
       }).then(blob => {
-        let url = window.URL.createObjectURL(blob);
-        let a = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
         a.href = url;
-        a.download = "Bookings.xlsx";
+        a.download = "TodayBookings.xlsx";
         a.click();
-        window.URL.revokeObjectURL(url);
+        URL.revokeObjectURL(url);
       });
     }
 
@@ -664,7 +698,7 @@
         tbody.innerHTML = "";
 
         if (data.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="14">No Events</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="14">No bookings found</td></tr>`;
           return;
         }
 
@@ -700,7 +734,7 @@
             const monthRow = document.createElement("tr");
             monthRow.className = "month-header";
             monthRow.innerHTML = `
-                    <td colspan="14">
+                    <td colspan="11">
                         📅 ${monthYear} - [ ${monthCounts[monthYear]} Event${monthCounts[monthYear] > 1 ? "s" : ""} ]
                     </td>
                 `;
