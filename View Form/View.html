@@ -432,6 +432,7 @@
                     <option>Noor Mahal [Destination]</option>
                     <option>Noor Mahal, Darbar Hall</option>
                     <option>Noor Mahal, Sheesh Mahal</option>
+                    <option>Noor Mahal</option>
                     <option>Noor Mahal, Rang Mahal</option>
                     <option>Noor Mahal, Rani Bagh</option>
                     <option>Noor Mahal, Dera</option>
@@ -789,6 +790,7 @@
             document.querySelector("#editEventTime").value = formatTimeForInput(tds[10].innerText.trim());
             document.querySelector("#editEventType").value = tds[5].innerText.trim();
             document.querySelector("#editVenue").value = tds[6].innerText.trim();
+            console.log(tds[6].innerText);
             document.querySelector("#editTotalAmount").value = tds[7].innerText.replace("₹", "").replace(/,/g, "").trim();
             document.querySelector("#editAdvanceReceived").value = tds[8].innerText.replace("₹", "").replace(/,/g, "").trim();
             document.querySelector("#editReceivedBy").value = tds[9].innerText.trim();
