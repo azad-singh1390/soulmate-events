@@ -467,8 +467,8 @@
                     <option>In Line [Following]</option>
                     <option>In Dicussuion</option>
                     <option>Azad Sandhu Is Following</option>
-                    <option>uday Is Following</option>
-                    <option>palki Is Following</option>
+                    <option>Uday Is Following</option>
+                    <option>Palki Is Following</option>
                     <option>In Dicussuion</option>
                     <option>Booked By Other</option>
                 </select>
@@ -704,6 +704,8 @@
                 decorator: tds[6].innerText.trim(),
                 booking_status: tds[7].innerText.replace("₹", "").replace(/,/g, "").trim()
             };
+
+            console.log("Original Data Set:", originalData);
 
 
             document.querySelector("#editBookingId").value = id;
