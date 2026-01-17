@@ -95,6 +95,11 @@
         <!-- 🔔 Notification Bell -->
         <br>
 
+        <a href="FollowUp/Followup.html" class="notification">
+            <span class="bell">📌</span>
+            <span class="badge4">0</span> <!-- change number dynamically -->
+        </a>
+
         <a href="UpcomingSeasonEvents/UpcomingSeasonEvent.html" class="notification">
             <span class="bell">📢</span>
             <span class="badge3">0</span> <!-- change number dynamically -->
@@ -159,6 +164,17 @@
                 .catch(err => console.error("Error fetching count:", err));
             console.log("Notification count updated");
         }
+
+        function fetchFollowupCount() {
+            fetch("https://soulmate-backend-production.up.railway.app/notifications/followupscount")
+                .then(response => response.json())
+                .then(data => {
+                    document.querySelector(".badge4").textContent = data.count;
+                })
+                .catch(err => console.error("Error fetching count:", err));
+            console.log("Notification count updated");
+            console.log("Followup count updated");
+        }
         
         function fetchNotificationUpcomingSeasonCount() {
             fetch("https://soulmate-backend-production.up.railway.app/notifications/upcomingcount")
@@ -183,6 +199,7 @@
 
             setTimeout(() => {
                 fetchNotificationCount();
+                fetchFollowupCount();
                 fetchNotificationTodayCount()   // call API at midnight
                 fetchNotificationUpcomingSeasonCount()
                 scheduleDailyApiCall();     // reschedule for next day
@@ -193,6 +210,7 @@
         document.addEventListener("DOMContentLoaded", fetchNotificationCount);
         document.addEventListener("DOMContentLoaded", fetchNotificationTodayCount);
         document.addEventListener("DOMContentLoaded", fetchNotificationUpcomingSeasonCount);
+        document.addEventListener("DOMContentLoaded", fetchFollowupCount);
         
     </script>
 
