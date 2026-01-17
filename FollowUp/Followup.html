@@ -531,6 +531,7 @@
                     style="background:#dc3545; color:#fff; padding:8px 14px; border:none; border-radius:6px; cursor:pointer;">
                     Cancel
                 </button>
+
             </div>
         </div>
     </div>
@@ -540,6 +541,109 @@
 
     <script>
 
+
+        function exportToExcel() {
+            const table = document.getElementById("bookingsTable");
+
+            let data = [];
+            console.log(table.rows);
+            for (let row of table.rows) {
+                let rowData = [];
+                console.log("Row:", row);
+                for (let cell of row.cells) {
+                    let text = cell.innerText.trim();
+
+                    // Convert ₹ values to numbers
+                    if (/₹/.test(text)) {
+                        text = Number(text.replace(/[₹,]/g, ""));
+                    }
+
+                    rowData.push(text);
+                }
+                data.push(rowData);
+            }
+
+            console.log("Extracted Data:", data);
+            for (let i = 0; i < data.length; i++) {
+                console.log("Row " + i + " Length: " + data[i].length);
+                if (data[i].length > 8) {
+                    // Remove last 2 columns (PDF + Action)
+                    data[i] = data[i].slice(0, -3);
+                }
+            }
+            // Remove last 2 columns (PDF + Action)
+            // data = data.map(r => r.slice(0, -3));
+            console.log("removed Extracted Data:", data);
+            const rowCount = data.length;
+            const colCount = data[0].length;
+
+            // Excel-safe column letter generator
+            function getColLetter(n) {
+                let s = "";
+                while (n > 0) {
+                    let m = (n - 1) % 26;
+                    s = String.fromCharCode(65 + m) + s;
+                    n = Math.floor((n - 1) / 26);
+                }
+                return s;
+            }
+
+            const lastColLetter = getColLetter(colCount);
+
+            XlsxPopulate.fromBlankAsync().then(workbook => {
+                const sheet = workbook.sheet(0);
+                sheet.name("Follow-ups");
+
+                sheet.cell("A1").value(data);
+
+                // Header styling
+                sheet.range(`A1:${lastColLetter}1`).style({
+                    bold: true,
+                    fill: "FFA500",
+                    fontColor: "000000",
+                    horizontalAlignment: "center",
+                    verticalAlignment: "center"
+                });
+
+                // Zebra striping
+                for (let i = 2; i <= rowCount; i++) {
+                    if (i % 2 === 0) {
+                        sheet.range(`A${i}:${lastColLetter}${i}`).style("fill", "F2F2F2");
+                    }
+                }
+
+                // Currency formatting
+                sheet.column(8).style({
+                    numberFormat: '"₹"#,##0',
+                    horizontalAlignment: "right"
+                });
+                sheet.column(9).style({
+                    numberFormat: '"₹"#,##0',
+                    horizontalAlignment: "right"
+                });
+
+                // Borders + wrapping (table only)
+                sheet.range(`A1:${lastColLetter}${rowCount}`).style({
+                    border: true,
+                    verticalAlignment: "center",
+                    wrapText: true
+                });
+
+                // Column widths
+                for (let c = 1; c <= colCount; c++) {
+                    sheet.column(c).width(30);
+                }
+
+                return workbook.outputAsync();
+            }).then(blob => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = "Follow-Ups.xlsx";
+                a.click();
+                URL.revokeObjectURL(url);
+            });
+        }
 
         function formatTime(timeString) {
             const [hours, minutes] = timeString.split(':');
