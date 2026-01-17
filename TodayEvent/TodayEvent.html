@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Coming Events</title>
+  <title>Events In Next 24 Hours</title>
 
   <!-- Add this inside <head> OR just before your script -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -15,6 +15,18 @@
       background: #f4f6f9;
       margin: 20px;
       padding-top: 70px;
+    }
+
+    .month-header {
+      background: white;
+      color: black;
+      font-weight: bold;
+      font-size: 26px;
+    }
+
+    .month-header td {
+      padding: 12px;
+      text-align: left;
     }
 
     /* Navbar */
@@ -64,6 +76,29 @@
       width: 100%;
     }
 
+    .edit-btn {
+      background: #28a745;
+      color: #fff;
+    }
+
+    .save-btn {
+      background: #007bff;
+      color: #fff;
+    }
+
+
+    .delete-btn {
+      background: black;
+      color: #fff;
+    }
+
+    .cancel-btn {
+      background: #dc3545;
+      color: #fff;
+    }
+
+
+
     h1 {
       text-align: center;
       color: #333;
@@ -72,7 +107,7 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
+      margin-top: 10px;
       background: #fff;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
@@ -80,7 +115,7 @@
     th,
     td {
       padding: 10px;
-      border: 2px solid black;
+      border: 1px solid black;
       text-align: center;
     }
 
@@ -168,6 +203,96 @@
       /* spacing between buttons */
       justify-content: center;
       /* optional: center align */
+    }
+
+
+    /* Modal overlay */
+    #editModal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      /* hidden by default */
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    /* Modal content */
+    #editModal .modal-content {
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      width: 450px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+      animation: fadeIn 0.3s ease;
+    }
+
+    /* Heading */
+    #editModal h2 {
+      margin-bottom: 20px;
+      text-align: center;
+      font-size: 20px;
+      color: #333;
+    }
+
+    /* Form styling */
+    #editBookingForm {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 15px;
+    }
+
+    /* Labels */
+    #editBookingForm label {
+      font-size: 14px;
+      font-weight: bold;
+      color: #444;
+      grid-column: span 2;
+      /* default full row */
+    }
+
+    /* Inputs & Select */
+    #editBookingForm input,
+    #editBookingForm select {
+      padding: 8px 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* Buttons container */
+    #editBookingForm .actions {
+      grid-column: span 2;
+      text-align: right;
+      margin-top: 15px;
+    }
+
+    /* Buttons */
+    #editBookingForm button {
+      padding: 8px 14px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    #editBookingForm .save-btn {
+      background: #007bff;
+      color: #fff;
+      margin-right: 8px;
+    }
+
+    #editBookingForm .cancel-btn {
+      background: #dc3545;
+      color: #fff;
     }
 
     .btn {
@@ -261,7 +386,7 @@
       </div>
   </nav>
 
-  <h1>📋 Events In Next 24 Hours</h1>
+  <h1>📋 Upcoming Events With-In  A Week</h1>
 
   <!-- Loader Overlay -->
   <div id="loader" class="loader-overlay" style="display: none;">
@@ -275,6 +400,7 @@
       ⬇ Export To Excel
     </button>
   </div>
+  <div class="table-container"></div>
   <table id="bookingsTable">
     <thead>
       <tr>
@@ -288,133 +414,131 @@
         <th>Time</th>
         <th>Quotation PDF</th>
         <th>Planning PDF</th>
+        <th>Action</th>
       </tr>
     </thead>
     <tbody></tbody>
   </table>
+  </div>
+<!-- Edit Modal -->
+    <div id="editModal">
+        <div class="modal-content">
+            <h2>Edit Booking</h2>
+            <form id="editBookingForm">
+                <input type="hidden" id="editBookingId">
+
+                <label>Client Name</label>
+                <input type="text" id="editClientName" required>
+
+                <label>Client Number</label>
+                <input type="text" id="editClientNumber" required>
+
+                <label>Start Date Of Event</label>
+                <input type="date" id="editStartDate" required>
+
+                <label>End Date Of Event</label>
+                <input type="date" id="editEndDate" required>
+
+                <label>Time Of Event</label>
+                <input type="time" id="editEventTime" required>
+
+                <label>Event</label>
+                <select id="editEventType" required>
+                    <option>Birthday</option>
+                    <option>Anniversary</option>
+                    <option>Engagement</option>
+                    <option>Sangeet</option>
+                    <option>Ring Ceremony</option>
+                    <option>Roka Ceremony</option>
+                    <option>Wedding</option>
+                    <option>Destination Wedding</option>
+                    <option>Corporate</option>
+                    <option>Get Together</option>
+                    <option>Other</option>
+                </select>
+
+                <label>Venue</label>
+                <select id="editVenue" required>
+                    <option>Noor Mahal [Destination]</option>
+                    <option>Noor Mahal, Darbar Hall</option>
+                    <option>Noor Mahal, Sheesh Mahal</option>
+                    <option>Noor Mahal, Rang Mahal</option>
+                    <option>Noor Mahal, Rani Bagh</option>
+                    <option>Noor Mahal, Dera</option>
+                    <option>Noor Mahal, Raja Bagh</option>
+                    <option>Noor Mahal, Ballroom</option>
+                    <option>Noor Mahal, Mischief</option>
+                    <option>Noor Mahal, Deewan-E-Aam</option>
+                    <option>Amani farms</option>
+                    <option>Rutba</option>
+                    <option>Eden</option>
+                    <option>Prem Plaza</option>
+                    <option>Jewels</option>
+                    <option>Other</option>
+                </select>
+
+                <label>Upload Quotation PDF</label>
+                <input type="file" id="editQuotationPdf" name="pdfUpload" accept=".pdf">
+
+                <label>Upload Planning PDF</label>
+                <input type="file" id="editPlanningPdf" name="planingpdfUpload" accept=".pdf">
+                <br>
+                <div style="margin-top:15px; text-align:right;">
+                    <button type="button" class="save-btn" onclick="saveEdit()">Save</button>
+                    <button type="button" class="cancel-btn" onclick="closeModal()">Cancel</button>
+                </div>
+                <br>
+                <div style="margin-top:15px; text-align:right;">
+                    <button type="button" class="delete-btn"
+                        onclick="deleteEdit(document.getElementById('editBookingId').value)">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Password Modal -->
+    <div id="passwordModal" style="display:none; position:fixed; top:0; left:0;
+     width:100%; height:100%; background:rgba(0,0,0,0.6);
+     justify-content:center; align-items:center; z-index:2000;">
+        <div
+            style="background:#fff; padding:20px; border-radius:10px; width:300px; text-align:center; box-shadow:0 4px 15px rgba(0,0,0,0.3);">
+            <h3>Enter Password</h3>
+            <input type="password" id="updatePassword"
+                style="width:100%; padding:8px; margin:15px 0; border:1px solid #ccc; border-radius:6px;"
+                placeholder="Password">
+            <div>
+                <button onclick="submitPassword()"
+                    style="background:#007bff; color:#fff; padding:8px 14px; border:none; border-radius:6px; margin-right:8px; cursor:pointer;">Submit</button>
+                <button onclick="closePasswordModal()"
+                    style="background:#dc3545; color:#fff; padding:8px 14px; border:none; border-radius:6px; cursor:pointer;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Password Modal -->
+    <div id="deletePasswordModal" style="display:none; position:fixed; top:0; left:0;
+ width:100%; height:100%; background:rgba(0,0,0,0.6);
+ justify-content:center; align-items:center; z-index:2000;">
+        <div style="background:#fff; padding:20px; border-radius:10px; width:300px; text-align:center;
+     box-shadow:0 4px 15px rgba(0,0,0,0.3);">
+            <h3>Enter Password to Delete</h3>
+            <input type="password" id="deletePassword"
+                style="width:100%; padding:8px; margin:15px 0; border:1px solid #ccc; border-radius:6px;"
+                placeholder="Password">
+            <div>
+                <button onclick="submitDeletePassword()"
+                    style="background:black; color:#fff; padding:8px 14px; border:none; border-radius:6px; margin-right:8px; cursor:pointer;">
+                    Confirm Delete
+                </button>
+                <button onclick="closeDeletePasswordModal()"
+                    style="background:#dc3545; color:#fff; padding:8px 14px; border:none; border-radius:6px; cursor:pointer;">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
 
   <script>
-    function formatTime(timeString) {
-      const [hours, minutes] = timeString.split(':');
-      const date = new Date();
-      date.setHours(hours, minutes, 0, 0); // set local hours/minutes
-
-      return date.toLocaleTimeString('en-US', {
-        hour: 'numeric',
-        minute: '2-digit',
-        hour12: true
-      });
-    }
-
-    function downloadPDF(url, filename) {
-      fetch(url)
-        .then(resp => resp.blob())
-        .then(blob => {
-          const link = document.createElement('a');
-          link.href = URL.createObjectURL(blob);
-          link.download = filename;
-          link.click();
-          URL.revokeObjectURL(link.href);
-        })
-        .catch(err => console.error("Download failed", err));
-    }
-
-
-    function sanitizeFilename(name) {
-      return name.replace(/\s+/g, '_').replace(/[^\w\-]/g, '');
-    }
-
-
-    function downloadFile(url, filename) {
-      fetch(url)
-        .then(response => response.blob())
-        .then(blob => {
-          const link = document.createElement("a");
-          link.href = URL.createObjectURL(blob);
-          link.download = filename;
-          link.click();
-          URL.revokeObjectURL(link.href);
-        });
-    }
-
-    async function loadBookings() {
-      const loader = document.getElementById("loader");
-
-      loader.style.display = "flex";
-      try {
-        const res = await fetch("https://soulmate-backend-production.up.railway.app/todaybookings");
-        const data = await res.json();
-        const bookings = data.rows || []; // ✅ ensure it's always an array
-        const tbody = document.querySelector("#bookingsTable tbody");
-        tbody.innerHTML = "";
-
-        let count = 1;
-        if (bookings.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="10">No events today</td></tr>`;
-          return;
-        }
-
-        bookings.forEach(row => {
-          const tr = document.createElement("tr");
-
-          // ✅ Format date as 12-September-2025
-          const eventStartDate = new Date(row.event_start_date).toLocaleDateString("en-GB", {
-            day: "2-digit",
-            month: "long",
-            year: "numeric"
-          }).replace(/\s/g, "-");
-
-          const eventEndDate = new Date(row.event_end_date).toLocaleDateString("en-GB", {
-            day: "2-digit",
-            month: "long",
-            year: "numeric"
-          }).replace(/\s/g, "-");
-
-
-
-          const pdfLink = row.has_quotation_pdf
-            ? `
-    <a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf" target="_blank">View</a> |
-    <a href="#" onclick="downloadFile(
-      'https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf',
-      '${row.client_name}-${eventStartDate}-quotation.pdf'
-    )">Download</a>
-  `
-            : "No PDF";
-
-          const planningpdfLink = row.has_planning_pdf
-            ? `
-    <a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf" target="_blank">View</a> |
-    <a href="#" onclick="downloadFile(
-      'https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf',
-      '${row.client_name}-${eventStartDate}-planning.pdf'
-    )">Download</a>
-  `
-            : "No PDF";
-
-
-
-          tr.innerHTML = `
-            <td>${count++}</td>
-            <td>${row.client_name}</td>
-            <td>${row.client_number}</td>
-            <td>${eventStartDate}</td>
-            <td>${eventEndDate}</td>
-            <td>${row.event_type}</td>
-            <td>${row.venue}</td>
-            <td>${formatTime(row.event_time)}</td>
-            <td>${pdfLink}</td>
-            <td>${planningpdfLink}</td>
-          `;
-          tbody.appendChild(tr);
-        });
-      } catch (err) {
-        console.error("Error fetching bookings:", err);
-      } finally {
-        loader.style.display = "none";
-      }
-    }
-
 
     function exportToExcel() {
       const table = document.getElementById("bookingsTable");
@@ -485,7 +609,350 @@
       });
     }
 
-    loadBookings();
+    function formatTime(timeString) {
+      const [hours, minutes] = timeString.split(':');
+      const date = new Date();
+      date.setHours(hours, minutes, 0, 0);
+
+      return date.toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+      });
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return "N/A";
+      const date = new Date(dateStr);
+      if (isNaN(date)) return "N/A";
+      return date.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric"
+      }).replace(/\s/g, "-");
+    }
+
+
+    function downloadPDF(url, filename) {
+      fetch(url)
+        .then(resp => resp.blob())
+        .then(blob => {
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download = filename;
+          link.click();
+          URL.revokeObjectURL(link.href);
+        })
+        .catch(err => console.error("Download failed", err));
+    }
+
+    // Helper to sanitize filename
+    function sanitizeFilename(name) {
+      return name.replace(/\s+/g, '_').replace(/[^\w\-]/g, '');
+    }
+
+    async function loadBookings() {
+      const tbody = document.querySelector("#bookingsTable tbody");
+      const loader = document.getElementById("loader");
+
+      loader.style.display = "flex";
+
+      try {
+        const res = await fetch("https://soulmate-backend-production.up.railway.app/todaybookings");
+        const result = await res.json();
+        const data = result.rows;
+        tbody.innerHTML = "";
+
+        if (data.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="14">No Events</td></tr>`;
+          return;
+        }
+
+
+        // 🔹 Sort by start date
+        data.sort((a, b) => new Date(a.event_start_date) - new Date(b.event_start_date));
+
+        // 🔹 Count events per month
+        const monthCounts = {};
+        data.forEach(row => {
+          const key = new Date(row.event_start_date).toLocaleDateString("en-US", {
+            month: "long",
+            year: "numeric"
+          });
+          monthCounts[key] = (monthCounts[key] || 0) + 1;
+        });
+
+        let currentMonth = "";
+        let serial = 1;
+
+        data.forEach(row => {
+          const startDate = new Date(row.event_start_date);
+          const monthYear = startDate.toLocaleDateString("en-US", {
+            month: "long",
+            year: "numeric"
+          });
+
+          // 🔹 Insert Month Header with count
+          if (monthYear !== currentMonth) {
+            currentMonth = monthYear;
+            serial = 1;
+
+            const monthRow = document.createElement("tr");
+            monthRow.className = "month-header";
+            monthRow.innerHTML = `
+                    <td colspan="14">
+                        📅 ${monthYear} - [ ${monthCounts[monthYear]} Event${monthCounts[monthYear] > 1 ? "s" : ""} ]
+                    </td>
+                `;
+            tbody.appendChild(monthRow);
+          }
+
+          const eventStartDate = formatDate(row.event_start_date);
+          const eventEndDate = formatDate(row.event_end_date);
+
+          const pdfLink = row.has_quotation_pdf
+            ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf" target="_blank">View</a>`
+            : "No PDF";
+
+          const planningpdfLink = row.has_planning_pdf
+            ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf" target="_blank">View</a>`
+            : "No PDF";
+
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+                <td>${serial++}</td>
+                <td>${row.client_name}</td>
+                <td>${row.client_number}</td>
+                <td>${eventStartDate}</td>
+                <td>${eventEndDate}</td>
+                <td>${row.event_type}</td>
+                <td>${row.venue}</td>
+                <td>${formatTime(row.event_time)}</td>
+                <td>${pdfLink}</td>
+                <td>${planningpdfLink}</td>
+                <td>
+                    <button class="edit-btn" onclick="editRow(this, ${row.id})">Edit</button>
+                </td>
+            `;
+
+          tbody.appendChild(tr);
+        });
+
+      } catch (err) {
+        console.error("Error fetching bookings:", err);
+        tbody.innerHTML = `<tr><td colspan="14">❌ Error fetching bookings</td></tr>`;
+      } finally {
+        loader.style.display = "none";
+      }
+    }
+
+
+    function formatDateForInput(dateString) {
+      if (!dateString) return "";
+      const date = new Date(dateString);
+      if (isNaN(date)) return "";
+      const yyyy = date.getFullYear();
+      const mm = String(date.getMonth() + 1).padStart(2, "0");
+      const dd = String(date.getDate()).padStart(2, "0");
+      return `${yyyy}-${mm}-${dd}`;
+    }
+
+    function formatTimeForInput(timeString) {
+      if (!timeString) return "";
+      let t = timeString.trim();
+      const ampmMatch = t.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+      if (ampmMatch) {
+        let hh = parseInt(ampmMatch[1], 10);
+        const mm = ampmMatch[2];
+        const ampm = ampmMatch[3].toUpperCase();
+        if (ampm === "PM" && hh !== 12) hh += 12;
+        if (ampm === "AM" && hh === 12) hh = 0;
+        return `${String(hh).padStart(2, "0")}:${mm}`;
+      }
+      const parts = t.split(":");
+      if (parts.length >= 2) {
+        return `${parts[0].padStart(2, "0")}:${parts[1].padStart(2, "0")}`;
+      }
+      return "";
+    }
+
+    let originalData = {};
+    function editRow(btn, id) {
+      const tr = btn.closest("tr");
+      const tds = tr.querySelectorAll("td");
+
+      originalData = {
+        client_name: tds[1].innerText.trim(),
+        client_number: tds[2].innerText.trim(),
+        event_start_date: formatDateForInput(tds[3].innerText.trim()),
+        event_end_date: formatDateForInput(tds[4].innerText.trim()),
+        event_type: tds[5].innerText.trim(),
+        venue: tds[6].innerText.trim(),
+        event_time: formatTimeForInput(tds[7].innerText.trim())
+      };
+
+      document.querySelector("#editBookingId").value = id;
+      document.querySelector("#editClientName").value = tds[1].innerText.trim();
+      document.querySelector("#editClientNumber").value = tds[2].innerText.trim();
+      document.querySelector("#editStartDate").value = formatDateForInput(tds[3].innerText.trim());
+      document.querySelector("#editEndDate").value = formatDateForInput(tds[4].innerText.trim());
+      document.querySelector("#editEventTime").value = formatTimeForInput(tds[7].innerText.trim());
+      document.querySelector("#editEventType").value = tds[5].innerText.trim();
+      document.querySelector("#editVenue").value = tds[6].innerText.trim();
+
+      document.getElementById("editModal").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("editModal").style.display = "none";
+      document.getElementById("editQuotationPdf").value = "";
+      document.getElementById("editPlanningPdf").value = "";
+    }
+
+    // Store pending changes + id until password entered
+    let pendingChanges = {};
+    let pendingId = null;
+
+    async function saveEdit() {
+      const id = document.querySelector("#editBookingId").value;
+      const current = {
+        client_name: document.querySelector("#editClientName").value.trim(),
+        client_number: document.querySelector("#editClientNumber").value.trim(),
+        event_start_date: document.querySelector("#editStartDate").value,
+        event_end_date: document.querySelector("#editEndDate").value,
+        event_type: document.querySelector("#editEventType").value,
+        venue: document.querySelector("#editVenue").value,
+        event_time: document.querySelector("#editEventTime").value
+      };
+
+      console.log("Original Data:", originalData);
+      console.log("Current Data:", current);
+      let changes = {};
+      for (const key in current) {
+        if (current[key] !== originalData[key]) {
+          changes[key] = current[key];
+        }
+      }
+
+      // if (Object.keys(changes).length === 0) {
+      //     alert("No changes detected!");
+      //     return;
+      // }
+      console.log("Changes detected for ID:", id, changes);
+      // Open password modal instead of prompt
+      askPassword(id, changes);
+    }
+
+    // --- Password Modal Logic ---
+    function askPassword(id, changes) {
+      pendingId = id;
+      pendingChanges = changes;
+      document.getElementById("updatePassword").value = "";
+      document.getElementById("passwordModal").style.display = "flex";
+    }
+
+    function closePasswordModal() {
+      document.getElementById("passwordModal").style.display = "none";
+      pendingChanges = {};
+      pendingId = null;
+    }
+
+    async function submitPassword() {
+      const password = document.getElementById("updatePassword").value.trim();
+      if (!password) {
+        alert("❌ Please enter password");
+        return;
+      }
+
+      try {
+        const formData = new FormData();
+        formData.append("password", password);
+
+        // Add only changed fields (text values)
+        for (let key in pendingChanges) {
+          formData.append(key, pendingChanges[key]);
+        }
+
+        // Add files if selected
+        const quotationFile = document.getElementById("editQuotationPdf").files[0];
+        const planningFile = document.getElementById("editPlanningPdf").files[0];
+        if (quotationFile) formData.append("pdfUpload", quotationFile);
+        if (planningFile) formData.append("planingpdfUpload", planningFile);
+
+        const res = await fetch(`https://soulmate-backend-production.up.railway.app/bookings/${pendingId}`, {
+          method: "PUT",
+          body: formData
+        });
+
+        if (!res.ok) throw new Error("Update failed");
+
+        alert("✅ Booking updated!");
+        closePasswordModal();
+        closeModal();
+        loadBookings();
+      } catch (err) {
+        alert("❌ Failed to update booking");
+        console.error(err);
+      }
+
+      document.getElementById("editQuotationPdf").value = "";
+      document.getElementById("editPlanningPdf").value = "";
+
+    }
+
+
+    window.onload = loadBookings;
+
+
+    let pendingDeleteId = null;
+
+    function deleteEdit(id) {
+      pendingDeleteId = id;
+      document.getElementById("deletePassword").value = "";
+      document.getElementById("deletePasswordModal").style.display = "flex";
+    }
+
+    function closeDeletePasswordModal() {
+      document.getElementById("deletePasswordModal").style.display = "none";
+      pendingDeleteId = null;
+    }
+
+    async function submitDeletePassword() {
+      const password = document.getElementById("deletePassword").value.trim();
+      if (!password) {
+        alert("❌ Please enter password");
+        return;
+      }
+
+      try {
+        const res = await fetch(`https://soulmate-backend-production.up.railway.app/bookings/${pendingDeleteId}`, {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ password })
+        });
+
+        const result = await res.json();
+        if (res.ok && result.success) {
+          alert("✅ Booking deleted successfully");
+          closeDeletePasswordModal();
+          closeModal();
+          loadBookings();
+        } else {
+          alert("❌ " + (result.message || "Failed to delete booking"));
+        }
+      } catch (err) {
+        console.error("Error deleting booking:", err);
+        alert("❌ Error deleting booking");
+      }
+    }
+
+
+    window.onclick = function (e) {
+      const modal = document.getElementById("editModal");
+      if (e.target === modal) {
+        closeModal();
+      }
+    };
   </script>
 </body>
 
