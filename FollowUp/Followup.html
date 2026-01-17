@@ -455,6 +455,8 @@
                     <option>Ashima</option>
                     <option>Namarta</option>
                     <option>Jedi</option>
+                    <option>Not Booked Yet</option>
+                    <option>No Details Shared</option>
                     <option>Other</option>
                 </select>
 
@@ -470,6 +472,8 @@
                     <option>Uday Is Following</option>
                     <option>Palki Is Following</option>
                     <option>In Dicussuion</option>
+                    <option>Quotation Shared</option>
+                    <option>Client Not Responding </option>
                     <option>Booked By Other</option>
                 </select>
 
@@ -689,8 +693,7 @@
         }
 
         let originalData = {};
-        function editRow(btn, id)
-        {
+        function editRow(btn, id) {
 
             const tr = btn.closest("tr");
             const tds = tr.querySelectorAll("td");

@@ -29,6 +29,11 @@ body {
     z-index: 10;
 }
 
+.nav-spacer {
+    display: inline-block;
+    width: 20px;   /* space size */
+}
+
 .nav-links {
     display: flex;
     justify-content: center;
