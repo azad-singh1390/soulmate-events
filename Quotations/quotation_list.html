@@ -51,6 +51,60 @@ a.pdf-link:hover {
   color: #ff007f;
 }
 
+/* Navbar */
+.navbar {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 20px 0;
+    background: rgba(0, 0, 0, 0.6);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    z-index: 10;
+}
+
+.nav-spacer {
+    display: inline-block;
+    width: 20px;   /* space size */
+}
+
+.nav-links {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+}
+
+.nav-links a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    position: relative;
+    transition: 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #ff007f;
+}
+
+.nav-links a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 0%;
+    height: 2px;
+    background: #ff007f;
+    transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+
+
 @media (max-width: 768px) {
   table {
     font-size: 0.85rem;
@@ -60,6 +114,15 @@ a.pdf-link:hover {
 </head>
 
 <body>
+
+
+    <nav class="navbar">
+        <div class="nav-links">
+            <a href="../index.html">Home</a>
+            </div>
+    </nav>
+
+
     <h2>Quotation Document List</h2>
 
     <table>
