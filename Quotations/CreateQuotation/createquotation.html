@@ -19,6 +19,21 @@ input, textarea, select {
     margin-bottom: 8px;
 }
 
+.date-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.date-row input {
+    flex: 1;
+}
+
+.to-text {
+    font-weight: bold;
+}
+
+
 button {
     padding: 8px 14px;
     background: black;
@@ -77,8 +92,34 @@ button {
 <h2>Quotation Details</h2>
 
 <input id="client" placeholder="Client Name">
-<input id="eventType" placeholder="Event Type">
-<input id="dates" placeholder="Event Dates">
+
+<!-- EVENT TYPE -->
+<select id="eventTypeSelect" onchange="handleEventTypeChange()">
+    <option value="" disabled selected hidden>Select Event Type</option>
+    <option>Birthday</option>
+    <option>Anniversary</option>
+    <option>Engagement</option>
+    <option>Sangeet</option>
+    <option>Ring Ceremony</option>
+    <option>Roka Ceremony</option>
+    <option>Wedding</option>
+    <option>Destination Wedding</option>
+    <option>Corporate</option>
+    <option>Get Together</option>
+    <option value="Other">Other</option>
+</select>
+
+<input id="eventTypeOther" placeholder="Enter Event Type" style="display:none;">
+
+<!-- EVENT DATES -->
+<label><b>Event Dates</b></label>
+
+<div class="date-row">
+    <span class="to-text">From</span>
+    <input type="date" id="dateFrom">
+    <span class="to-text"> To </span>
+    <input type="date" id="dateTo">
+</div>
 
 <h3>Event Blocks</h3>
 <div id="blocks"></div>
@@ -112,6 +153,31 @@ button {
 <script>
 let blockCount = 0;
 
+/* EVENT TYPE HANDLER */
+function handleEventTypeChange() {
+    const select = document.getElementById("eventTypeSelect");
+    const other = document.getElementById("eventTypeOther");
+
+    if (select.value === "Other") {
+        other.style.display = "block";
+        other.focus();
+    } else {
+        other.style.display = "none";
+        other.value = "";
+    }
+}
+
+/* DATE FORMATTER */
+function formatDate(dateStr) {
+    const d = new Date(dateStr);
+    return d.toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+    });
+}
+
+/* ADD EVENT BLOCK */
 function addBlock() {
     blockCount++;
     const div = document.createElement("div");
@@ -146,17 +212,35 @@ function addBlock() {
     document.getElementById("blocks").appendChild(div);
 }
 
+/* GENERATE PDF */
 function generatePDF() {
     document.getElementById("pClient").innerText = client.value;
-    document.getElementById("pEvent").innerText = eventType.value;
-    document.getElementById("pDates").innerText = dates.value;
+
+    const eventType =
+        eventTypeSelect.value === "Other"
+            ? eventTypeOther.value
+            : eventTypeSelect.value;
+
+    document.getElementById("pEvent").innerText = eventType;
+
+    const from = document.getElementById("dateFrom").value;
+    const to = document.getElementById("dateTo").value;
+
+    let dateText = "";
+    if (from && to) {
+        dateText = `${formatDate(from)} to ${formatDate(to)}`;
+    } else if (from) {
+        dateText = formatDate(from);
+    }
+
+    document.getElementById("pDates").innerText = dateText;
 
     const pdfBlocks = document.getElementById("pdfBlocks");
     pdfBlocks.innerHTML = "";
 
     let grandTotal = 0;
 
-    document.querySelectorAll(".block").forEach((block, index) => {
+    document.querySelectorAll(".block").forEach(block => {
         const inputs = block.querySelectorAll("input");
         const event = block.querySelector(".eventSelect").value;
         const offerings = block.querySelector("textarea").value;
@@ -195,7 +279,7 @@ function generatePDF() {
         .save();
 }
 
-// add first block by default
+/* ADD FIRST BLOCK */
 addBlock();
 </script>
 
