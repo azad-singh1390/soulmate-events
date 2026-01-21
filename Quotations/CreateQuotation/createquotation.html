@@ -19,21 +19,6 @@ input, textarea, select {
     margin-bottom: 8px;
 }
 
-.date-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.date-row input {
-    flex: 1;
-}
-
-.to-text {
-    font-weight: bold;
-}
-
-
 button {
     padding: 8px 14px;
     background: black;
@@ -54,7 +39,28 @@ button {
     background: darkred;
 }
 
-/* PDF AREA */
+/* Date Row */
+.date-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.date-row input {
+    flex: 1;
+}
+
+.to-text {
+    font-weight: bold;
+}
+
+/* Disabled section */
+.disabled-section {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* PDF */
 #pdf {
     background: white;
     padding: 30px;
@@ -93,32 +99,44 @@ button {
 
 <input id="client" placeholder="Client Name">
 
-<!-- EVENT TYPE -->
-<select id="eventTypeSelect" onchange="handleEventTypeChange()">
-    <option value="" disabled selected hidden>Select Event Type</option>
-    <option>Birthday</option>
-    <option>Anniversary</option>
-    <option>Engagement</option>
-    <option>Sangeet</option>
-    <option>Ring Ceremony</option>
-    <option>Roka Ceremony</option>
-    <option>Wedding</option>
-    <option>Destination Wedding</option>
-    <option>Corporate</option>
-    <option>Get Together</option>
-    <option value="Other">Other</option>
-</select>
+<!-- ENABLE EVENT DETAILS -->
+<label>
+    <input type="checkbox" id="enableEventDetails" onchange="toggleEventDetails()">
+    Enable Event Details
+</label>
 
-<input id="eventTypeOther" placeholder="Enter Event Type" style="display:none;">
+<br><br>
 
-<!-- EVENT DATES -->
-<label><b>Event Dates</b></label>
+<!-- EVENT DETAILS -->
+<div id="eventDetails" class="disabled-section">
 
-<div class="date-row">
-    <span class="to-text">From</span>
-    <input type="date" id="dateFrom">
-    <span class="to-text"> To </span>
-    <input type="date" id="dateTo">
+    <!-- EVENT TYPE -->
+    <select id="eventTypeSelect" onchange="handleEventTypeChange()" disabled>
+        <option value="" disabled selected hidden>Select Event Type</option>
+        <option>Birthday</option>
+        <option>Anniversary</option>
+        <option>Engagement</option>
+        <option>Sangeet</option>
+        <option>Ring Ceremony</option>
+        <option>Roka Ceremony</option>
+        <option>Wedding</option>
+        <option>Destination Wedding</option>
+        <option>Corporate</option>
+        <option>Get Together</option>
+        <option value="Other">Other</option>
+    </select>
+
+    <input id="eventTypeOther" placeholder="Enter Event Type" style="display:none;" disabled>
+
+    <!-- EVENT DATES -->
+    <label><b>Event Dates</b></label>
+    <div class="date-row">
+        <span class="to-text">From</span>
+        <input type="date" id="dateFrom" disabled>
+        <span class="to-text">To</span>
+        <input type="date" id="dateTo" disabled>
+    </div>
+
 </div>
 
 <h3>Event Blocks</h3>
@@ -153,24 +171,40 @@ button {
 <script>
 let blockCount = 0;
 
-/* EVENT TYPE HANDLER */
-function handleEventTypeChange() {
-    const select = document.getElementById("eventTypeSelect");
-    const other = document.getElementById("eventTypeOther");
+/* ENABLE / DISABLE EVENT DETAILS */
+function toggleEventDetails() {
+    const enabled = enableEventDetails.checked;
+    eventDetails.classList.toggle("disabled-section", !enabled);
 
-    if (select.value === "Other") {
-        other.style.display = "block";
-        other.focus();
-    } else {
-        other.style.display = "none";
-        other.value = "";
+    eventDetails.querySelectorAll("select, input").forEach(el => {
+        el.disabled = !enabled;
+    });
+
+    if (!enabled) {
+        eventTypeSelect.value = "";
+        eventTypeOther.value = "";
+        eventTypeOther.style.display = "none";
+        dateFrom.value = "";
+        dateTo.value = "";
     }
 }
 
-/* DATE FORMATTER */
+/* EVENT TYPE OTHER */
+function handleEventTypeChange() {
+    if (eventTypeSelect.value === "Other") {
+        eventTypeOther.style.display = "block";
+        eventTypeOther.disabled = false;
+        eventTypeOther.focus();
+    } else {
+        eventTypeOther.style.display = "none";
+        eventTypeOther.value = "";
+        eventTypeOther.disabled = true;
+    }
+}
+
+/* FORMAT DATE */
 function formatDate(dateStr) {
-    const d = new Date(dateStr);
-    return d.toLocaleDateString("en-GB", {
+    return new Date(dateStr).toLocaleDateString("en-GB", {
         day: "numeric",
         month: "long",
         year: "numeric"
@@ -185,10 +219,16 @@ function addBlock() {
     div.innerHTML = `
         <h4>Event Block ${blockCount}</h4>
 
-        <input placeholder="Date">
-        <input placeholder="Venue">
-        <input placeholder="Time">
+        <label><b>Date</b></label>
+        <input type="date" class="blockDate">
 
+        <label><b>Venue</b></label>
+        <input class="blockVenue" placeholder="Venue">
+
+        <label><b>Time</b></label>
+        <input type="time" class="blockTime">
+
+        <label><b>Event</b></label>
         <select class="eventSelect">
             <option value="" disabled selected hidden>Select Event</option>
             <option>Birthday</option>
@@ -204,55 +244,52 @@ function addBlock() {
             <option>Other</option>
         </select>
 
-        <textarea placeholder="Offerings (one per line)"></textarea>
-        <input type="number" placeholder="Total Amount">
+        <label><b>Offerings</b></label>
+        <textarea class="blockOfferings" placeholder="Offerings (one per line)"></textarea>
+
+        <label><b>Total Amount</b></label>
+        <input type="number" class="blockAmount">
 
         <button class="remove" onclick="this.parentElement.remove()">Remove</button>
     `;
-    document.getElementById("blocks").appendChild(div);
+    blocks.appendChild(div);
 }
 
 /* GENERATE PDF */
 function generatePDF() {
-    document.getElementById("pClient").innerText = client.value;
+    pClient.innerText = client.value;
 
     const eventType =
         eventTypeSelect.value === "Other"
             ? eventTypeOther.value
             : eventTypeSelect.value;
 
-    document.getElementById("pEvent").innerText = eventType;
+    pEvent.innerText = eventType || "";
 
-    const from = document.getElementById("dateFrom").value;
-    const to = document.getElementById("dateTo").value;
-
-    let dateText = "";
-    if (from && to) {
-        dateText = `${formatDate(from)} to ${formatDate(to)}`;
-    } else if (from) {
-        dateText = formatDate(from);
+    if (dateFrom.value) {
+        pDates.innerText = dateTo.value
+            ? `${formatDate(dateFrom.value)} to ${formatDate(dateTo.value)}`
+            : formatDate(dateFrom.value);
     }
 
-    document.getElementById("pDates").innerText = dateText;
-
-    const pdfBlocks = document.getElementById("pdfBlocks");
     pdfBlocks.innerHTML = "";
-
-    let grandTotal = 0;
+    let total = 0;
 
     document.querySelectorAll(".block").forEach(block => {
-        const inputs = block.querySelectorAll("input");
+        const date = block.querySelector(".blockDate").value;
+        const venue = block.querySelector(".blockVenue").value;
+        const time = block.querySelector(".blockTime").value;
         const event = block.querySelector(".eventSelect").value;
-        const offerings = block.querySelector("textarea").value;
-        const amount = Number(inputs[3].value || 0);
+        const offerings = block.querySelector(".blockOfferings").value;
+        const amount = Number(block.querySelector(".blockAmount").value || 0);
 
-        grandTotal += amount;
+        total += amount;
 
-        const html = `
+        pdfBlocks.insertAdjacentHTML("beforeend", `
             <div class="section">
-                <b>DATE:</b> ${inputs[0].value}<br>
-                <b>VENUE:</b> ${inputs[1].value}<br>
-                <b>TIME:</b> ${inputs[2].value}<br>
+                <b>DATE:</b> ${date ? formatDate(date) : ""}<br>
+                <b>VENUE:</b> ${venue}<br>
+                <b>TIME:</b> ${time}<br>
                 <b>EVENT:</b> ${event}<br><br>
 
                 <b>OFFERINGS</b>
@@ -262,21 +299,17 @@ function generatePDF() {
 
                 <div class="total">Total: ₹ ${amount}</div>
             </div>
-        `;
-        pdfBlocks.insertAdjacentHTML("beforeend", html);
+        `);
     });
 
-    document.getElementById("grandTotal").innerText = grandTotal;
+    grandTotal.innerText = total;
 
-    html2pdf()
-        .from(document.getElementById("pdf"))
-        .set({
-            filename: "Event_Quotation.pdf",
-            margin: 10,
-            html2canvas: { scale: 2 },
-            jsPDF: { format: "a4", orientation: "portrait" }
-        })
-        .save();
+    html2pdf().from(pdf).set({
+        filename: "Event_Quotation.pdf",
+        margin: 10,
+        html2canvas: { scale: 2 },
+        jsPDF: { format: "a4", orientation: "portrait" }
+    }).save();
 }
 
 /* ADD FIRST BLOCK */
