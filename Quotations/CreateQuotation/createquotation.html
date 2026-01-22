@@ -99,7 +99,6 @@ button {
 
 <input id="client" placeholder="Client Name">
 
-<!-- ENABLE EVENT DETAILS -->
 <label>
     <input type="checkbox" id="enableEventDetails" onchange="toggleEventDetails()">
     Enable Event Details
@@ -110,7 +109,6 @@ button {
 <!-- EVENT DETAILS -->
 <div id="eventDetails" class="disabled-section">
 
-    <!-- EVENT TYPE -->
     <select id="eventTypeSelect" onchange="handleEventTypeChange()" disabled>
         <option value="" disabled selected hidden>Select Event Type</option>
         <option>Birthday</option>
@@ -128,7 +126,6 @@ button {
 
     <input id="eventTypeOther" placeholder="Enter Event Type" style="display:none;" disabled>
 
-    <!-- EVENT DATES -->
     <label><b>Event Dates</b></label>
     <div class="date-row">
         <span class="to-text">From</span>
@@ -136,7 +133,6 @@ button {
         <span class="to-text">To</span>
         <input type="date" id="dateTo" disabled>
     </div>
-
 </div>
 
 <h3>Event Blocks</h3>
@@ -171,30 +167,16 @@ button {
 <script>
 let blockCount = 0;
 
-/* ENABLE / DISABLE EVENT DETAILS */
 function toggleEventDetails() {
     const enabled = enableEventDetails.checked;
     eventDetails.classList.toggle("disabled-section", !enabled);
-
-    eventDetails.querySelectorAll("select, input").forEach(el => {
-        el.disabled = !enabled;
-    });
-
-    if (!enabled) {
-        eventTypeSelect.value = "";
-        eventTypeOther.value = "";
-        eventTypeOther.style.display = "none";
-        dateFrom.value = "";
-        dateTo.value = "";
-    }
+    eventDetails.querySelectorAll("select, input").forEach(el => el.disabled = !enabled);
 }
 
-/* EVENT TYPE OTHER */
 function handleEventTypeChange() {
     if (eventTypeSelect.value === "Other") {
         eventTypeOther.style.display = "block";
         eventTypeOther.disabled = false;
-        eventTypeOther.focus();
     } else {
         eventTypeOther.style.display = "none";
         eventTypeOther.value = "";
@@ -202,7 +184,6 @@ function handleEventTypeChange() {
     }
 }
 
-/* FORMAT DATE */
 function formatDate(dateStr) {
     return new Date(dateStr).toLocaleDateString("en-GB", {
         day: "numeric",
@@ -216,6 +197,7 @@ function addBlock() {
     blockCount++;
     const div = document.createElement("div");
     div.className = "block";
+
     div.innerHTML = `
         <h4>Event Block ${blockCount}</h4>
 
@@ -223,13 +205,27 @@ function addBlock() {
         <input type="date" class="blockDate">
 
         <label><b>Venue</b></label>
-        <input class="blockVenue" placeholder="Venue">
+        <select class="blockVenue">
+            <option value="" disabled selected hidden>Select Venue</option>
+            <option>Deewan-E-Aam, Noor Mahal</option>
+            <option>Deewan-E-Khas, Noor Mahal</option>
+            <option>Darbar Hall, Noor Mahal</option>
+            <option>Dera, Noor Mahal</option>
+            <option>Sheesh Mahal, Noor Mahal</option>
+            <option>Rang Mahal, Noor Mahal</option>
+            <option>Raja Bagh, Noor Mahal</option>
+            <option>Rani Bagh</option>
+            <option>Jal Mahal</option>
+            <option value="Other">Other</option>
+        </select>
+
+        <input class="blockVenueOther" placeholder="Enter Venue Name" style="display:none;">
 
         <label><b>Time</b></label>
         <input type="time" class="blockTime">
 
         <label><b>Event</b></label>
-        <select class="eventSelect">
+        <select class="blockEventSelect">
             <option value="" disabled selected hidden>Select Event</option>
             <option>Birthday</option>
             <option>Anniversary</option>
@@ -241,68 +237,204 @@ function addBlock() {
             <option>Destination Wedding</option>
             <option>Corporate</option>
             <option>Get Together</option>
-            <option>Other</option>
+            <option value="Other">Other</option>
         </select>
 
+        <input class="blockEventOther" placeholder="Enter Event Name" style="display:none;">
+
         <label><b>Offerings</b></label>
-        <textarea class="blockOfferings" placeholder="Offerings (one per line)"></textarea>
+        <textarea class="blockOfferings"></textarea>
 
         <label><b>Total Amount</b></label>
         <input type="number" class="blockAmount">
 
         <button class="remove" onclick="this.parentElement.remove()">Remove</button>
     `;
+
     blocks.appendChild(div);
+
+    const venueSelect = div.querySelector(".blockVenue");
+    const venueOther = div.querySelector(".blockVenueOther");
+    venueSelect.onchange = () => {
+        venueOther.style.display = venueSelect.value === "Other" ? "block" : "none";
+        if (venueSelect.value !== "Other") venueOther.value = "";
+    };
+
+    const eventSelect = div.querySelector(".blockEventSelect");
+    const eventOther = div.querySelector(".blockEventOther");
+    eventSelect.onchange = () => {
+        eventOther.style.display = eventSelect.value === "Other" ? "block" : "none";
+        if (eventSelect.value !== "Other") eventOther.value = "";
+    };
 }
 
 /* GENERATE PDF */
 function generatePDF() {
+
+    /* ===============================
+       BASIC VALIDATION
+    =============================== */
+
+    if (!client.value.trim()) {
+        alert("Client Name is required");
+        return;
+    }
+
+    const blocks = document.querySelectorAll(".block");
+    if (blocks.length === 0) {
+        alert("Please add at least one Event Block");
+        return;
+    }
+
+    /* ===============================
+       MAIN EVENT DETAILS VALIDATION
+    =============================== */
+
+    if (enableEventDetails.checked) {
+
+        if (!eventTypeSelect.value) {
+            alert("Please select Event Type");
+            return;
+        }
+
+        if (eventTypeSelect.value === "Other" && !eventTypeOther.value.trim()) {
+            alert("Please enter Event Type");
+            return;
+        }
+
+        if (!dateFrom.value || !dateTo.value) {
+            alert("Please select Event From and To dates");
+            return;
+        }
+    }
+
+    /* ===============================
+       EVENT BLOCKS VALIDATION
+    =============================== */
+
+    for (let i = 0; i < blocks.length; i++) {
+        const block = blocks[i];
+        const index = i + 1;
+
+        if (!block.querySelector(".blockDate").value) {
+            alert(`Please select Date in Event Block ${index}`);
+            return;
+        }
+
+        const venueSelect = block.querySelector(".blockVenue");
+        const venueOther = block.querySelector(".blockVenueOther");
+
+        if (!venueSelect.value) {
+            alert(`Please select Venue in Event Block ${index}`);
+            return;
+        }
+
+        if (venueSelect.value === "Other" && !venueOther.value.trim()) {
+            alert(`Please enter Venue in Event Block ${index}`);
+            return;
+        }
+
+        if (!block.querySelector(".blockTime").value) {
+            alert(`Please select Time in Event Block ${index}`);
+            return;
+        }
+
+        const eventSelect = block.querySelector(".blockEventSelect");
+        const eventOther = block.querySelector(".blockEventOther");
+
+        if (!eventSelect.value) {
+            alert(`Please select Event in Event Block ${index}`);
+            return;
+        }
+
+        if (eventSelect.value === "Other" && !eventOther.value.trim()) {
+            alert(`Please enter Event name in Event Block ${index}`);
+            return;
+        }
+
+        if (!block.querySelector(".blockOfferings").value.trim()) {
+            alert(`Please enter Offerings in Event Block ${index}`);
+            return;
+        }
+
+        const amount = block.querySelector(".blockAmount").value;
+        if (!amount || Number(amount) <= 0) {
+            alert(`Please enter valid Amount in Event Block ${index}`);
+            return;
+        }
+    }
+
+    /* ===============================
+       ALL VALIDATIONS PASSED
+    =============================== */
+
     pClient.innerText = client.value;
 
-    const eventType =
-        eventTypeSelect.value === "Other"
-            ? eventTypeOther.value
-            : eventTypeSelect.value;
+    if (enableEventDetails.checked) {
+        pEvent.innerText =
+            eventTypeSelect.value === "Other"
+                ? eventTypeOther.value
+                : eventTypeSelect.value;
 
-    pEvent.innerText = eventType || "";
+        pDates.innerText =
+            `${formatDate(dateFrom.value)} to ${formatDate(dateTo.value)}`;
 
-    if (dateFrom.value) {
-        pDates.innerText = dateTo.value
-            ? `${formatDate(dateFrom.value)} to ${formatDate(dateTo.value)}`
-            : formatDate(dateFrom.value);
+        pEvent.parentElement.style.display = "flex";
+        pDates.parentElement.style.display = "flex";
+    } else {
+        pEvent.parentElement.style.display = "none";
+        pDates.parentElement.style.display = "none";
     }
+
+    /* ===============================
+       BUILD PDF BLOCKS
+    =============================== */
 
     pdfBlocks.innerHTML = "";
     let total = 0;
 
-    document.querySelectorAll(".block").forEach(block => {
-        const date = block.querySelector(".blockDate").value;
-        const venue = block.querySelector(".blockVenue").value;
-        const time = block.querySelector(".blockTime").value;
-        const event = block.querySelector(".eventSelect").value;
-        const offerings = block.querySelector(".blockOfferings").value;
-        const amount = Number(block.querySelector(".blockAmount").value || 0);
+    blocks.forEach(block => {
 
+        const venueSelect = block.querySelector(".blockVenue");
+        const venue =
+            venueSelect.value === "Other"
+                ? block.querySelector(".blockVenueOther").value
+                : venueSelect.value;
+
+        const eventSelect = block.querySelector(".blockEventSelect");
+        const event =
+            eventSelect.value === "Other"
+                ? block.querySelector(".blockEventOther").value
+                : eventSelect.value;
+
+        const amount = Number(block.querySelector(".blockAmount").value);
         total += amount;
 
-        pdfBlocks.insertAdjacentHTML("beforeend", `
+        pdfBlocks.innerHTML += `
             <div class="section">
-                <b>DATE:</b> ${date ? formatDate(date) : ""}<br>
+                <b>DATE:</b> ${formatDate(block.querySelector(".blockDate").value)}<br>
                 <b>VENUE:</b> ${venue}<br>
-                <b>TIME:</b> ${time}<br>
+                <b>TIME:</b> ${block.querySelector(".blockTime").value}<br>
                 <b>EVENT:</b> ${event}<br><br>
 
                 <b>OFFERINGS</b>
                 <div class="items">
-                    ${offerings.split("\n").map(i => "• " + i).join("<br>")}
+                    ${block.querySelector(".blockOfferings").value
+                        .split("\n")
+                        .map(i => "• " + i)
+                        .join("<br>")}
                 </div>
 
                 <div class="total">Total: ₹ ${amount}</div>
             </div>
-        `);
+        `;
     });
 
     grandTotal.innerText = total;
+
+    /* ===============================
+       EXPORT PDF
+    =============================== */
 
     html2pdf().from(pdf).set({
         filename: "Event_Quotation.pdf",
@@ -312,7 +444,6 @@ function generatePDF() {
     }).save();
 }
 
-/* ADD FIRST BLOCK */
 addBlock();
 </script>
 
