@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -82,16 +83,18 @@
             <input type="text" name="clientname" placeholder="Enter Client Name" required>
 
             <label>Client Number</label>
-            <input type="tel" name="clientNumber" placeholder="Enter Client Number" pattern="[0-9]{10}" required>
+            <input type="tel" name="clientNumber" placeholder="Enter Client Number" value="9729035555"
+                pattern="[0-9]{10}" required>
 
             <label>Start Date Of Event</label>
-            <input type="date" name="startDate" required>
+            <input type="date" name="startDate" id="startDate" required>
 
             <label>End Date Of Event</label>
-            <input type="date" name="endDate" required>
+            <input type="date" name="endDate" id="endDate" required>
+
 
             <label>Time Of Event</label>
-            <input type="time" name="eventTime" required>
+            <input type="time" name="eventTime" value="17:00" required>
 
             <label>Event</label>
             <select name="eventType" required>
@@ -132,12 +135,17 @@
             </select>
 
             <label>Upload Quotation PDF</label>
-            <input type="file" name="pdfUpload" accept=".pdf" required onchange="previewFile(this, 'quotationPreview')">
-            <small id="quotationPreview"></small>
+            <input type="file" name="pdfUpload" accept=".pdf" onchange="previewFile(this, 'quotationPreview')">
+            <small id="quotationPreview">Default: default.pdf</small>
 
             <label>Upload Planning PDF</label>
             <input type="file" name="planingpdfUpload" accept=".pdf" onchange="previewFile(this, 'planningPreview')">
-            <small id="planningPreview"></small>
+            <small id="planningPreview">Default: default.pdf</small>
+
+            <!-- hidden flags to tell backend to use default -->
+            <input type="hidden" name="useDefaultQuotation" value="true">
+            <input type="hidden" name="useDefaultPlanning" value="true">
+
 
             <label>Total Amount</label>
             <input type="number" name="totalAmount" placeholder="Enter Booking Amount" min="0" required>
@@ -215,9 +223,20 @@
         let formPendingSubmit = null;
 
         function previewFile(input, previewId) {
-            const file = input.files[0];
-            if (file) {
-                document.getElementById(previewId).innerText = "Selected: " + file.name;
+            const preview = document.getElementById(previewId);
+
+            if (input.files && input.files.length > 0) {
+                preview.innerText = "Selected: " + input.files[0].name;
+
+                // user uploaded a file → disable default
+                if (previewId === "quotationPreview") {
+                    document.querySelector('input[name="useDefaultQuotation"]').value = "false";
+                }
+                if (previewId === "planningPreview") {
+                    document.querySelector('input[name="useDefaultPlanning"]').value = "false";
+                }
+            } else {
+                preview.innerText = "Default: default.pdf";
             }
         }
 
@@ -308,7 +327,83 @@
             }
         };
 
+
+        document.querySelector('select[name="venue"]').value = "Noor Mahal";
+        document.querySelector('select[name="receivedBy"]').value = "Other";
+        document.querySelector('input[name="eventTime"]').value = "17:00";
+        document.querySelector('input[name="clientNumber"]').value = "9729035555";
+        document.querySelector('input[name="advanceReceived"]').value = "0";
+        document.querySelector('input[name="totalAmount"]').value = "0";
+        document.querySelector('select[name="eventType"]').value = "Destination Wedding";
+
+
+        const startDateInput = document.getElementById("startDate");
+        const endDateInput = document.getElementById("endDate");
+
+        // When start date changes
+        startDateInput.addEventListener("change", () => {
+            endDateInput.min = startDateInput.value;
+
+            if (endDateInput.value && endDateInput.value < startDateInput.value) {
+                endDateInput.value = startDateInput.value;
+            }
+        });
+
+        // Extra safety: prevent submit if invalid
+        document.getElementById("bookingForm").addEventListener("submit", (e) => {
+            if (endDateInput.value < startDateInput.value) {
+                alert("End Date cannot be earlier than Start Date");
+                e.preventDefault();
+            }
+        });
+
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const today = new Date().toISOString().split('T')[0];
+
+            document.querySelector('input[name="startDate"]').value = today;
+            document.querySelector('input[name="endDate"]').value = today;
+        });
+
     </script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
 </body>
 
 </html>
