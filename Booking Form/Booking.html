@@ -409,13 +409,66 @@
                 onContinue();
             };
 
-            document.getElementById("viewBookingsBtn").onclick = () => {
-                window.location.href = "../View Form/View.html";
+            document.getElementById("viewBookingsBtn").onclick = async () => {
+                const startDate = document.querySelector('input[name="startDate"]').value;
+                if (!startDate) return;
+
+                try {
+                    const res = await fetch(
+                        `https://soulmate-backend-production.up.railway.app/bookings-by-date?startDate=${startDate}`
+                    );
+
+                    const data = await res.json();
+                    renderBookingTable(data.rows || []);
+                    closeConflictModal();
+                    openBookingListModal();
+
+                } catch (err) {
+                    alert("Failed to load bookings");
+                }
             };
+
         }
 
         function closeConflictModal() {
             document.getElementById("dateConflictModal").style.display = "none";
+        }
+
+
+
+        function renderBookingTable(rows) {
+            const tbody = document.getElementById("bookingTableBody");
+            tbody.innerHTML = "";
+
+            if (rows.length === 0) {
+                tbody.innerHTML = `
+            <tr>
+                <td colspan="7" style="text-align:center;">No bookings found</td>
+            </tr>`;
+                return;
+            }
+
+            rows.forEach(r => {
+                tbody.innerHTML += `
+            <tr>
+                <td>${r.client_name}</td>
+                <td>${r.client_number}</td>
+                <td>${r.event_type}</td>
+                <td>${r.venue}</td>
+                <td>${formatTime(r.event_time)}</td>
+                <td>${r.has_quotation_pdf ? "✅" : "❌"}</td>
+                <td>${r.has_planning_pdf ? "✅" : "❌"}</td>
+            </tr>
+        `;
+            });
+        }
+
+        function openBookingListModal() {
+            document.getElementById("bookingListModal").style.display = "flex";
+        }
+
+        function closeBookingListModal() {
+            document.getElementById("bookingListModal").style.display = "none";
         }
 
     </script>
@@ -434,6 +487,34 @@
             </div>
         </div>
     </div>
+    <!-- Existing bookings table -->
+    <!-- Booking List Modal -->
+    <div id="bookingListModal" class="modal" style="display:none;">
+        <div class="modal-content" style="width:90%; max-width:900px;">
+            <h3>📅 Existing Bookings for Selected Date</h3>
+
+            <table border="1" width="100%" style="border-collapse:collapse; margin-top:10px;">
+                <thead>
+                    <tr>
+                        <th>Client</th>
+                        <th>Contact</th>
+                        <th>Event</th>
+                        <th>Venue</th>
+                        <th>Time</th>
+                        <th>Quotation</th>
+                        <th>Planning</th>
+                    </tr>
+                </thead>
+                <tbody id="bookingTableBody">
+                    <!-- data goes here -->
+                </tbody>
+            </table>
+
+            <br>
+            <button onclick="closeBookingListModal()">Close</button>
+        </div>
+    </div>
+    >
 
 </body>
 

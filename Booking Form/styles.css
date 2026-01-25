@@ -20,6 +20,40 @@
     font-weight: 600;
 }
 
+
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 999;
+}
+
+.modal-content {
+  background: #fff;
+  width: 90%;
+  max-width: 900px;
+  margin: 5% auto;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+#bookingsTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+#bookingsTable th, #bookingsTable td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#bookingsTable th {
+  background: #f4f4f4;
+}
+
+
 #viewBookingsBtn {
     background: #007bff;
     color: white;
