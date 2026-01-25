@@ -449,6 +449,14 @@
             }
 
             rows.forEach(r => {
+                const pdfLink = r.has_quotation_pdf
+                    ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${r.id}/quotation-pdf" target="_blank">View</a>`
+                    : "No PDF";
+
+                const planningpdfLink = r.has_planning_pdf
+                    ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${r.id}/planning-pdf" target="_blank">View</a>`
+                    : "No PDF";
+
                 tbody.innerHTML += `
             <tr>
                 <td>${r.client_name}</td>
@@ -456,8 +464,8 @@
                 <td>${r.event_type}</td>
                 <td>${r.venue}</td>
                 <td>${formatTime(r.event_time)}</td>
-                <td>${r.has_quotation_pdf ? "✅" : "❌"}</td>
-                <td>${r.has_planning_pdf ? "✅" : "❌"}</td>
+                <td>${pdfLink}</td>
+                <td>${planningpdfLink}</td>
             </tr>
         `;
             });
