@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -314,10 +313,10 @@
             }
         }
 
-        document.querySelector('#bookingForm').addEventListener('submit', function (event) {
-            event.preventDefault();
-            openPasswordModal(event.target);
-        });
+        // document.querySelector('#bookingForm').addEventListener('submit', function (event) {
+        //     event.preventDefault();
+        //     openPasswordModal(event.target);
+        // });
 
 
         window.onclick = function (e) {
@@ -358,6 +357,37 @@
         });
 
 
+        document.querySelector('#bookingForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const startDate = document.querySelector('input[name="startDate"]').value;
+
+            if (!startDate) return;
+
+            try {
+                const res = await fetch(
+                    `https://soulmate-backend-production.up.railway.app/check-event-date?startDate=${startDate}`
+                );
+
+                const data = await res.json();
+
+                if (data.exists) {
+                    showConflictModal(() => {
+                        openPasswordModal(document.getElementById("bookingForm"));
+                    });
+                    return;
+                }
+
+                // No duplicate → continue normal flow
+                openPasswordModal(event.target);
+
+            } catch (err) {
+                alert("Unable to verify event date. Try again.");
+            }
+        });
+
+
+
         document.addEventListener("DOMContentLoaded", () => {
             const today = new Date().toISOString().split('T')[0];
 
@@ -366,44 +396,45 @@
         });
 
     </script>
-<!-- Code injected by live-server -->
-<script>
-	// <![CDATA[  <-- For SVG support
-	if ('WebSocket' in window) {
-		(function () {
-			function refreshCSS() {
-				var sheets = [].slice.call(document.getElementsByTagName("link"));
-				var head = document.getElementsByTagName("head")[0];
-				for (var i = 0; i < sheets.length; ++i) {
-					var elem = sheets[i];
-					var parent = elem.parentElement || head;
-					parent.removeChild(elem);
-					var rel = elem.rel;
-					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
-						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
-						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
-					}
-					parent.appendChild(elem);
-				}
-			}
-			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
-			var address = protocol + window.location.host + window.location.pathname + '/ws';
-			var socket = new WebSocket(address);
-			socket.onmessage = function (msg) {
-				if (msg.data == 'reload') window.location.reload();
-				else if (msg.data == 'refreshcss') refreshCSS();
-			};
-			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
-				console.log('Live reload enabled.');
-				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
-			}
-		})();
-	}
-	else {
-		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
-	}
-	// ]]>
-</script>
+    <script>
+        let proceedAfterConflict = false;
+
+        function showConflictModal(onContinue) {
+            proceedAfterConflict = false;
+            document.getElementById("dateConflictModal").style.display = "flex";
+
+            document.getElementById("continueBtn").onclick = () => {
+                proceedAfterConflict = true;
+                closeConflictModal();
+                onContinue();
+            };
+
+            document.getElementById("viewBookingsBtn").onclick = () => {
+                window.location.href = "../View Form/View.html";
+            };
+        }
+
+        function closeConflictModal() {
+            document.getElementById("dateConflictModal").style.display = "none";
+        }
+
+    </script>
+    <div id="dateConflictModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <h3>⚠️ Event Already Exists</h3>
+            <p>
+                An event already exists for this date.<br>
+                You can view existing bookings or continue anyway.
+            </p>
+
+            <div class="modal-buttons">
+                <button id="viewBookingsBtn">View Bookings</button>
+                <button id="continueBtn">Continue</button>
+                <button onclick="closeConflictModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
 </body>
 
 </html>
