@@ -24,7 +24,8 @@ const albumFiles = [
     "1 (5).mp4",
     "1 (6).mp4",
     "e20ffd33-cf5a-41fb-9b4b-d8816a7ca9f6.mov",
-    "IMG_1224.mov"
+    "IMG_1224.mov",
+    "IMG_7252.MOV"
 ];
 
 const album = document.getElementById("video-album");
