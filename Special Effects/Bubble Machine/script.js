@@ -20,7 +20,8 @@ const albumFiles = [
     "Bubble_2.mp4",
     "Bubble_3.mp4",
     "Bubble_4.mp4",
-    "Bubble_5.mp4"
+    "Bubble_5.mp4",
+    "IMG_7237.MOV"
 ];
 
 const album = document.getElementById("video-album");

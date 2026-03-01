@@ -25,8 +25,7 @@ const albumFiles = [
     "Haldi_9.jpeg",
     "Haldi_1.mp4",
     "Haldi_2.mp4",
-    "Haldi_3.mp4",
-    "IMG_7237.MOV"
+    "Haldi_3.mp4"
 ];
 
 const album = document.getElementById("video-album");
