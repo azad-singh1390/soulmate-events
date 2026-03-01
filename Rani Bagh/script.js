@@ -23,7 +23,6 @@ const albumFiles = [
     "e20ffd33-cf5a-41fb-9b4b-d8816a7ca9f6.mov",
     "IMG_1224.mov",
     "IMG_3945.MOV",
-    "IMG_3980 (1).MOV",
     "IMG_3980.MOV",
     "IMG_4348.MOV",
     "IMG_7233.MOV",
