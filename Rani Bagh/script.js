@@ -17,15 +17,17 @@ const albumFiles = [
     "1 (2).jpeg",
     "1 (3).jpeg",
     "IMG_1079.jpeg",
-    "1 (1).mp4",
-    "1 (2).mp4",
     "1 (3).mp4",
     "1 (4).mp4",
-    "1 (5).mp4",
     "1 (6).mp4",
     "e20ffd33-cf5a-41fb-9b4b-d8816a7ca9f6.mov",
     "IMG_1224.mov",
-    "IMG_7252.MOV"
+    "IMG_4348.MOV",
+    "IMG_7233.MOV",
+    "IMG_7247.MOV",
+    "IMG_7252.MOV",
+    "IMG_7259.MOV",
+    "IMG_7264.MOV"
 ];
 
 const album = document.getElementById("video-album");
