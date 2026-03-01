@@ -16,6 +16,7 @@ const albumFiles = [
     "Picture4.jpg",
     "Picture5.jpg",
     "Picture6.jpg",
+    "IMG_4158.MOV",
     "Media1.mp4",
     "Media2.mp4",
     "Media3.mp4"
