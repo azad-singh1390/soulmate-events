@@ -10,6 +10,7 @@ parent_directories = [
     r'D:\SOULMATE\Website\soulmate-events\Basic Setup',
     r'D:\SOULMATE\Website\soulmate-events\Single Screen',
     r'D:\SOULMATE\Website\soulmate-events\Double Screen',
+    r'D:\SOULMATE\Website\soulmate-events\Corporate',
     r'D:\SOULMATE\Website\soulmate-events\Rani Bagh'
 ]
 
