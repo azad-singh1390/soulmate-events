@@ -34,7 +34,8 @@ const albumFiles = [
     "Cocktail_7.mp4",
     "Cocktail_8.mp4",
     "Cocktail_9.mp4",
-    "IMG_4323.mov"
+    "IMG_4323.mov",
+    "IMG_4354.MOV"
 ];
 
 const album = document.getElementById("video-album");
