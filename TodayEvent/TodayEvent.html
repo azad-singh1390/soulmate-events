@@ -757,7 +757,7 @@
             ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf" target="_blank">View</a> | 
            <a href="#" onclick="downloadPDF(
              'https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf',
-             '${sanitizeFilename(row.client_name + " - " + eventStartDate)}-planning.pdf'
+             '${sanitizeFilename(row.client_name + "-" + eventStartDate)}-planning.pdf'
            )">Download</a>`
             : "No PDF";
 
