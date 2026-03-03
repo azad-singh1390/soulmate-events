@@ -989,7 +989,7 @@
       loader.style.display = "flex";
 
       try {
-        const res = await fetch("https://soulmate-backend-production.up.railway.app/upcomingbookings");
+        const res = await fetch("https://soulmate-backend-production.up.railway.app/todaybookings");
         const result = await res.json();
         const data = Array.isArray(result.rows) ? result.rows : [];
 
@@ -1024,7 +1024,7 @@
       loader.style.display = "flex";
 
       try {
-        const res = await fetch("https://soulmate-backend-production.up.railway.app/upcomingbookings");
+        const res = await fetch("https://soulmate-backend-production.up.railway.app/todaybookings");
         const result = await res.json();
         const data = Array.isArray(result.rows) ? result.rows : [];
 
