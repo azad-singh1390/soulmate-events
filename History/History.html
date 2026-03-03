@@ -18,18 +18,18 @@
     }
 
     .month-header {
-            background: white;
-            color: black;
-            font-weight: bold;
-            font-size: 26px;
-        }
+      background: white;
+      color: black;
+      font-weight: bold;
+      font-size: 26px;
+    }
 
-        .month-header td {
-            background-color: white;
-            padding: 12px;
-            text-align: left;
-        }
-        
+    .month-header td {
+      background-color: white;
+      padding: 12px;
+      text-align: left;
+    }
+
     /* Navbar */
     .navbar {
       width: 100%;
@@ -288,6 +288,14 @@
     <button onclick="exportToExcel()" class="btn">
       ⬇ Export To Excel
     </button>
+    
+    <button onclick="downloadAllQuotations()" class="btn">
+      📄 Download All Quotations
+    </button>
+
+    <button onclick="downloadAllPlannings()" class="btn">
+      📑 Download All Plannings
+    </button>
   </div>
   <table id="bookingsTable">
     <thead>
@@ -448,6 +456,91 @@
       } catch (err) {
         console.error("Error fetching history bookings:", err);
         tbody.innerHTML = `<tr><td colspan="10">❌ Error loading history bookings</td></tr>`;
+      } finally {
+        loader.style.display = "none";
+      }
+    }
+
+
+    function downloadFileSequentially(url, filename) {
+      return fetch(url)
+        .then(resp => resp.blob())
+        .then(blob => {
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download = filename;
+          link.click();
+          URL.revokeObjectURL(link.href);
+
+          return new Promise(resolve => setTimeout(resolve, 500)); // small delay
+        });
+    }
+
+    async function downloadAllPlannings() {
+      const loader = document.getElementById("loader");
+      loader.style.display = "flex";
+
+      try {
+        const res = await fetch("https://soulmate-backend-production.up.railway.app/upcomingbookings");
+        const result = await res.json();
+        const data = Array.isArray(result.rows) ? result.rows : [];
+
+        const plannings = data.filter(row => row.has_planning_pdf);
+
+        if (plannings.length === 0) {
+          alert("No planning PDFs found.");
+          return;
+        }
+
+        for (let row of plannings) {
+          const eventStartDate = formatDate(row.event_start_date);
+
+          const url = `https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf`;
+          const filename = sanitizeFilename(row.client_name + "-" + eventStartDate) + "-planning.pdf";
+
+          await downloadFileSequentially(url, filename);
+        }
+
+        alert("✅ All planning PDFs downloaded!");
+
+      } catch (err) {
+        console.error(err);
+        alert("❌ Error downloading plannings");
+      } finally {
+        loader.style.display = "none";
+      }
+    }
+
+    async function downloadAllQuotations() {
+      const loader = document.getElementById("loader");
+      loader.style.display = "flex";
+
+      try {
+        const res = await fetch("https://soulmate-backend-production.up.railway.app/upcomingbookings");
+        const result = await res.json();
+        const data = Array.isArray(result.rows) ? result.rows : [];
+
+        const quotations = data.filter(row => row.has_quotation_pdf);
+
+        if (quotations.length === 0) {
+          alert("No quotation PDFs found.");
+          return;
+        }
+
+        for (let row of quotations) {
+          const eventStartDate = formatDate(row.event_start_date);
+
+          const url = `https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf`;
+          const filename = sanitizeFilename(row.client_name + "-" + eventStartDate) + "-quotation.pdf";
+
+          await downloadFileSequentially(url, filename);
+        }
+
+        alert("✅ All quotation PDFs downloaded!");
+
+      } catch (err) {
+        console.error(err);
+        alert("❌ Error downloading quotations");
       } finally {
         loader.style.display = "none";
       }
