@@ -1,95 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <meta charset="UTF-8">
-<title>Dynamic Event Quotation</title>
+<title>Soulmate Event Quotation</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
-body {
-    font-family: "Times New Roman", serif;
-    background: #f2f2f2;
-    padding: 20px;
-}
-
-input, textarea, select {
-    width: 100%;
-    padding: 6px;
-    margin-bottom: 8px;
-}
-
-button {
-    padding: 8px 14px;
-    background: black;
-    color: white;
-    border: none;
-    cursor: pointer;
-    margin-top: 5px;
-}
-
-.block {
-    background: white;
-    padding: 15px;
-    margin-bottom: 12px;
-    border: 1px solid #ccc;
-}
-
-.remove {
-    background: darkred;
-}
-
-/* Date Row */
-.date-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.date-row input {
-    flex: 1;
-}
-
-.to-text {
-    font-weight: bold;
-}
-
-/* Disabled section */
-.disabled-section {
-    opacity: 0.5;
-    pointer-events: none;
-}
-
-/* PDF */
-#pdf {
-    background: white;
-    padding: 30px;
-    width: 800px;
-    margin: auto;
-}
-
-.section {
-    margin-top: 25px;
-}
-
-.row {
-    display: flex;
-    margin-bottom: 6px;
-}
-
-.label {
-    width: 120px;
-    font-weight: bold;
-}
-
-.items {
-    margin-left: 20px;
-}
-
-.total {
-    font-weight: bold;
-    margin-top: 8px;
-}
+.event-line { display: grid; grid-template-columns: 110px 15px auto; margin-bottom: 4px; font-size: 15px; }
+.label { font-weight: bold; }
+body { font-family: "Times New Roman", serif; background: #f2f2f2; padding: 20px; }
+input, textarea, select { width: 100%; padding: 6px; margin-bottom: 8px; }
+button { padding: 8px 14px; background: black; color: white; border: none; cursor: pointer; margin-top: 5px; }
+.block { background: white; padding: 15px; margin-bottom: 12px; border: 1px solid #ccc; }
+.remove { background: darkred; }
+.date-row { display: flex; gap: 10px; align-items: center; }
+.date-row input { flex: 1; }
+.disabled-section { opacity: 0.5; pointer-events: none; }
+#pdf { background: white; padding: 30px; width: 800px; margin: auto; }
+.quotation-header { padding: 20px 25px; margin-bottom: 25px; border: 1px solid #ddd; border-radius: 6px; background: #fafafa; }
+.header-row { display: flex; margin-bottom: 10px; }
+.header-label { width: 160px; font-weight: 600; position: relative; }
+.header-label::after { content: " :"; position: absolute; right: 10px; }
+.header-value { flex: 1; font-weight: 500; }
+.section { margin-top: 25px; }
+.items { margin-left: 20px; }
+.total { font-weight: bold; margin-top: 8px; }
 </style>
 </head>
 
@@ -97,42 +34,51 @@ button {
 
 <h2>Quotation Details</h2>
 
-<input id="client" placeholder="Client Name">
+<input id="client" placeholder="Client Name" value="Rahul Sharma">
 
 <label>
-    <input type="checkbox" id="enableEventDetails" onchange="toggleEventDetails()">
-    Enable Event Details
+<input type="checkbox" id="enableEventDetails" checked onchange="toggleEventDetails()">
+Enable Event Details
 </label>
 
 <br><br>
 
-<!-- EVENT DETAILS -->
-<div id="eventDetails" class="disabled-section">
+<div id="eventDetails">
 
-    <select id="eventTypeSelect" onchange="handleEventTypeChange()" disabled>
-        <option value="" disabled selected hidden>Select Event Type</option>
-        <option>Birthday</option>
-        <option>Anniversary</option>
-        <option>Engagement</option>
-        <option>Sangeet</option>
-        <option>Ring Ceremony</option>
-        <option>Roka Ceremony</option>
-        <option>Wedding</option>
-        <option>Destination Wedding</option>
-        <option>Corporate</option>
-        <option>Get Together</option>
-        <option value="Other">Other</option>
-    </select>
+<select id="eventTypeSelect" onchange="handleEventTypeChange()">
+<option selected>Wedding</option>
+<option>Birthday</option>
+<option>Anniversary</option>
+<option>Engagement</option>
+<option>Sangeet</option>
+<option>Ring Ceremony</option>
+<option>Roka Ceremony</option>
+<option>Destination Wedding</option>
+<option>Corporate</option>
+<option>Get Together</option>
+<option value="Other">Other</option>
+</select>
 
-    <input id="eventTypeOther" placeholder="Enter Event Type" style="display:none;" disabled>
+<input id="eventTypeOther" placeholder="Enter Event Type" style="display:none;">
 
-    <label><b>Event Dates</b></label>
-    <div class="date-row">
-        <span class="to-text">From</span>
-        <input type="date" id="dateFrom" disabled>
-        <span class="to-text">To</span>
-        <input type="date" id="dateTo" disabled>
-    </div>
+<select id="eventVenueSelect" onchange="handleEventVenueChange()">
+<option selected>Noor Mahal</option>
+<option>Eden</option>
+<option>Gulmohar</option>
+<option>Amani Farms</option>
+<option>Emarld</option>
+<option value="Other">Other</option>
+</select>
+
+<input id="eventVenueOther" placeholder="Enter Event Venue" style="display:none;">
+
+<label><b>Event Dates</b></label>
+<div class="date-row">
+<span><b>From</b></span>
+<input type="date" id="dateFrom" value="2026-02-20">
+<span><b>To</b></span>
+<input type="date" id="dateTo" value="2026-02-22">
+</div>
 </div>
 
 <h3>Event Blocks</h3>
@@ -143,308 +89,191 @@ button {
 
 <hr>
 
-<!-- PDF CONTENT -->
 <div id="pdf">
-    <h2 style="text-align:center;">Event Quotation</h2>
+<h2 style="text-align:center;">Soulmate Event Quotation</h2>
 
-    <div class="row"><div class="label">Client:</div><div id="pClient"></div></div>
-    <div class="row"><div class="label">Event:</div><div id="pEvent"></div></div>
-    <div class="row"><div class="label">Dates:</div><div id="pDates"></div></div>
+<div class="quotation-header">
+<div class="header-row"><div class="header-label">CLIENT NAME</div><div class="header-value" id="pClient"></div></div>
+<div class="header-row"><div class="header-label">EVENT</div><div class="header-value" id="pEvent"></div></div>
+<div class="header-row"><div class="header-label">DATES</div><div class="header-value" id="pDates"></div></div>
+<div class="header-row"><div class="header-label">VENUE</div><div class="header-value" id="pVenue"></div></div>
+</div>
 
-    <div id="pdfBlocks"></div>
+<div id="pdfBlocks"></div>
 
-    <hr>
-    <div class="total">Grand Total: ₹ <span id="grandTotal"></span></div>
+<hr>
+<div class="total">Grand Total: ₹ <span id="grandTotal"></span></div>
 
-    <div class="section">
-        <b>Payment Schedule</b><br>
-        Token: Any Amount<br>
-        75% Before Event<br>
-        Remaining Payment After Event
-    </div>
+<div class="section">
+<b>Payment Schedule</b><br>
+Token: Any Amount<br>
+75% Before Event<br>
+Remaining Payment After Event
+</div>
 </div>
 
 <script>
+
 let blockCount = 0;
 
 function toggleEventDetails() {
-    const enabled = enableEventDetails.checked;
-    eventDetails.classList.toggle("disabled-section", !enabled);
-    eventDetails.querySelectorAll("select, input").forEach(el => el.disabled = !enabled);
+const enabled = enableEventDetails.checked;
+eventDetails.classList.toggle("disabled-section", !enabled);
 }
 
 function handleEventTypeChange() {
-    if (eventTypeSelect.value === "Other") {
-        eventTypeOther.style.display = "block";
-        eventTypeOther.disabled = false;
-    } else {
-        eventTypeOther.style.display = "none";
-        eventTypeOther.value = "";
-        eventTypeOther.disabled = true;
-    }
+eventTypeOther.style.display = eventTypeSelect.value === "Other" ? "block" : "none";
+}
+
+function handleEventVenueChange() {
+eventVenueOther.style.display = eventVenueSelect.value === "Other" ? "block" : "none";
 }
 
 function formatDate(dateStr) {
-    return new Date(dateStr).toLocaleDateString("en-GB", {
-        day: "numeric",
-        month: "long",
-        year: "numeric"
-    });
+return new Date(dateStr).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
 }
 
-/* ADD EVENT BLOCK */
+function formatTime(timeStr) {
+return new Date("1970-01-01T"+timeStr)
+.toLocaleTimeString("en-IN",{hour:"numeric",minute:"2-digit"});
+}
+
+function generateSection(title, content) {
+if (!content.trim()) return "";
+return `<b>${title}</b>
+<div class="items">
+${content.split("\n").map(i=>"• "+i).join("<br>")}
+</div>`;
+}
+
 function addBlock() {
-    blockCount++;
-    const div = document.createElement("div");
-    div.className = "block";
+blockCount++;
+const div = document.createElement("div");
+div.className="block";
 
-    div.innerHTML = `
-        <h4>Event Block ${blockCount}</h4>
+div.innerHTML=`
+<h4>Event Block ${blockCount}</h4>
 
-        <label><b>Date</b></label>
-        <input type="date" class="blockDate">
+<label><b>Date</b></label>
+<input type="date" class="blockDate" value="2026-02-20">
 
-        <label><b>Venue</b></label>
-        <select class="blockVenue">
-            <option value="" disabled selected hidden>Select Venue</option>
-            <option>Deewan-E-Aam, Noor Mahal</option>
-            <option>Deewan-E-Khas, Noor Mahal</option>
-            <option>Darbar Hall, Noor Mahal</option>
-            <option>Dera, Noor Mahal</option>
-            <option>Sheesh Mahal, Noor Mahal</option>
-            <option>Rang Mahal, Noor Mahal</option>
-            <option>Raja Bagh, Noor Mahal</option>
-            <option>Rani Bagh</option>
-            <option>Jal Mahal</option>
-            <option value="Other">Other</option>
-        </select>
+<label><b>Venue</b></label>
+<select class="blockVenue">
+<option selected>Deewan-E-Aam, Noor Mahal</option>
+<option>Deewan-E-Khas, Noor Mahal</option>
+<option>Darbar Hall, Noor Mahal</option>
+<option>Dera, Noor Mahal</option>
+<option>Sheesh Mahal, Noor Mahal</option>
+<option>Rang Mahal, Noor Mahal</option>
+<option>Raja Bagh, Noor Mahal</option>
+<option>Rani Bagh</option>
+<option>Jal Mahal</option>
+<option value="Other">Other</option>
+</select>
 
-        <input class="blockVenueOther" placeholder="Enter Venue Name" style="display:none;">
+<input class="blockVenueOther" style="display:none;">
 
-        <label><b>Time</b></label>
-        <input type="time" class="blockTime">
+<label><b>Time</b></label>
+<input type="time" class="blockTime" value="19:00">
 
-        <label><b>Event</b></label>
-        <select class="blockEventSelect">
-            <option value="" disabled selected hidden>Select Event</option>
-            <option>Birthday</option>
-            <option>Anniversary</option>
-            <option>Engagement</option>
-            <option>Sangeet</option>
-            <option>Ring Ceremony</option>
-            <option>Roka Ceremony</option>
-            <option>Wedding</option>
-            <option>Destination Wedding</option>
-            <option>Corporate</option>
-            <option>Get Together</option>
-            <option value="Other">Other</option>
-        </select>
+<label><b>Event</b></label>
+<select class="blockEventSelect">
+<option selected>Wedding</option>
+<option>Birthday</option>
+<option>Sangeet</option>
+<option>Engagement</option>
+<option value="Other">Other</option>
+</select>
 
-        <input class="blockEventOther" placeholder="Enter Event Name" style="display:none;">
+<input class="blockEventOther" style="display:none;">
 
-        <label><b>Offerings</b></label>
-        <textarea class="blockOfferings"></textarea>
+<label><b>Sound Setup</b></label>
+<textarea class="blockSoundSetup">Line Array Sound System
+Cordless Mics
+DJ Console Setup</textarea>
 
-        <label><b>Total Amount</b></label>
-        <input type="number" class="blockAmount">
+<label><b>Floor & Stage</b></label>
+<textarea class="blockFloorStage">24x16 Stage Platform
+Carpet Finish
+Dance Floor Setup</textarea>
 
-        <button class="remove" onclick="this.parentElement.remove()">Remove</button>
-    `;
+<label><b>Lights & Truss</b></label>
+<textarea class="blockLightsTruss">Moving Heads
+LED Par Cans
+Truss Structure</textarea>
 
-    blocks.appendChild(div);
+<label><b>Led Screen</b></label>
+<textarea class="blockLedScreen">10x8 LED Wall
+Live Camera Display</textarea>
 
-    const venueSelect = div.querySelector(".blockVenue");
-    const venueOther = div.querySelector(".blockVenueOther");
-    venueSelect.onchange = () => {
-        venueOther.style.display = venueSelect.value === "Other" ? "block" : "none";
-        if (venueSelect.value !== "Other") venueOther.value = "";
-    };
+<label><b>Techrider</b></label>
+<textarea class="blockTechrider">Sound Engineer
+Light Operator
+Generator Backup</textarea>
 
-    const eventSelect = div.querySelector(".blockEventSelect");
-    const eventOther = div.querySelector(".blockEventOther");
-    eventSelect.onchange = () => {
-        eventOther.style.display = eventSelect.value === "Other" ? "block" : "none";
-        if (eventSelect.value !== "Other") eventOther.value = "";
-    };
+<label><b>Other Requirements</b></label>
+<textarea class="blockOtherRequirements">Green Room Setup
+Artist Hospitality</textarea>
+
+<label><b>Special Effects</b></label>
+<textarea class="blockSpecialEffects">Cold Pyro
+Confetti Blast
+Low Fog Entry</textarea>
+
+<label><b>Total Amount</b></label>
+<input type="number" class="blockAmount" value="250000">
+
+<button class="remove" onclick="this.parentElement.remove()">Remove</button>
+`;
+
+blocks.appendChild(div);
 }
 
-/* GENERATE PDF */
-function generatePDF() {
+function generatePDF(){
 
-    /* ===============================
-       BASIC VALIDATION
-    =============================== */
+pClient.innerText=client.value;
+pEvent.innerText=eventTypeSelect.value;
+pDates.innerText=`${formatDate(dateFrom.value)} to ${formatDate(dateTo.value)}`;
+pVenue.innerText=eventVenueSelect.value;
 
-    if (!client.value.trim()) {
-        alert("Client Name is required");
-        return;
-    }
+pdfBlocks.innerHTML="";
+let total=0;
 
-    const blocks = document.querySelectorAll(".block");
-    if (blocks.length === 0) {
-        alert("Please add at least one Event Block");
-        return;
-    }
+document.querySelectorAll(".block").forEach(block=>{
 
-    /* ===============================
-       MAIN EVENT DETAILS VALIDATION
-    =============================== */
+const amount=Number(block.querySelector(".blockAmount").value);
+total+=amount;
 
-    if (enableEventDetails.checked) {
+pdfBlocks.innerHTML+=`
+<div class="section">
+<div class="event-line"><div class="label">DATE</div><div>:</div><div>${formatDate(block.querySelector(".blockDate").value)}</div></div>
+<div class="event-line"><div class="label">VENUE</div><div>:</div><div>${block.querySelector(".blockVenue").value}</div></div>
+<div class="event-line"><div class="label">TIME</div><div>:</div><div>${formatTime(block.querySelector(".blockTime").value)}</div></div>
+<div class="event-line"><div class="label">EVENT</div><div>:</div><div>${block.querySelector(".blockEventSelect").value}</div></div>
+<br>
+${generateSection("Sound Setup",block.querySelector(".blockSoundSetup").value)}
+${generateSection("Floor & Stage",block.querySelector(".blockFloorStage").value)}
+${generateSection("Lights & Truss",block.querySelector(".blockLightsTruss").value)}
+${generateSection("Led Screen",block.querySelector(".blockLedScreen").value)}
+${generateSection("Techrider",block.querySelector(".blockTechrider").value)}
+${generateSection("Other Requirements",block.querySelector(".blockOtherRequirements").value)}
+${generateSection("Special Effects",block.querySelector(".blockSpecialEffects").value)}
+<div class="total">Total: ₹ ${amount}</div>
+</div><hr>`;
+});
 
-        if (!eventTypeSelect.value) {
-            alert("Please select Event Type");
-            return;
-        }
+grandTotal.innerText=total;
 
-        if (eventTypeSelect.value === "Other" && !eventTypeOther.value.trim()) {
-            alert("Please enter Event Type");
-            return;
-        }
-
-        if (!dateFrom.value || !dateTo.value) {
-            alert("Please select Event From and To dates");
-            return;
-        }
-    }
-
-    /* ===============================
-       EVENT BLOCKS VALIDATION
-    =============================== */
-
-    for (let i = 0; i < blocks.length; i++) {
-        const block = blocks[i];
-        const index = i + 1;
-
-        if (!block.querySelector(".blockDate").value) {
-            alert(`Please select Date in Event Block ${index}`);
-            return;
-        }
-
-        const venueSelect = block.querySelector(".blockVenue");
-        const venueOther = block.querySelector(".blockVenueOther");
-
-        if (!venueSelect.value) {
-            alert(`Please select Venue in Event Block ${index}`);
-            return;
-        }
-
-        if (venueSelect.value === "Other" && !venueOther.value.trim()) {
-            alert(`Please enter Venue in Event Block ${index}`);
-            return;
-        }
-
-        if (!block.querySelector(".blockTime").value) {
-            alert(`Please select Time in Event Block ${index}`);
-            return;
-        }
-
-        const eventSelect = block.querySelector(".blockEventSelect");
-        const eventOther = block.querySelector(".blockEventOther");
-
-        if (!eventSelect.value) {
-            alert(`Please select Event in Event Block ${index}`);
-            return;
-        }
-
-        if (eventSelect.value === "Other" && !eventOther.value.trim()) {
-            alert(`Please enter Event name in Event Block ${index}`);
-            return;
-        }
-
-        if (!block.querySelector(".blockOfferings").value.trim()) {
-            alert(`Please enter Offerings in Event Block ${index}`);
-            return;
-        }
-
-        const amount = block.querySelector(".blockAmount").value;
-        if (!amount || Number(amount) <= 0) {
-            alert(`Please enter valid Amount in Event Block ${index}`);
-            return;
-        }
-    }
-
-    /* ===============================
-       ALL VALIDATIONS PASSED
-    =============================== */
-
-    pClient.innerText = client.value;
-
-    if (enableEventDetails.checked) {
-        pEvent.innerText =
-            eventTypeSelect.value === "Other"
-                ? eventTypeOther.value
-                : eventTypeSelect.value;
-
-        pDates.innerText =
-            `${formatDate(dateFrom.value)} to ${formatDate(dateTo.value)}`;
-
-        pEvent.parentElement.style.display = "flex";
-        pDates.parentElement.style.display = "flex";
-    } else {
-        pEvent.parentElement.style.display = "none";
-        pDates.parentElement.style.display = "none";
-    }
-
-    /* ===============================
-       BUILD PDF BLOCKS
-    =============================== */
-
-    pdfBlocks.innerHTML = "";
-    let total = 0;
-
-    blocks.forEach(block => {
-
-        const venueSelect = block.querySelector(".blockVenue");
-        const venue =
-            venueSelect.value === "Other"
-                ? block.querySelector(".blockVenueOther").value
-                : venueSelect.value;
-
-        const eventSelect = block.querySelector(".blockEventSelect");
-        const event =
-            eventSelect.value === "Other"
-                ? block.querySelector(".blockEventOther").value
-                : eventSelect.value;
-
-        const amount = Number(block.querySelector(".blockAmount").value);
-        total += amount;
-
-        pdfBlocks.innerHTML += `
-            <div class="section">
-                <b>DATE:</b> ${formatDate(block.querySelector(".blockDate").value)}<br>
-                <b>VENUE:</b> ${venue}<br>
-                <b>TIME:</b> ${block.querySelector(".blockTime").value}<br>
-                <b>EVENT:</b> ${event}<br><br>
-
-                <b>OFFERINGS</b>
-                <div class="items">
-                    ${block.querySelector(".blockOfferings").value
-                        .split("\n")
-                        .map(i => "• " + i)
-                        .join("<br>")}
-                </div>
-
-                <div class="total">Total: ₹ ${amount}</div>
-            </div>
-        `;
-    });
-
-    grandTotal.innerText = total;
-
-    /* ===============================
-       EXPORT PDF
-    =============================== */
-
-    html2pdf().from(pdf).set({
-        filename: "Event_Quotation.pdf",
-        margin: 10,
-        html2canvas: { scale: 2 },
-        jsPDF: { format: "a4", orientation: "portrait" }
-    }).save();
+html2pdf().from(pdf).set({
+filename:"Event_Quotation.pdf",
+margin:10,
+html2canvas:{scale:2},
+jsPDF:{format:"a4",orientation:"portrait"}
+}).save();
 }
 
 addBlock();
+
 </script>
 
 </body>
