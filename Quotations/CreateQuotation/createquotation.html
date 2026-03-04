@@ -190,6 +190,7 @@
     <button onclick="addBlock()">➕ Add New Event Block</button>
     <button onclick="generatePDF()">📄 Generate PDF</button>
     <button onclick="createTextFile()">Download TXT</button>
+    <button onclick="viewTextFile()">View TXT</button>
 
     <hr>
 
@@ -296,38 +297,50 @@ ${content.split("\n").map(i => "• " + i).join("<br>")}
 
 <input class="blockEventOther" placeholder="Enter Event Name" style="display:none;">
 
-<label><b>Sound Setup</b></label>
-<textarea class="blockSoundSetup">Line Array Sound System
+<label><b>Audio Setup</b></label>
+<textarea class="blockSoundSetup">Sound System
 Cordless Mics
-DJ Console Setup</textarea>
+Led Console
+Professional DJ Jockey
+Sound Engineer
+Genset & Labour</textarea>
 
 <label><b>Floor & Stage</b></label>
-<textarea class="blockFloorStage">24x16 Stage Platform
-Carpet Finish
-Dance Floor Setup</textarea>
+<textarea class="blockFloorStage">Stage Platform 16x32 With Staircase & carpeting
+Led Or Flex Floor As Per Requirement</textarea>
 
 <label><b>Lights & Truss</b></label>
-<textarea class="blockLightsTruss">Moving Heads
-LED Par Cans
-Truss Structure</textarea>
+<textarea class="blockLightsTruss">2 Pole Truss Structure
+Sharpy, Led & Blinder Lights
+Professional Light Operator</textarea>
 
 <label><b>Led Screen</b></label>
-<textarea class="blockLedScreen">10x8 LED Wall
-Live Camera Display</textarea>
+<textarea class="blockLedScreen">Double Led Screen [300 Sq. Ft.]
+Professional video Operator</textarea>
 
 <label><b>Techrider</b></label>
-<textarea class="blockTechrider">Sound Engineer
-Light Operator
-Generator Backup</textarea>
+<textarea class="blockTechrider">As Per Requirement</textarea>
 
 <label><b>Other Requirements</b></label>
 <textarea class="blockOtherRequirements">Green Room Setup
 Artist Hospitality</textarea>
 
 <label><b>Special Effects</b></label>
-<textarea class="blockSpecialEffects">Cold Pyro
-Confetti Blast
-Low Fog Entry</textarea>
+<textarea class="blockSpecialEffects">
+Sparkle Machines
+Bubble Machine
+Co2 Jets
+Co2 Gun
+Cold Pyro
+Cold Pyro Guns
+Color Guns
+Low Fog 
+Helium Balloons
+Fireworks
+Stick Lights
+Color Shots
+Laser Light
+Spot Light</textarea>
 
 <label><b>Total Amount</b></label>
 <input type="number" class="blockAmount" value="250000">
@@ -366,6 +379,84 @@ Low Fog Entry</textarea>
             };
         }
 
+
+        function viewTextFile() {
+
+            let content = "";
+            content += "Soulmate Event Quotation\n";
+            content += "----------------------------------\n\n";
+
+            content += "CLIENT NAME : " + document.getElementById("client").value + "\n";
+
+            if (enableEventDetails.checked) {
+
+                let eventType = eventTypeSelect.value === "Other"
+                    ? eventTypeOther.value
+                    : eventTypeSelect.value;
+
+                let mainVenue = eventVenueSelect.value === "Other"
+                    ? eventVenueOther.value
+                    : eventVenueSelect.value;
+
+                content += "EVENT       : " + eventType + "\n";
+                content += "DATES       : " + formatDate(dateFrom.value) + " to " + formatDate(dateTo.value) + "\n";
+                content += "VENUE       : " + mainVenue + "\n";
+            }
+
+            content += "\n----------------------------------\n\n";
+
+            let total = 0;
+
+            document.querySelectorAll(".block").forEach((block, index) => {
+
+                let amount = Number(block.querySelector(".blockAmount").value);
+                total += amount;
+
+                let blockVenueSelect = block.querySelector(".blockVenue");
+                let blockVenue = blockVenueSelect.value === "Other"
+                    ? block.querySelector(".blockVenueOther").value
+                    : blockVenueSelect.value;
+
+                let blockEventSelect = block.querySelector(".blockEventSelect");
+                let blockEvent = blockEventSelect.value === "Other"
+                    ? block.querySelector(".blockEventOther").value
+                    : blockEventSelect.value;
+
+                content += "DATE  : " + formatDate(block.querySelector(".blockDate").value) + "\n";
+                content += "VENUE : " + blockVenue + "\n";
+                content += "TIME  : " + formatTime(block.querySelector(".blockTime").value) + "\n";
+                content += "EVENT : " + blockEvent + "\n\n";
+
+                function addSection(title, textareaClass) {
+                    let value = block.querySelector(textareaClass).value.trim();
+                    if (value) {
+                        content += title + "\n";
+                        value.split("\n").forEach(line => {
+                            content += " - " + line + "\n";
+                        });
+                        content += "\n";
+                    }
+                }
+
+                addSection("Sound Setup", ".blockSoundSetup");
+                addSection("Floor & Stage", ".blockFloorStage");
+                addSection("Lights & Truss", ".blockLightsTruss");
+                addSection("Led Screen", ".blockLedScreen");
+                addSection("Techrider", ".blockTechrider");
+                addSection("Other Requirements", ".blockOtherRequirements");
+                addSection("Special Effects", ".blockSpecialEffects");
+
+                // content += "Total : ₹ " + amount.toLocaleString("en-IN") + "\n";
+                // content += "\n----------------------------------\n\n";
+            });
+
+            // content += "GRAND TOTAL : ₹ " + total.toLocaleString("en-IN") + "\n";
+
+            // 🔥 SHOW IN NEW WINDOW
+            let newWindow = window.open();
+            newWindow.document.write("<pre>" + content + "</pre>");
+            newWindow.document.close();
+        }
 
         function createTextFile() {
 
@@ -435,11 +526,11 @@ Low Fog Entry</textarea>
                 addSection("Other Requirements", ".blockOtherRequirements");
                 addSection("Special Effects", ".blockSpecialEffects");
 
-                content += "Total : ₹ " + amount.toLocaleString("en-IN") + "\n";
+                content += "Total : " + amount.toLocaleString("en-IN") + "\n";
                 content += "\n----------------------------------\n\n";
             });
 
-            content += "GRAND TOTAL : ₹ " + total.toLocaleString("en-IN") + "\n";
+            content += "GRAND TOTAL : " + total.toLocaleString("en-IN") + "\n";
 
             // Create file
             let blob = new Blob([content], { type: "text/plain" });
