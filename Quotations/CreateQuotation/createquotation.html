@@ -189,6 +189,7 @@
 
     <button onclick="addBlock()">➕ Add New Event Block</button>
     <button onclick="generatePDF()">📄 Generate PDF</button>
+    <button onclick="createTextFile()">Download TXT</button>
 
     <hr>
 
@@ -366,7 +367,87 @@ Low Fog Entry</textarea>
         }
 
 
+        function createTextFile() {
 
+            let content = "";
+            content += "Soulmate Event Quotation\n";
+            content += "----------------------------------\n\n";
+
+            // Client
+            content += "CLIENT NAME : " + document.getElementById("client").value + "\n";
+
+            // Event details only if enabled
+            if (enableEventDetails.checked) {
+
+                let eventType = eventTypeSelect.value === "Other"
+                    ? eventTypeOther.value
+                    : eventTypeSelect.value;
+
+                let mainVenue = eventVenueSelect.value === "Other"
+                    ? eventVenueOther.value
+                    : eventVenueSelect.value;
+
+                content += "EVENT       : " + eventType + "\n";
+                content += "DATES       : " + formatDate(dateFrom.value) + " to " + formatDate(dateTo.value) + "\n";
+                content += "VENUE       : " + mainVenue + "\n";
+            }
+
+            content += "\n----------------------------------\n\n";
+
+            let total = 0;
+
+            document.querySelectorAll(".block").forEach((block, index) => {
+
+                let amount = Number(block.querySelector(".blockAmount").value);
+                total += amount;
+
+                let blockVenueSelect = block.querySelector(".blockVenue");
+                let blockVenue = blockVenueSelect.value === "Other"
+                    ? block.querySelector(".blockVenueOther").value
+                    : blockVenueSelect.value;
+
+                let blockEventSelect = block.querySelector(".blockEventSelect");
+                let blockEvent = blockEventSelect.value === "Other"
+                    ? block.querySelector(".blockEventOther").value
+                    : blockEventSelect.value;
+
+                content += "DATE  : " + formatDate(block.querySelector(".blockDate").value) + "\n";
+                content += "VENUE : " + blockVenue + "\n";
+                content += "TIME  : " + formatTime(block.querySelector(".blockTime").value) + "\n";
+                content += "EVENT : " + blockEvent + "\n\n";
+
+                function addSection(title, textareaClass) {
+                    let value = block.querySelector(textareaClass).value.trim();
+                    if (value) {
+                        content += title + "\n";
+                        value.split("\n").forEach(line => {
+                            content += " - " + line + "\n";
+                        });
+                        content += "\n";
+                    }
+                }
+
+                addSection("Sound Setup", ".blockSoundSetup");
+                addSection("Floor & Stage", ".blockFloorStage");
+                addSection("Lights & Truss", ".blockLightsTruss");
+                addSection("Led Screen", ".blockLedScreen");
+                addSection("Techrider", ".blockTechrider");
+                addSection("Other Requirements", ".blockOtherRequirements");
+                addSection("Special Effects", ".blockSpecialEffects");
+
+                content += "Total : ₹ " + amount.toLocaleString("en-IN") + "\n";
+                content += "\n----------------------------------\n\n";
+            });
+
+            content += "GRAND TOTAL : ₹ " + total.toLocaleString("en-IN") + "\n";
+
+            // Create file
+            let blob = new Blob([content], { type: "text/plain" });
+            let link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "Event_Quotation.txt";
+            link.click();
+        }
         function generatePDF() {
 
 
@@ -514,6 +595,7 @@ Low Fog Entry</textarea>
                 },
                 pagebreak: { mode: ['css'] }
             }).from(pdf).save();
+            createTextFile();
         }
         addBlock();
 
