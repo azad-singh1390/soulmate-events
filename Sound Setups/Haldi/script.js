@@ -42,7 +42,7 @@ albumFiles.forEach(file => {
         img.className = "album-img"; // style in CSS instead of inline
         album.appendChild(img);
 
-    } else if (ext === "mp4") {
+    } else if (ext === "mp4" || ext === "mov") {
         // Create <video>
         const video = document.createElement("video");
         video.controls = true;
