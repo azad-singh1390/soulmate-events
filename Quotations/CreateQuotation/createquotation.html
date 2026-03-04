@@ -101,6 +101,12 @@
             margin-bottom: 10px;
         }
 
+
+        .quotation-row {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
         .header-label {
             width: 160px;
             font-weight: 600;
@@ -202,15 +208,15 @@
                 <div class="header-label">CLIENT NAME</div>
                 <div class="header-value" id="pClient"></div>
             </div>
-            <div class="header-row">
+            <div class="quotation-row" id="rowEvent">
                 <div class="header-label">EVENT</div>
                 <div class="header-value" id="pEvent"></div>
             </div>
-            <div class="header-row">
+            <div class="quotation-row" id="rowDates">
                 <div class="header-label">DATES</div>
                 <div class="header-value" id="pDates"></div>
             </div>
-            <div class="header-row">
+            <div class="quotation-row" id="rowVenue">
                 <div class="header-label">VENUE</div>
                 <div class="header-value" id="pVenue"></div>
             </div>
@@ -587,6 +593,7 @@ Spot Light</textarea>
 
 
             // EVENT VENUE (handle Other validation)
+
             if (eventVenueSelect.value === "Other") {
                 if (!eventVenueOther.value.trim()) {
                     alert("Please enter Event Venue in 'Other' field.");
@@ -597,28 +604,44 @@ Spot Light</textarea>
 
             const eventDetailsEnabled = enableEventDetails.checked;
 
-            // CLIENT
             pClient.innerText = client.value;
 
-            // EVENT TYPE (handle Other)
-            let eventType = eventTypeSelect.value === "Other"
-                ? eventTypeOther.value
-                : eventTypeSelect.value;
 
-            // VENUE (handle Other)
-            let mainVenue = eventVenueSelect.value === "Other"
-                ? eventVenueOther.value
-                : eventVenueSelect.value;
+            // get the row elements
+            let rowEvent = document.getElementById("rowEvent");
+            let rowDates = document.getElementById("rowDates");
+            let rowVenue = document.getElementById("rowVenue");
 
-            // HEADER SECTION (only if enabled)
-            if (eventDetailsEnabled) {
-                pEvent.innerText = eventType;
-                pDates.innerText = `${formatDate(dateFrom.value)} to ${formatDate(dateTo.value)}`;
-                pVenue.innerText = mainVenue;
+            // clear text first (optional but safe)
+            document.getElementById("pEvent").innerText = "";
+            document.getElementById("pDates").innerText = "";
+            document.getElementById("pVenue").innerText = "";
+
+            // toggle based on checkbox
+            if (enableEventDetails.checked) {
+
+                rowEvent.style.display = "flex";
+                rowDates.style.display = "flex";
+                rowVenue.style.display = "flex";
+
+                // fill values
+                let eventType = eventTypeSelect.value === "Other"
+                    ? eventTypeOther.value.trim()
+                    : eventTypeSelect.value;
+
+                let mainVenue = eventVenueSelect.value === "Other"
+                    ? eventVenueOther.value.trim()
+                    : eventVenueSelect.value;
+
+                if (eventType) rowEvent.querySelector("#pEvent").innerText = eventType;
+                if (dateFrom.value && dateTo.value) rowDates.querySelector("#pDates").innerText = formatDate(dateFrom.value) + " to " + formatDate(dateTo.value);
+                if (mainVenue) rowVenue.querySelector("#pVenue").innerText = mainVenue;
+
             } else {
-                pEvent.innerText = "-";
-                pDates.innerText = "-";
-                pVenue.innerText = "-";
+                // hide the rows if unchecked
+                rowEvent.style.display = "none";
+                rowDates.style.display = "none";
+                rowVenue.style.display = "none";
             }
 
             pdfBlocks.innerHTML = "";
