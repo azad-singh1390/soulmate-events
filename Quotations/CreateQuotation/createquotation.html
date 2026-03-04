@@ -68,11 +68,24 @@
             pointer-events: none;
         }
 
+        .section {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        .quotation-header {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
         #pdf {
+            position: relative;
+            width: 700px;
+            box-sizing: border-box;
             background: white;
             padding: 30px;
-            width: 800px;
-            margin: auto;
+            display: none;
+            /* hide properly */
         }
 
         .quotation-header {
@@ -205,13 +218,6 @@
 
         <hr>
         <div class="total">Grand Total: ₹ <span id="grandTotal"></span></div>
-
-        <div class="section">
-            <b>Payment Schedule</b><br>
-            Token: Any Amount<br>
-            75% Before Event<br>
-            Remaining Payment After Event
-        </div>
     </div>
 
     <script>
@@ -358,7 +364,64 @@ Low Fog Entry</textarea>
                 }
             };
         }
+
+
+
         function generatePDF() {
+
+
+            const pdf = document.getElementById("pdf");
+
+            pdf.style.display = "block";   // 👈 show temporarily
+
+            // 🔴 VALIDATE BLOCK VENUE & EVENT "OTHER"
+            const blocks = document.querySelectorAll(".block");
+
+            for (let i = 0; i < blocks.length; i++) {
+
+                const block = blocks[i];
+
+                // Venue validation
+                const venueSelect = block.querySelector(".blockVenue");
+                const venueOther = block.querySelector(".blockVenueOther");
+
+                if (venueSelect.value === "Other" && !venueOther.value.trim()) {
+                    alert(`Please enter Venue in 'Other' field for Block ${i + 1}.`);
+                    venueOther.focus();
+                    return; // 🚫 STOP FUNCTION
+                }
+
+                // Event validation
+                const eventSelect = block.querySelector(".blockEventSelect");
+                const eventOther = block.querySelector(".blockEventOther");
+
+                if (eventSelect.value === "Other" && !eventOther.value.trim()) {
+                    alert(`Please enter Event in 'Other' field for Block ${i + 1}.`);
+                    eventOther.focus();
+                    return; // 🚫 STOP FUNCTION
+                }
+            }
+
+            // EVENT TYPE (handle Other validation)
+            if (eventTypeSelect.value === "Other") {
+
+                if (!eventTypeOther.value.trim()) {
+                    alert("Please enter Event Type in 'Other' field.");
+                    eventTypeOther.focus(); // optional: auto focus
+                    return; // 🚫 stop PDF generation
+                }
+
+            }
+
+
+            // EVENT VENUE (handle Other validation)
+            if (eventVenueSelect.value === "Other") {
+                if (!eventVenueOther.value.trim()) {
+                    alert("Please enter Event Venue in 'Other' field.");
+                    eventVenueOther.focus(); // optional: auto focus
+                    return; // 🚫 stop PDF generation
+                }
+            }
 
             const eventDetailsEnabled = enableEventDetails.checked;
 
@@ -429,12 +492,28 @@ Low Fog Entry</textarea>
 
             grandTotal.innerText = total.toLocaleString("en-IN");
 
-            html2pdf().from(pdf).set({
+            if (!pdf.innerHTML.trim()) {
+                alert("No content available to generate PDF.");
+                return;
+            }
+            console.log("PDF Content:", pdf.innerHTML);
+            grandTotal.innerText = total.toLocaleString("en-IN");
+
+            html2pdf().set({
+                margin: 15,
                 filename: "Event_Quotation.pdf",
-                margin: 10,
-                html2canvas: { scale: 2 },
-                jsPDF: { format: "a4", orientation: "portrait" }
-            }).save();
+                image: { type: "jpeg", quality: 0.98 },
+                html2canvas: {
+                    scale: 1,        // 🔥 important (NOT 2)
+                    scrollY: 0
+                },
+                jsPDF: {
+                    unit: "mm",
+                    format: "a4",
+                    orientation: "portrait"
+                },
+                pagebreak: { mode: ['css'] }
+            }).from(pdf).save();
         }
         addBlock();
 
