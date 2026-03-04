@@ -23,6 +23,7 @@ const albumFiles = [
     "Wedding_night_6.jpeg",
     "Wedding_night_7.jpeg",
     "Wedding_night_8.jpeg",
+    "IMG_7359.MOV",
     "Wedding_1.mp4",
     "Wedding_2.mp4",
     "Wedding_3.mp4",
