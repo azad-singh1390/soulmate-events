@@ -2,156 +2,258 @@
 <html lang="en">
 
 <head>
-<meta charset="UTF-8">
-<title>Soulmate Event Quotation</title>
+    <meta charset="UTF-8">
+    <title>Soulmate Event Quotation</title>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-<style>
-.event-line { display: grid; grid-template-columns: 110px 15px auto; margin-bottom: 4px; font-size: 15px; }
-.label { font-weight: bold; }
-body { font-family: "Times New Roman", serif; background: #f2f2f2; padding: 20px; }
-input, textarea, select { width: 100%; padding: 6px; margin-bottom: 8px; }
-button { padding: 8px 14px; background: black; color: white; border: none; cursor: pointer; margin-top: 5px; }
-.block { background: white; padding: 15px; margin-bottom: 12px; border: 1px solid #ccc; }
-.remove { background: darkred; }
-.date-row { display: flex; gap: 10px; align-items: center; }
-.date-row input { flex: 1; }
-.disabled-section { opacity: 0.5; pointer-events: none; }
-#pdf { background: white; padding: 30px; width: 800px; margin: auto; }
-.quotation-header { padding: 20px 25px; margin-bottom: 25px; border: 1px solid #ddd; border-radius: 6px; background: #fafafa; }
-.header-row { display: flex; margin-bottom: 10px; }
-.header-label { width: 160px; font-weight: 600; position: relative; }
-.header-label::after { content: " :"; position: absolute; right: 10px; }
-.header-value { flex: 1; font-weight: 500; }
-.section { margin-top: 25px; }
-.items { margin-left: 20px; }
-.total { font-weight: bold; margin-top: 8px; }
-</style>
+    <style>
+        .event-line {
+            display: grid;
+            grid-template-columns: 110px 15px auto;
+            margin-bottom: 4px;
+            font-size: 15px;
+        }
+
+        .label {
+            font-weight: bold;
+        }
+
+        body {
+            font-family: "Times New Roman", serif;
+            background: #f2f2f2;
+            padding: 20px;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 6px;
+            margin-bottom: 8px;
+        }
+
+        button {
+            padding: 8px 14px;
+            background: black;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .block {
+            background: white;
+            padding: 15px;
+            margin-bottom: 12px;
+            border: 1px solid #ccc;
+        }
+
+        .remove {
+            background: darkred;
+        }
+
+        .date-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .date-row input {
+            flex: 1;
+        }
+
+        .disabled-section {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        #pdf {
+            background: white;
+            padding: 30px;
+            width: 800px;
+            margin: auto;
+        }
+
+        .quotation-header {
+            padding: 20px 25px;
+            margin-bottom: 25px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: #fafafa;
+        }
+
+        .header-row {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .header-label {
+            width: 160px;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .header-label::after {
+            content: " :";
+            position: absolute;
+            right: 10px;
+        }
+
+        .header-value {
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .section {
+            margin-top: 25px;
+        }
+
+        .items {
+            margin-left: 20px;
+        }
+
+        .total {
+            font-weight: bold;
+            margin-top: 8px;
+        }
+    </style>
 </head>
 
 <body>
 
-<h2>Quotation Details</h2>
+    <h2>Quotation Details</h2>
 
-<input id="client" placeholder="Client Name" value="Rahul Sharma">
+    <input id="client" placeholder="Client Name" value="Rahul Sharma">
 
-<label>
-<input type="checkbox" id="enableEventDetails" checked onchange="toggleEventDetails()">
-Enable Event Details
-</label>
+    <label>
+        <input type="checkbox" id="enableEventDetails" checked onchange="toggleEventDetails()">
+        Enable Event Details
+    </label>
 
-<br><br>
+    <br><br>
 
-<div id="eventDetails">
+    <div id="eventDetails">
 
-<select id="eventTypeSelect" onchange="handleEventTypeChange()">
-<option selected>Wedding</option>
-<option>Birthday</option>
-<option>Anniversary</option>
-<option>Engagement</option>
-<option>Sangeet</option>
-<option>Ring Ceremony</option>
-<option>Roka Ceremony</option>
-<option>Destination Wedding</option>
-<option>Corporate</option>
-<option>Get Together</option>
-<option value="Other">Other</option>
-</select>
+        <select id="eventTypeSelect" onchange="handleEventTypeChange()">
+            <option selected>Wedding</option>
+            <option>Birthday</option>
+            <option>Anniversary</option>
+            <option>Engagement</option>
+            <option>Sangeet</option>
+            <option>Ring Ceremony</option>
+            <option>Roka Ceremony</option>
+            <option>Destination Wedding</option>
+            <option>Corporate</option>
+            <option>Get Together</option>
+            <option value="Other">Other</option>
+        </select>
 
-<input id="eventTypeOther" placeholder="Enter Event Type" style="display:none;">
+        <input id="eventTypeOther" placeholder="Enter Event Type" style="display:none;">
 
-<select id="eventVenueSelect" onchange="handleEventVenueChange()">
-<option selected>Noor Mahal</option>
-<option>Eden</option>
-<option>Gulmohar</option>
-<option>Amani Farms</option>
-<option>Emarld</option>
-<option value="Other">Other</option>
-</select>
+        <select id="eventVenueSelect" onchange="handleEventVenueChange()">
+            <option selected>Noor Mahal</option>
+            <option>Eden</option>
+            <option>Gulmohar</option>
+            <option>Amani Farms</option>
+            <option>Emarld</option>
+            <option value="Other">Other</option>
+        </select>
 
-<input id="eventVenueOther" placeholder="Enter Event Venue" style="display:none;">
+        <input id="eventVenueOther" placeholder="Enter Event Venue" style="display:none;">
 
-<label><b>Event Dates</b></label>
-<div class="date-row">
-<span><b>From</b></span>
-<input type="date" id="dateFrom" value="2026-02-20">
-<span><b>To</b></span>
-<input type="date" id="dateTo" value="2026-02-22">
-</div>
-</div>
+        <label><b>Event Dates</b></label>
+        <div class="date-row">
+            <span><b>From</b></span>
+            <input type="date" id="dateFrom" value="2026-02-20">
+            <span><b>To</b></span>
+            <input type="date" id="dateTo" value="2026-02-22">
+        </div>
+    </div>
 
-<h3>Event Blocks</h3>
-<div id="blocks"></div>
+    <h3>Event Blocks</h3>
+    <div id="blocks"></div>
 
-<button onclick="addBlock()">➕ Add New Event Block</button>
-<button onclick="generatePDF()">📄 Generate PDF</button>
+    <button onclick="addBlock()">➕ Add New Event Block</button>
+    <button onclick="generatePDF()">📄 Generate PDF</button>
 
-<hr>
+    <hr>
 
-<div id="pdf">
-<h2 style="text-align:center;">Soulmate Event Quotation</h2>
+    <div id="pdf">
+        <h2 style="text-align:center;">Soulmate Event Quotation</h2>
 
-<div class="quotation-header">
-<div class="header-row"><div class="header-label">CLIENT NAME</div><div class="header-value" id="pClient"></div></div>
-<div class="header-row"><div class="header-label">EVENT</div><div class="header-value" id="pEvent"></div></div>
-<div class="header-row"><div class="header-label">DATES</div><div class="header-value" id="pDates"></div></div>
-<div class="header-row"><div class="header-label">VENUE</div><div class="header-value" id="pVenue"></div></div>
-</div>
+        <div class="quotation-header">
+            <div class="header-row">
+                <div class="header-label">CLIENT NAME</div>
+                <div class="header-value" id="pClient"></div>
+            </div>
+            <div class="header-row">
+                <div class="header-label">EVENT</div>
+                <div class="header-value" id="pEvent"></div>
+            </div>
+            <div class="header-row">
+                <div class="header-label">DATES</div>
+                <div class="header-value" id="pDates"></div>
+            </div>
+            <div class="header-row">
+                <div class="header-label">VENUE</div>
+                <div class="header-value" id="pVenue"></div>
+            </div>
+        </div>
 
-<div id="pdfBlocks"></div>
+        <div id="pdfBlocks"></div>
 
-<hr>
-<div class="total">Grand Total: ₹ <span id="grandTotal"></span></div>
+        <hr>
+        <div class="total">Grand Total: ₹ <span id="grandTotal"></span></div>
 
-<div class="section">
-<b>Payment Schedule</b><br>
-Token: Any Amount<br>
-75% Before Event<br>
-Remaining Payment After Event
-</div>
-</div>
+        <div class="section">
+            <b>Payment Schedule</b><br>
+            Token: Any Amount<br>
+            75% Before Event<br>
+            Remaining Payment After Event
+        </div>
+    </div>
 
-<script>
+    <script>
 
-let blockCount = 0;
+        let blockCount = 0;
 
-function toggleEventDetails() {
-const enabled = enableEventDetails.checked;
-eventDetails.classList.toggle("disabled-section", !enabled);
-}
+        function toggleEventDetails() {
+            const enabled = enableEventDetails.checked;
+            eventDetails.classList.toggle("disabled-section", !enabled);
+        }
 
-function handleEventTypeChange() {
-eventTypeOther.style.display = eventTypeSelect.value === "Other" ? "block" : "none";
-}
+        function handleEventTypeChange() {
+            eventTypeOther.style.display = eventTypeSelect.value === "Other" ? "block" : "none";
+        }
 
-function handleEventVenueChange() {
-eventVenueOther.style.display = eventVenueSelect.value === "Other" ? "block" : "none";
-}
+        function handleEventVenueChange() {
+            eventVenueOther.style.display = eventVenueSelect.value === "Other" ? "block" : "none";
+        }
 
-function formatDate(dateStr) {
-return new Date(dateStr).toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
-}
+        function formatDate(dateStr) {
+            return new Date(dateStr).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+        }
 
-function formatTime(timeStr) {
-return new Date("1970-01-01T"+timeStr)
-.toLocaleTimeString("en-IN",{hour:"numeric",minute:"2-digit"});
-}
+        function formatTime(timeStr) {
+            return new Date("1970-01-01T" + timeStr)
+                .toLocaleTimeString("en-IN", { hour: "numeric", minute: "2-digit" });
+        }
 
-function generateSection(title, content) {
-if (!content.trim()) return "";
-return `<b>${title}</b>
+        function generateSection(title, content) {
+            if (!content.trim()) return "";
+            return `<b>${title}</b>
 <div class="items">
-${content.split("\n").map(i=>"• "+i).join("<br>")}
+${content.split("\n").map(i => "• " + i).join("<br>")}
 </div>`;
-}
+        }
 
-function addBlock() {
-blockCount++;
-const div = document.createElement("div");
-div.className="block";
+        function addBlock() {
+            blockCount++;
+            const div = document.createElement("div");
+            div.className = "block";
 
-div.innerHTML=`
+            div.innerHTML = `
 <h4>Event Block ${blockCount}</h4>
 
 <label><b>Date</b></label>
@@ -171,7 +273,7 @@ div.innerHTML=`
 <option value="Other">Other</option>
 </select>
 
-<input class="blockVenueOther" style="display:none;">
+<input class="blockVenueOther" placeholder="Enter Venue" style="display:none;">
 
 <label><b>Time</b></label>
 <input type="time" class="blockTime" value="19:00">
@@ -185,7 +287,7 @@ div.innerHTML=`
 <option value="Other">Other</option>
 </select>
 
-<input class="blockEventOther" style="display:none;">
+<input class="blockEventOther" placeholder="Enter Event Name" style="display:none;">
 
 <label><b>Sound Setup</b></label>
 <textarea class="blockSoundSetup">Line Array Sound System
@@ -226,55 +328,118 @@ Low Fog Entry</textarea>
 <button class="remove" onclick="this.parentElement.remove()">Remove</button>
 `;
 
-blocks.appendChild(div);
-}
+            blocks.appendChild(div);
 
-function generatePDF(){
+            /* 🔥 ENABLE OTHER OPTION LOGIC */
 
-pClient.innerText=client.value;
-pEvent.innerText=eventTypeSelect.value;
-pDates.innerText=`${formatDate(dateFrom.value)} to ${formatDate(dateTo.value)}`;
-pVenue.innerText=eventVenueSelect.value;
+            // Venue Other
+            const venueSelect = div.querySelector(".blockVenue");
+            const venueOther = div.querySelector(".blockVenueOther");
 
-pdfBlocks.innerHTML="";
-let total=0;
+            venueSelect.onchange = () => {
+                if (venueSelect.value === "Other") {
+                    venueOther.style.display = "block";
+                } else {
+                    venueOther.style.display = "none";
+                    venueOther.value = "";
+                }
+            };
 
-document.querySelectorAll(".block").forEach(block=>{
+            // Event Other
+            const eventSelect = div.querySelector(".blockEventSelect");
+            const eventOther = div.querySelector(".blockEventOther");
 
-const amount=Number(block.querySelector(".blockAmount").value);
-total+=amount;
+            eventSelect.onchange = () => {
+                if (eventSelect.value === "Other") {
+                    eventOther.style.display = "block";
+                } else {
+                    eventOther.style.display = "none";
+                    eventOther.value = "";
+                }
+            };
+        }
+        function generatePDF() {
 
-pdfBlocks.innerHTML+=`
-<div class="section">
-<div class="event-line"><div class="label">DATE</div><div>:</div><div>${formatDate(block.querySelector(".blockDate").value)}</div></div>
-<div class="event-line"><div class="label">VENUE</div><div>:</div><div>${block.querySelector(".blockVenue").value}</div></div>
-<div class="event-line"><div class="label">TIME</div><div>:</div><div>${formatTime(block.querySelector(".blockTime").value)}</div></div>
-<div class="event-line"><div class="label">EVENT</div><div>:</div><div>${block.querySelector(".blockEventSelect").value}</div></div>
-<br>
-${generateSection("Sound Setup",block.querySelector(".blockSoundSetup").value)}
-${generateSection("Floor & Stage",block.querySelector(".blockFloorStage").value)}
-${generateSection("Lights & Truss",block.querySelector(".blockLightsTruss").value)}
-${generateSection("Led Screen",block.querySelector(".blockLedScreen").value)}
-${generateSection("Techrider",block.querySelector(".blockTechrider").value)}
-${generateSection("Other Requirements",block.querySelector(".blockOtherRequirements").value)}
-${generateSection("Special Effects",block.querySelector(".blockSpecialEffects").value)}
-<div class="total">Total: ₹ ${amount}</div>
-</div><hr>`;
-});
+            const eventDetailsEnabled = enableEventDetails.checked;
 
-grandTotal.innerText=total;
+            // CLIENT
+            pClient.innerText = client.value;
 
-html2pdf().from(pdf).set({
-filename:"Event_Quotation.pdf",
-margin:10,
-html2canvas:{scale:2},
-jsPDF:{format:"a4",orientation:"portrait"}
-}).save();
-}
+            // EVENT TYPE (handle Other)
+            let eventType = eventTypeSelect.value === "Other"
+                ? eventTypeOther.value
+                : eventTypeSelect.value;
 
-addBlock();
+            // VENUE (handle Other)
+            let mainVenue = eventVenueSelect.value === "Other"
+                ? eventVenueOther.value
+                : eventVenueSelect.value;
 
-</script>
+            // HEADER SECTION (only if enabled)
+            if (eventDetailsEnabled) {
+                pEvent.innerText = eventType;
+                pDates.innerText = `${formatDate(dateFrom.value)} to ${formatDate(dateTo.value)}`;
+                pVenue.innerText = mainVenue;
+            } else {
+                pEvent.innerText = "-";
+                pDates.innerText = "-";
+                pVenue.innerText = "-";
+            }
+
+            pdfBlocks.innerHTML = "";
+            let total = 0;
+
+            document.querySelectorAll(".block").forEach(block => {
+
+                const amount = Number(block.querySelector(".blockAmount").value);
+                total += amount;
+
+                // BLOCK VENUE (handle Other)
+                let blockVenueSelect = block.querySelector(".blockVenue");
+                let blockVenue = blockVenueSelect.value === "Other"
+                    ? (block.querySelector(".blockVenueOther").value || "Custom Venue")
+                    : blockVenueSelect.value;
+
+                // BLOCK EVENT (handle Other)
+                let blockEventSelect = block.querySelector(".blockEventSelect");
+                let blockEvent = blockEventSelect.value === "Other"
+                    ? (block.querySelector(".blockEventOther").value || "Custom Event")
+                    : blockEventSelect.value;
+
+                pdfBlocks.innerHTML += `
+    <div class="section">
+        <div class="event-line"><div class="label">DATE</div><div>:</div><div>${formatDate(block.querySelector(".blockDate").value)}</div></div>
+        <div class="event-line"><div class="label">VENUE</div><div>:</div><div>${blockVenue}</div></div>
+        <div class="event-line"><div class="label">TIME</div><div>:</div><div>${formatTime(block.querySelector(".blockTime").value)}</div></div>
+        <div class="event-line"><div class="label">EVENT</div><div>:</div><div>${blockEvent}</div></div>
+        <br>
+
+        ${generateSection("Sound Setup", block.querySelector(".blockSoundSetup").value)}
+        ${generateSection("Floor & Stage", block.querySelector(".blockFloorStage").value)}
+        ${generateSection("Lights & Truss", block.querySelector(".blockLightsTruss").value)}
+        ${generateSection("Led Screen", block.querySelector(".blockLedScreen").value)}
+        ${generateSection("Techrider", block.querySelector(".blockTechrider").value)}
+        ${generateSection("Other Requirements", block.querySelector(".blockOtherRequirements").value)}
+        ${generateSection("Special Effects", block.querySelector(".blockSpecialEffects").value)}
+
+        <div class="total">Total: ₹ ${amount.toLocaleString("en-IN")}</div>
+    </div>
+    <hr>`;
+            });
+
+            grandTotal.innerText = total.toLocaleString("en-IN");
+
+            html2pdf().from(pdf).set({
+                filename: "Event_Quotation.pdf",
+                margin: 10,
+                html2canvas: { scale: 2 },
+                jsPDF: { format: "a4", orientation: "portrait" }
+            }).save();
+        }
+        addBlock();
+
+    </script>
 
 </body>
+
 </html>
