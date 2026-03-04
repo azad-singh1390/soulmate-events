@@ -232,6 +232,10 @@
 
         let blockCount = 0;
 
+        function replaceSpacesWithUnderscore(str) {
+            return str.replace(/\s+/g, "_");
+        }
+
         function toggleEventDetails() {
             const enabled = enableEventDetails.checked;
             eventDetails.classList.toggle("disabled-section", !enabled);
@@ -492,7 +496,7 @@ Spot Light</textarea>
             content += "\n----------------------------------\n\n";
 
             let total = 0;
-
+            let globaldate = "";
             document.querySelectorAll(".block").forEach((block, index) => {
 
                 let amount = Number(block.querySelector(".blockAmount").value);
@@ -508,6 +512,9 @@ Spot Light</textarea>
                     ? block.querySelector(".blockEventOther").value
                     : blockEventSelect.value;
 
+                if (index === 0) {
+                    globaldate = formatDate(block.querySelector(".blockDate").value);
+                }
                 content += "DATE  : " + formatDate(block.querySelector(".blockDate").value) + "\n";
                 content += "VENUE : " + blockVenue + "\n";
                 content += "TIME  : " + formatTime(block.querySelector(".blockTime").value) + "\n";
@@ -542,7 +549,9 @@ Spot Light</textarea>
             let blob = new Blob([content], { type: "text/plain" });
             let link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
-            link.download = "Event_Quotation.txt";
+            link.download = "SoulmateEvents_" + client.value + "_" + replaceSpacesWithUnderscore(globaldate) + "_Quotation.txt";
+            link.click();
+            link.download = "SoulmateEvents_" + client.value + "_" + replaceSpacesWithUnderscore(globaldate) + "_Plannning.txt";
             link.click();
         }
         function generatePDF() {
@@ -647,10 +656,17 @@ Spot Light</textarea>
             pdfBlocks.innerHTML = "";
             let total = 0;
 
+            let globaldate = "";
+            let globacount = 0;
             document.querySelectorAll(".block").forEach(block => {
 
                 const amount = Number(block.querySelector(".blockAmount").value);
                 total += amount;
+
+                if (globacount === 0) {
+                    globaldate = formatDate(block.querySelector(".blockDate").value);
+                }
+                globacount++;
 
                 // BLOCK VENUE (handle Other)
                 let blockVenueSelect = block.querySelector(".blockVenue");
@@ -696,7 +712,7 @@ Spot Light</textarea>
 
             html2pdf().set({
                 margin: 15,
-                filename: "Event_Quotation.pdf",
+                filename: "SoulmateEvents_" + client.value  + "_" + replaceSpacesWithUnderscore(globaldate) + "_Quotation.pdf",
                 image: { type: "jpeg", quality: 0.98 },
                 html2canvas: {
                     scale: 1,        // 🔥 important (NOT 2)
