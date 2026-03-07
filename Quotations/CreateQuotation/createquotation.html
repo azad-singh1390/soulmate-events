@@ -543,7 +543,8 @@ Spot Light</textarea>
             content += "\n----------------------------------\n\n";
 
             let total = 0;
-            let globaldate = "";
+            let firstBlock = document.querySelector(".blockDate");
+            let globaldate = firstBlock ? formatDate(firstBlock.value) : "";
             document.querySelectorAll(".block").forEach((block, index) => {
 
                 let amount = Number(block.querySelector(".blockAmount").value);
