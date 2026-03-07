@@ -274,8 +274,14 @@
                 .toLocaleTimeString("en-IN", { hour: "numeric", minute: "2-digit" });
         }
 
-        function generateSection(title, content) {
-            if (!content.trim()) return "";
+        function generateSection(title, textarea, checkbox) {
+
+            if (!checkbox.checked) return "";
+
+            let content = textarea.value.trim();
+
+            if (!content) return "";
+
             return `<b>${title}</b>
 <div class="items">
 ${content.split("\n").map(i => "• " + i).join("<br>")}
@@ -334,30 +340,30 @@ Genset & Labour</textarea>
 
 <label><b>Floor & Stage</b></label>
 <input type="checkbox" class="checkboxFloorStage">
-<textarea class="blockFloorStage autoResize">Stage Platform 16x32 With Staircase & carpeting
+<textarea class="blockFloorStage autoResize" disabled>Stage Platform 16x32 With Staircase & carpeting
 Led Or Flex Floor As Per Requirement</textarea>
 
 <label><b>Lights & Truss</b></label>
 <input type="checkbox" class="checkboxLightsTruss">
-<textarea class="blockLightsTruss autoResize">2 Pole Truss Structure
+<textarea class="blockLightsTruss autoResize" disabled>2 Pole Truss Structure
 Sharpy, Led & Blinder Lights
 Professional Light Operator</textarea>
 
 <label><b>Led Screen</b></label>
 <input type="checkbox" class="checkboxLedScreen">
-<textarea class="blockLedScreen autoResize">Double Led Screen [300 Sq. Ft.]
+<textarea class="blockLedScreen autoResize" disabled>Double Led Screen [300 Sq. Ft.]
 Professional video Operator</textarea>
 
 <label><b>Anchor & Artists</b></label>
 <input type="checkbox" class="checkboxAnchorArtists">
-<textarea class="blockAnchorArtists autoResize">
+<textarea class="blockAnchorArtists autoResize" disabled>
 Professional Anchor
 Bride Groom Entry Artists</textarea>
 
 
 <label><b>Barat Setup</b></label>
 <input type="checkbox" class="checkboxBaratSetup">
-<textarea class="blockBaratSetup autoResize">
+<textarea class="blockBaratSetup autoResize" disabled>
 10 Led Chattar
 DJ On Wheels
 Vintage Car
@@ -365,16 +371,16 @@ Dholies (6)</textarea>
 
 <label><b>Techrider</b></label>
 <input type="checkbox" class="checkboxTechrider">
-<textarea class="blockTechrider autoResize">As Per Requirement</textarea>
+<textarea class="blockTechrider autoResize" disabled>As Per Requirement</textarea>
 
 <label><b>Other Requirements</b></label>
 <input type="checkbox" class="checkboxOtherRequirements">
-<textarea class="blockOtherRequirements autoResize">Green Room Setup
+<textarea class="blockOtherRequirements autoResize" disabled>Green Room Setup
 Artist Hospitality</textarea>
 
 <label><b>Special Effects</b></label>
 <input type="checkbox" class="checkboxSpecialEffects">
-<textarea class="blockSpecialEffects autoResize">
+<textarea class="blockSpecialEffects autoResize" disabled>
 Sparkle Machines
 Bubble Machine
 Co2 Jets
@@ -390,12 +396,18 @@ Color Shots
 Laser Light
 Spot Light</textarea>
 
-<label><b>Total Amount</b></label>
-<input type="number" class="blockAmount" value="250000">
+<label>
+<input type="checkbox" class="checkboxAmount">
+<b>Total Amount</b>
+</label>
+
+<input type="number" class="blockAmount" value="0" disabled>
 
 <button class="remove" onclick="this.parentElement.remove()">Remove</button>
 `;
             blocks.appendChild(div);
+
+            enableCheckboxLogic(div);
 
             div.querySelector(".blockDate").value = getTodayDate();
 
@@ -431,6 +443,40 @@ Spot Light</textarea>
         }
 
 
+        function enableCheckboxLogic(container) {
+
+            container.querySelectorAll("input[type='checkbox']").forEach(cb => {
+
+                let target = cb.nextElementSibling;
+
+                // If next element is not textarea/input, find the next input/textarea
+                if (!target || (target.tagName !== "TEXTAREA" && target.tagName !== "INPUT")) {
+                    target = cb.parentElement.nextElementSibling;
+                }
+
+                if (!target) return;
+
+                if (target.tagName === "TEXTAREA" || target.tagName === "INPUT") {
+
+                    target.disabled = true;
+
+                    cb.addEventListener("change", function () {
+
+                        target.disabled = !this.checked;
+
+                        // Auto resize textarea when enabled
+                        if (this.checked && target.tagName === "TEXTAREA") {
+                            target.style.height = "auto";
+                            target.style.height = target.scrollHeight + "px";
+                        }
+
+                    });
+
+                }
+
+            });
+
+        }
         function viewTextFile() {
 
             let content = "";
@@ -460,8 +506,14 @@ Spot Light</textarea>
 
             document.querySelectorAll(".block").forEach((block, index) => {
 
-                let amount = Number(block.querySelector(".blockAmount").value);
-                total += amount;
+                let amount = 0;
+
+                const amountCheckbox = block.querySelector(".checkboxAmount");
+
+                if (amountCheckbox.checked) {
+                    amount = Number(block.querySelector(".blockAmount").value) || 0;
+                    total += amount;
+                }
 
                 let blockVenueSelect = block.querySelector(".blockVenue");
                 let blockVenue = blockVenueSelect.value === "Other"
@@ -478,8 +530,13 @@ Spot Light</textarea>
                 content += "TIME  : " + formatTime(block.querySelector(".blockTime").value) + "\n";
                 content += "EVENT : " + blockEvent + "\n\n";
 
-                function addSection(title, textareaClass) {
+                function addSection(title, textareaClass, checkboxClass) {
+
+                    let checkbox = block.querySelector(checkboxClass);
+                    if (!checkbox.checked) return;
+
                     let value = block.querySelector(textareaClass).value.trim();
+
                     if (value) {
                         content += title + "\n";
                         value.split("\n").forEach(line => {
@@ -489,20 +546,19 @@ Spot Light</textarea>
                     }
                 }
 
-                addSection("Sound Setup", ".blockSoundSetup");
-                addSection("Floor & Stage", ".blockFloorStage");
-                addSection("Lights & Truss", ".blockLightsTruss");
-                addSection("Led Screen", ".blockLedScreen");
-                addSection("Anchor & Artists", ".blockAnchorArtists");
-                addSection("Barat Setup", ".blockBaratSetup");
-                addSection("Techrider", ".blockTechrider");
-                addSection("Other Requirements", ".blockOtherRequirements");
-                addSection("Special Effects", ".blockSpecialEffects");
-
-
+                addSection("Sound Setup", ".blockSoundSetup", ".checkboxSoundSetup");
+                addSection("Floor & Stage", ".blockFloorStage", ".checkboxFloorStage");
+                addSection("Lights & Truss", ".blockLightsTruss", ".checkboxLightsTruss");
+                addSection("Led Screen", ".blockLedScreen", ".checkboxLedScreen");
+                addSection("Anchor & Artists", ".blockAnchorArtists", ".checkboxAnchorArtists");
+                addSection("Techrider", ".blockTechrider", ".checkboxTechrider");
+                addSection("Other Requirements", ".blockOtherRequirements", ".checkboxOtherRequirements");
+                addSection("Barat Setup", ".blockBaratSetup", ".checkboxBaratSetup");
+                addSection("Special Effects", ".blockSpecialEffects", ".checkboxSpecialEffects");
                 // content += "Total : ₹ " + amount.toLocaleString("en-IN") + "\n";
                 // content += "\n----------------------------------\n\n";
             });
+
 
             // content += "GRAND TOTAL : ₹ " + total.toLocaleString("en-IN") + "\n";
 
@@ -544,8 +600,14 @@ Spot Light</textarea>
             let globaldate = firstBlock ? formatDate(firstBlock.value) : "";
             document.querySelectorAll(".block").forEach((block, index) => {
 
-                let amount = Number(block.querySelector(".blockAmount").value);
-                total += amount;
+                let amount = 0;
+
+                const amountCheckbox = block.querySelector(".checkboxAmount");
+
+                if (amountCheckbox.checked) {
+                    amount = Number(block.querySelector(".blockAmount").value) || 0;
+                    total += amount;
+                }
 
                 let blockVenueSelect = block.querySelector(".blockVenue");
                 let blockVenue = blockVenueSelect.value === "Other"
@@ -565,8 +627,14 @@ Spot Light</textarea>
                 content += "TIME  : " + formatTime(block.querySelector(".blockTime").value) + "\n";
                 content += "EVENT : " + blockEvent + "\n\n";
 
-                function addSection(title, textareaClass) {
+
+                function addSection(title, textareaClass, checkboxClass) {
+
+                    let checkbox = block.querySelector(checkboxClass);
+                    if (!checkbox.checked) return;
+
                     let value = block.querySelector(textareaClass).value.trim();
+
                     if (value) {
                         content += title + "\n";
                         value.split("\n").forEach(line => {
@@ -576,20 +644,25 @@ Spot Light</textarea>
                     }
                 }
 
-                addSection("Sound Setup", ".blockSoundSetup");
-                addSection("Floor & Stage", ".blockFloorStage");
-                addSection("Lights & Truss", ".blockLightsTruss");
-                addSection("Led Screen", ".blockLedScreen");
-                addSection("Techrider", ".blockTechrider");
-                addSection("Other Requirements", ".blockOtherRequirements");
-                addSection("Barat Setup", ".blockBaratSetup");
-                addSection("Special Effects", ".blockSpecialEffects");
+                addSection("Sound Setup", ".blockSoundSetup", ".checkboxSoundSetup");
+                addSection("Floor & Stage", ".blockFloorStage", ".checkboxFloorStage");
+                addSection("Lights & Truss", ".blockLightsTruss", ".checkboxLightsTruss");
+                addSection("Led Screen", ".blockLedScreen", ".checkboxLedScreen");
+                addSection("Anchor & Artists", ".blockAnchorArtists", ".checkboxAnchorArtists");
+                addSection("Techrider", ".blockTechrider", ".checkboxTechrider");
+                addSection("Other Requirements", ".blockOtherRequirements", ".checkboxOtherRequirements");
+                addSection("Barat Setup", ".blockBaratSetup", ".checkboxBaratSetup");
+                addSection("Special Effects", ".blockSpecialEffects", ".checkboxSpecialEffects");
 
+                
+                if (amountCheckbox.checked) 
+                {
                 content += "Total : " + amount.toLocaleString("en-IN") + "\n";
                 content += "\n----------------------------------\n\n";
+                }
             });
 
-            content += "GRAND TOTAL : " + total.toLocaleString("en-IN") + "\n";
+            content += "GRAND TOTAL : ₹ " + total.toLocaleString("en-IN") + "\n";
 
             // Create file
             let blob = new Blob([content], { type: "text/plain" });
@@ -706,8 +779,14 @@ Spot Light</textarea>
             let globacount = 0;
             document.querySelectorAll(".block").forEach(block => {
 
-                const amount = Number(block.querySelector(".blockAmount").value);
-                total += amount;
+                let amount = 0;
+
+                const amountCheckbox = block.querySelector(".checkboxAmount");
+
+                if (amountCheckbox.checked) {
+                    amount = Number(block.querySelector(".blockAmount").value) || 0;
+                    total += amount;
+                }
 
                 if (globacount === 0) {
                     globaldate = formatDate(block.querySelector(".blockDate").value);
@@ -734,16 +813,55 @@ Spot Light</textarea>
         <div class="event-line"><div class="label">EVENT</div><div>:</div><div>${blockEvent}</div></div>
         <br>
 
-        ${generateSection("Sound Setup", block.querySelector(".blockSoundSetup").value)}
-        ${generateSection("Floor & Stage", block.querySelector(".blockFloorStage").value)}
-        ${generateSection("Lights & Truss", block.querySelector(".blockLightsTruss").value)}
-        ${generateSection("Led Screen", block.querySelector(".blockLedScreen").value)}
-        ${generateSection("Anchor & Artists", block.querySelector(".blockAnchorArtists").value)}
-        ${generateSection("Techrider", block.querySelector(".blockTechrider").value)}
-        ${generateSection("Other Requirements", block.querySelector(".blockOtherRequirements").value)}
-        ${generateSection("Special Effects", block.querySelector(".blockSpecialEffects").value)}
+${generateSection(
+                    "Sound Setup",
+                    block.querySelector(".blockSoundSetup"),
+                    block.querySelector(".checkboxSoundSetup")
+                )}
 
-        <div class="total">Total: ₹ ${amount.toLocaleString("en-IN")}</div>
+${generateSection(
+                    "Floor & Stage",
+                    block.querySelector(".blockFloorStage"),
+                    block.querySelector(".checkboxFloorStage")
+                )}
+
+${generateSection(
+                    "Lights & Truss",
+                    block.querySelector(".blockLightsTruss"),
+                    block.querySelector(".checkboxLightsTruss")
+                )}
+
+${generateSection(
+                    "Led Screen",
+                    block.querySelector(".blockLedScreen"),
+                    block.querySelector(".checkboxLedScreen")
+                )}
+
+${generateSection(
+                    "Anchor & Artists",
+                    block.querySelector(".blockAnchorArtists"),
+                    block.querySelector(".checkboxAnchorArtists")
+                )}
+
+${generateSection(
+                    "Techrider",
+                    block.querySelector(".blockTechrider"),
+                    block.querySelector(".checkboxTechrider")
+                )}
+
+${generateSection(
+                    "Other Requirements",
+                    block.querySelector(".blockOtherRequirements"),
+                    block.querySelector(".checkboxOtherRequirements")
+                )}
+
+${generateSection(
+                    "Special Effects",
+                    block.querySelector(".blockSpecialEffects"),
+                    block.querySelector(".checkboxSpecialEffects")
+                )}
+
+        ${amount ? `<div class="total">Total: ₹ ${amount.toLocaleString("en-IN")}</div>` : ""}
     </div>
     <hr>`;
             });
