@@ -8,60 +8,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
-        .blockSoundSetup {
-            width: 100%;
-            resize: none;
-            overflow: hidden;
-            box-sizing: border-box;
-        }
-
-        .blockAnchorArtists {
-            width: 100%;
-            resize: none;
-            overflow: hidden;
-            box-sizing: border-box;
-        }
-
-        .blockFloorStage {
-            width: 100%;
-            resize: none;
-            overflow: hidden;
-            box-sizing: border-box;
-        }
-
-        .blockLightsTruss {
-            width: 100%;
-            resize: none;
-            overflow: hidden;
-            box-sizing: border-box;
-        }
-
-        .blockLedScreen {
-            width: 100%;
-            resize: none;
-            overflow: hidden;
-            box-sizing: border-box;
-        }
-
-        .blockBaratSetup {
-            width: 100%;
-            resize: none;
-            overflow: hidden;
-            box-sizing: border-box;
-        }
-        .blockTechrider {
-            width: 100%;
-            resize: none;
-            overflow: hidden;
-            box-sizing: border-box;
-        }
-        .blockOtherRequirements {
-            width: 100%;
-            resize: none;
-            overflow: hidden;
-            box-sizing: border-box;
-        }
-        .blockSpecialEffects {
+        .autoResize {
             width: 100%;
             resize: none;
             overflow: hidden;
@@ -245,9 +192,9 @@
         <label><b>Event Dates</b></label>
         <div class="date-row">
             <span><b>From</b></span>
-            <input type="date" id="dateFrom" value="2026-02-20">
+            <input type="date" id="dateFrom" value="getTodayDate()">
             <span><b>To</b></span>
-            <input type="date" id="dateTo" value="2026-02-22">
+            <input type="date" id="dateTo" value="getTodayDate()">
         </div>
     </div>
 
@@ -314,6 +261,14 @@
             return new Date(dateStr).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
         }
 
+        function getTodayDate() {
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            return `${yyyy}-${mm}-${dd}`;
+        }
+
         function formatTime(timeStr) {
             return new Date("1970-01-01T" + timeStr)
                 .toLocaleTimeString("en-IN", { hour: "numeric", minute: "2-digit" });
@@ -336,7 +291,7 @@ ${content.split("\n").map(i => "• " + i).join("<br>")}
 <h4>Event Block ${blockCount}</h4>
 
 <label><b>Date</b></label>
-<input type="date" class="blockDate" value="2026-02-20">
+<input type="date" class="blockDate" value="getTodayDate()">
 
 <label><b>Venue</b></label>
 <select class="blockVenue">
@@ -369,8 +324,8 @@ ${content.split("\n").map(i => "• " + i).join("<br>")}
 <input class="blockEventOther" placeholder="Enter Event Name" style="display:none;">
 
 <label><b>Audio Setup</b></label>
-<input type="checkbox" class="blockSoundSetup">
-<textarea class="blockSoundSetup">Sound System
+<input type="checkbox" class="checkboxSoundSetup">
+<textarea class="blockSoundSetup autoResize" >Sound System
 Cordless Mics
 Led Console
 Professional DJ Jockey
@@ -378,32 +333,32 @@ Sound Engineer
 Genset & Labour</textarea>
 
 <label><b>Floor & Stage</b></label>
-<input type="checkbox" class="blockFloorStage">
-<textarea class="blockFloorStage">Stage Platform 16x32 With Staircase & carpeting
+<input type="checkbox" class="checkboxFloorStage">
+<textarea class="blockFloorStage autoResize">Stage Platform 16x32 With Staircase & carpeting
 Led Or Flex Floor As Per Requirement</textarea>
 
 <label><b>Lights & Truss</b></label>
-<input type="checkbox" class="blockLightsTruss">
-<textarea class="blockLightsTruss">2 Pole Truss Structure
+<input type="checkbox" class="checkboxLightsTruss">
+<textarea class="blockLightsTruss autoResize">2 Pole Truss Structure
 Sharpy, Led & Blinder Lights
 Professional Light Operator</textarea>
 
 <label><b>Led Screen</b></label>
-<input type="checkbox" class="blockLedScreen">
-<textarea class="blockLedScreen">Double Led Screen [300 Sq. Ft.]
+<input type="checkbox" class="checkboxLedScreen">
+<textarea class="blockLedScreen autoResize">Double Led Screen [300 Sq. Ft.]
 Professional video Operator</textarea>
 
 <label><b>Anchor & Artists</b></label>
-<input type="checkbox" class="blockAnchorArtists">
-<textarea class="blockAnchorArtists">
+<input type="checkbox" class="checkboxAnchorArtists">
+<textarea class="blockAnchorArtists autoResize">
 Professional Anchor
 Bride Groom Entry Artists
     </textarea>
 
 
 <label><b>Barat Setup</b></label>
-<input type="checkbox" class="blockBaratSetup">
-<textarea class="blockBaratSetup">
+<input type="checkbox" class="checkboxBaratSetup">
+<textarea class="blockBaratSetup autoResize">
 10 Led Chattar
 DJ On Wheels
 Vintage Car
@@ -411,18 +366,18 @@ Dholies (6)
     </textarea>
 
 <label><b>Techrider</b></label>
-<input type="checkbox" class="blockTechrider">
-<textarea class="blockTechrider">As Per Requirement</textarea>
+<input type="checkbox" class="checkboxTechrider">
+<textarea class="blockTechrider autoResize">As Per Requirement</textarea>
 
 
 <label><b>Other Requirements</b></label>
-<input type="checkbox" class="blockOtherRequirements">
-<textarea class="blockOtherRequirements">Green Room Setup
+<input type="checkbox" class="checkboxOtherRequirements">
+<textarea class="blockOtherRequirements autoResize">Green Room Setup
 Artist Hospitality</textarea>
 
 <label><b>Special Effects</b></label>
-<input type="checkbox" class="blockSpecialEffects">
-<textarea class="blockSpecialEffects">
+<input type="checkbox" class="checkboxSpecialEffects">
+<textarea class="blockSpecialEffects autoResize">
 Sparkle Machines
 Bubble Machine
 Co2 Jets
@@ -443,8 +398,8 @@ Spot Light</textarea>
 
 <button class="remove" onclick="this.parentElement.remove()">Remove</button>
 `;
-
             blocks.appendChild(div);
+            enableAutoResize(div);
 
             /* 🔥 ENABLE OTHER OPTION LOGIC */
 
@@ -818,6 +773,7 @@ Spot Light</textarea>
             }).from(pdf).save();
         }
         addBlock();
+        enableAutoResize(document);
 
 
         function autoResizeTextarea(textarea) {
@@ -825,61 +781,19 @@ Spot Light</textarea>
             textarea.style.height = textarea.scrollHeight + "px";
         }
 
-        document.querySelectorAll(".blockSoundSetup").forEach(function (textarea) {
-            autoResizeTextarea(textarea);
-            textarea.addEventListener("input", function () {
-                autoResizeTextarea(this);
-            });
-        });
-        document.querySelectorAll(".blockFloorStage").forEach(function (textarea) {
-            autoResizeTextarea(textarea);
-            textarea.addEventListener("input", function () {
-                autoResizeTextarea(this);
-            });
-        });
-        document.querySelectorAll(".blockLightsTruss").forEach(function (textarea) {
-            autoResizeTextarea(textarea);
-            textarea.addEventListener("input", function () {
-                autoResizeTextarea(this);
-            });
-        });
-        document.querySelectorAll(".blockLedScreen").forEach(function (textarea) {
-            autoResizeTextarea(textarea);
-            textarea.addEventListener("input", function () {
-                autoResizeTextarea(this);
-            });
-        });
-        document.querySelectorAll(".blockAnchorArtists").forEach(function (textarea) {
-            autoResizeTextarea(textarea);
-            textarea.addEventListener("input", function () {
-                autoResizeTextarea(this);
-            });
-        });
-        document.querySelectorAll(".blockBaratSetup").forEach(function (textarea) {
-            autoResizeTextarea(textarea);
-            textarea.addEventListener("input", function () {
-                autoResizeTextarea(this);
-            });
-        });
-        document.querySelectorAll(".blockTechrider").forEach(function (textarea) {
-            autoResizeTextarea(textarea);
-            textarea.addEventListener("input", function () {
-                autoResizeTextarea(this);
-            });
-        });
-        document.querySelectorAll(".blockOtherRequirements").forEach(function (textarea) {
-            autoResizeTextarea(textarea);
-            textarea.addEventListener("input", function () {
-                autoResizeTextarea(this);
-            });
-        });
-        document.querySelectorAll(".blockSpecialEffects").forEach(function (textarea) {
-            autoResizeTextarea(textarea);
-            textarea.addEventListener("input", function () {
-                autoResizeTextarea(this);
-            });
-        });
+        function enableAutoResize(container) {
 
+            container.querySelectorAll(".autoResize").forEach(textarea => {
+
+                autoResizeTextarea(textarea);
+
+                textarea.addEventListener("input", function () {
+                    autoResizeTextarea(this);
+                });
+
+            });
+
+        }
 
     </script>
 
