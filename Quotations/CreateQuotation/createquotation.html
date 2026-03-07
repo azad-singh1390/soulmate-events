@@ -192,9 +192,9 @@
         <label><b>Event Dates</b></label>
         <div class="date-row">
             <span><b>From</b></span>
-            <input type="date" id="dateFrom" value="getTodayDate()">
+            <input type="date" id="dateFrom">
             <span><b>To</b></span>
-            <input type="date" id="dateTo" value="getTodayDate()">
+            <input type="date" id="dateTo">
         </div>
     </div>
 
@@ -291,7 +291,7 @@ ${content.split("\n").map(i => "• " + i).join("<br>")}
 <h4>Event Block ${blockCount}</h4>
 
 <label><b>Date</b></label>
-<input type="date" class="blockDate" value="getTodayDate()">
+<input type="date" class="blockDate">
 
 <label><b>Venue</b></label>
 <select class="blockVenue">
@@ -399,6 +399,9 @@ Spot Light</textarea>
 <button class="remove" onclick="this.parentElement.remove()">Remove</button>
 `;
             blocks.appendChild(div);
+
+            div.querySelector(".blockDate").value = getTodayDate();
+
             enableAutoResize(div);
 
             /* 🔥 ENABLE OTHER OPTION LOGIC */
@@ -774,6 +777,9 @@ Spot Light</textarea>
         }
         addBlock();
         enableAutoResize(document);
+
+        dateFrom.value = getTodayDate();
+        dateTo.value = getTodayDate();
 
 
         function autoResizeTextarea(textarea) {
