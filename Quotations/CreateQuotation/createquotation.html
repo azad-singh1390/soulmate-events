@@ -8,6 +8,67 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
+        .blockSoundSetup {
+            width: 100%;
+            resize: none;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .blockAnchorArtists {
+            width: 100%;
+            resize: none;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .blockFloorStage {
+            width: 100%;
+            resize: none;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .blockLightsTruss {
+            width: 100%;
+            resize: none;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .blockLedScreen {
+            width: 100%;
+            resize: none;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .blockBaratSetup {
+            width: 100%;
+            resize: none;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+        .blockTechrider {
+            width: 100%;
+            resize: none;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+        .blockOtherRequirements {
+            width: 100%;
+            resize: none;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+        .blockSpecialEffects {
+            width: 100%;
+            resize: none;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+
         .event-line {
             display: grid;
             grid-template-columns: 110px 15px auto;
@@ -308,6 +369,7 @@ ${content.split("\n").map(i => "• " + i).join("<br>")}
 <input class="blockEventOther" placeholder="Enter Event Name" style="display:none;">
 
 <label><b>Audio Setup</b></label>
+<input type="checkbox" class="blockSoundSetup">
 <textarea class="blockSoundSetup">Sound System
 Cordless Mics
 Led Console
@@ -316,26 +378,50 @@ Sound Engineer
 Genset & Labour</textarea>
 
 <label><b>Floor & Stage</b></label>
+<input type="checkbox" class="blockFloorStage">
 <textarea class="blockFloorStage">Stage Platform 16x32 With Staircase & carpeting
 Led Or Flex Floor As Per Requirement</textarea>
 
 <label><b>Lights & Truss</b></label>
+<input type="checkbox" class="blockLightsTruss">
 <textarea class="blockLightsTruss">2 Pole Truss Structure
 Sharpy, Led & Blinder Lights
 Professional Light Operator</textarea>
 
 <label><b>Led Screen</b></label>
+<input type="checkbox" class="blockLedScreen">
 <textarea class="blockLedScreen">Double Led Screen [300 Sq. Ft.]
 Professional video Operator</textarea>
 
+<label><b>Anchor & Artists</b></label>
+<input type="checkbox" class="blockAnchorArtists">
+<textarea class="blockAnchorArtists">
+Professional Anchor
+Bride Groom Entry Artists
+    </textarea>
+
+
+<label><b>Barat Setup</b></label>
+<input type="checkbox" class="blockBaratSetup">
+<textarea class="blockBaratSetup">
+10 Led Chattar
+DJ On Wheels
+Vintage Car
+Dholies (6)
+    </textarea>
+
 <label><b>Techrider</b></label>
+<input type="checkbox" class="blockTechrider">
 <textarea class="blockTechrider">As Per Requirement</textarea>
 
+
 <label><b>Other Requirements</b></label>
+<input type="checkbox" class="blockOtherRequirements">
 <textarea class="blockOtherRequirements">Green Room Setup
 Artist Hospitality</textarea>
 
 <label><b>Special Effects</b></label>
+<input type="checkbox" class="blockSpecialEffects">
 <textarea class="blockSpecialEffects">
 Sparkle Machines
 Bubble Machine
@@ -452,9 +538,12 @@ Spot Light</textarea>
                 addSection("Floor & Stage", ".blockFloorStage");
                 addSection("Lights & Truss", ".blockLightsTruss");
                 addSection("Led Screen", ".blockLedScreen");
+                addSection("Anchor & Artists", ".blockAnchorArtists");
+                addSection("Barat Setup", ".blockBaratSetup");
                 addSection("Techrider", ".blockTechrider");
                 addSection("Other Requirements", ".blockOtherRequirements");
                 addSection("Special Effects", ".blockSpecialEffects");
+
 
                 // content += "Total : ₹ " + amount.toLocaleString("en-IN") + "\n";
                 // content += "\n----------------------------------\n\n";
@@ -537,6 +626,7 @@ Spot Light</textarea>
                 addSection("Led Screen", ".blockLedScreen");
                 addSection("Techrider", ".blockTechrider");
                 addSection("Other Requirements", ".blockOtherRequirements");
+                addSection("Barat Setup", ".blockBaratSetup");
                 addSection("Special Effects", ".blockSpecialEffects");
 
                 content += "Total : " + amount.toLocaleString("en-IN") + "\n";
@@ -692,6 +782,7 @@ Spot Light</textarea>
         ${generateSection("Floor & Stage", block.querySelector(".blockFloorStage").value)}
         ${generateSection("Lights & Truss", block.querySelector(".blockLightsTruss").value)}
         ${generateSection("Led Screen", block.querySelector(".blockLedScreen").value)}
+        ${generateSection("Anchor & Artists", block.querySelector(".blockAnchorArtists").value)}
         ${generateSection("Techrider", block.querySelector(".blockTechrider").value)}
         ${generateSection("Other Requirements", block.querySelector(".blockOtherRequirements").value)}
         ${generateSection("Special Effects", block.querySelector(".blockSpecialEffects").value)}
@@ -712,7 +803,7 @@ Spot Light</textarea>
 
             html2pdf().set({
                 margin: 15,
-                filename: "SoulmateEvents_" + client.value  + "_" + replaceSpacesWithUnderscore(globaldate) + "_Quotation.pdf",
+                filename: "SoulmateEvents_" + client.value + "_" + replaceSpacesWithUnderscore(globaldate) + "_Quotation.pdf",
                 image: { type: "jpeg", quality: 0.98 },
                 html2canvas: {
                     scale: 1,        // 🔥 important (NOT 2)
@@ -727,6 +818,68 @@ Spot Light</textarea>
             }).from(pdf).save();
         }
         addBlock();
+
+
+        function autoResizeTextarea(textarea) {
+            textarea.style.height = "auto";
+            textarea.style.height = textarea.scrollHeight + "px";
+        }
+
+        document.querySelectorAll(".blockSoundSetup").forEach(function (textarea) {
+            autoResizeTextarea(textarea);
+            textarea.addEventListener("input", function () {
+                autoResizeTextarea(this);
+            });
+        });
+        document.querySelectorAll(".blockFloorStage").forEach(function (textarea) {
+            autoResizeTextarea(textarea);
+            textarea.addEventListener("input", function () {
+                autoResizeTextarea(this);
+            });
+        });
+        document.querySelectorAll(".blockLightsTruss").forEach(function (textarea) {
+            autoResizeTextarea(textarea);
+            textarea.addEventListener("input", function () {
+                autoResizeTextarea(this);
+            });
+        });
+        document.querySelectorAll(".blockLedScreen").forEach(function (textarea) {
+            autoResizeTextarea(textarea);
+            textarea.addEventListener("input", function () {
+                autoResizeTextarea(this);
+            });
+        });
+        document.querySelectorAll(".blockAnchorArtists").forEach(function (textarea) {
+            autoResizeTextarea(textarea);
+            textarea.addEventListener("input", function () {
+                autoResizeTextarea(this);
+            });
+        });
+        document.querySelectorAll(".blockBaratSetup").forEach(function (textarea) {
+            autoResizeTextarea(textarea);
+            textarea.addEventListener("input", function () {
+                autoResizeTextarea(this);
+            });
+        });
+        document.querySelectorAll(".blockTechrider").forEach(function (textarea) {
+            autoResizeTextarea(textarea);
+            textarea.addEventListener("input", function () {
+                autoResizeTextarea(this);
+            });
+        });
+        document.querySelectorAll(".blockOtherRequirements").forEach(function (textarea) {
+            autoResizeTextarea(textarea);
+            textarea.addEventListener("input", function () {
+                autoResizeTextarea(this);
+            });
+        });
+        document.querySelectorAll(".blockSpecialEffects").forEach(function (textarea) {
+            autoResizeTextarea(textarea);
+            textarea.addEventListener("input", function () {
+                autoResizeTextarea(this);
+            });
+        });
+
 
     </script>
 
