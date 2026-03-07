@@ -480,7 +480,7 @@ Spot Light</textarea>
         function viewTextFile() {
 
             let content = "";
-            content += "Soulmate Event Quotation\n";
+            content += "Soulmate Event Planning\n";
             content += "----------------------------------\n\n";
 
             content += "CLIENT NAME : " + document.getElementById("client").value + "\n";
@@ -559,7 +559,7 @@ Spot Light</textarea>
                 // content += "\n----------------------------------\n\n";
             });
 
-
+            content += "\n----------------------------------\n\n";
             // content += "GRAND TOTAL : ₹ " + total.toLocaleString("en-IN") + "\n";
 
             // 🔥 SHOW IN NEW WINDOW
@@ -571,7 +571,7 @@ Spot Light</textarea>
         function createTextFile() {
 
             let content = "";
-            content += "Soulmate Event Quotation\n";
+            content += "Soulmate Event Details\n";
             content += "----------------------------------\n\n";
 
             // Client
@@ -660,9 +660,13 @@ Spot Light</textarea>
                 content += "Total : " + amount.toLocaleString("en-IN") + "\n";
                 content += "\n----------------------------------\n\n";
                 }
+                else
+                {
+                    content += "\n----------------------------------\n\n";
+                }
             });
 
-            content += "GRAND TOTAL : ₹ " + total.toLocaleString("en-IN") + "\n";
+            // content += "GRAND TOTAL : ₹ " + total.toLocaleString("en-IN") + "\n";
 
             // Create file
             let blob = new Blob([content], { type: "text/plain" });
