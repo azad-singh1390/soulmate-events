@@ -3,21 +3,45 @@
 
 <head>
 <title>View Planning - Soulmate Events</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+}
+
+.container{
+    width:95%;
+    margin:auto;
+    text-align:center;
+}
+
+#planningTextArea{
+    width:100%;
+    height:70vh;   /* takes 70% of screen height */
+    resize:none;
+}
+</style>
+
 </head>
 
 <body>
 
-<h2 style="text-align:center;">Soulmate Event Planning</h2>
+<div class="container">
+
+<h2>Soulmate Event Planning</h2>
 
 <button onclick="loadText()">Load Planning</button>
 
 <br><br>
 
-<textarea id="planningTextArea" rows="20" style="width:90%;" readonly></textarea>
+<textarea id="planningTextArea" readonly></textarea>
 
 <br><br>
 
 <button onclick="updateText()">Update Planning</button>
+
+</div>
 
 <script>
 
@@ -25,6 +49,7 @@ const params = new URLSearchParams(window.location.search);
 const fetchUrl = params.get("url");
 
 window.onload = loadText;
+
 async function loadText() {
 
     const textArea = document.getElementById("planningTextArea");
@@ -32,59 +57,50 @@ async function loadText() {
     try {
 
         const res = await fetch(fetchUrl);
-        console.log("Fetch response:", res);
-        if(res.status === 404) {
+
+        if(res.status === 404){
             alert("No planning content found.");
             textArea.value = "";
             textArea.readOnly = false;
             return;
         }
-        if (!res.ok) {
-            throw new Error(`HTTP error! status: ${res.status}`);
-        }
 
         const data = await res.text();
 
-        if (data) {
-            textArea.value = data;
-            textArea.readOnly = false;
-        } else {
-            alert("No planning content found.");
-        }
+        textArea.value = data || "";
+        textArea.readOnly = false;
 
     } catch (error) {
 
-        console.error("Error fetching planning content:", error);
+        console.error(error);
         alert("Failed to load planning content.");
 
     }
-
 }
 
 async function updateText() {
 
     const textArea = document.getElementById("planningTextArea");
-    const content = textArea.value;
 
     try {
 
-        const res = await fetch(fetchUrl, {
-            method: "POST",
-            headers: {
-                "Content-Type": "text/plain"
+        const res = await fetch(fetchUrl,{
+            method:"POST",
+            headers:{
+                "Content-Type":"text/plain"
             },
-            body: content
+            body:textArea.value
         });
 
-        if (!res.ok) {
-            throw new Error(`HTTP error! status: ${res.status}`);
+        if(!res.ok){
+            throw new Error(res.status);
         }
 
         alert("Planning content updated successfully!");
 
-    } catch (error) {
+    } catch(error){
 
-        console.error("Error updating planning content:", error);
+        console.error(error);
         alert("Failed to update planning content.");
 
     }
@@ -93,5 +109,4 @@ async function updateText() {
 </script>
 
 </body>
-
 </html>
