@@ -9,6 +9,7 @@
   <!-- Add this inside <head> OR just before your script -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx-populate/browser/xlsx-populate.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -991,10 +992,12 @@ ${row.has_planning_text ? "View" : "Add Text"}
     }
 
     async function downloadAllPlannings() {
+
       const loader = document.getElementById("loader");
       loader.style.display = "flex";
 
       try {
+
         const res = await fetch("https://soulmate-backend-production.up.railway.app/upcomingbookings");
         const result = await res.json();
         const data = Array.isArray(result.rows) ? result.rows : [];
@@ -1007,21 +1010,59 @@ ${row.has_planning_text ? "View" : "Add Text"}
         }
 
         for (let row of plannings) {
+
           const eventStartDate = formatDate(row.event_start_date);
 
-          const url = `https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf`;
+          const url = `https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-text`;
           const filename = sanitizeFilename(row.client_name + "-" + eventStartDate) + "-planning.pdf";
 
-          await downloadFileSequentially(url, filename);
+          const textRes = await fetch(url);
+
+          if (!textRes.ok) continue;
+
+          const text = await textRes.text();
+
+          const { jsPDF } = window.jspdf;
+          const pdf = new jsPDF();
+
+          const pageHeight = pdf.internal.pageSize.height;
+          const margin = 10;
+          const lineHeight = 7;
+
+          const lines = pdf.splitTextToSize(text, 180);
+
+          let y = margin;
+
+          lines.forEach((line) => {
+
+            if (y + lineHeight > pageHeight - margin) {
+              pdf.addPage();
+              y = margin;
+            }
+
+            pdf.text(line, margin, y);
+            y += lineHeight;
+
+          });
+
+          pdf.save(filename);
+
+          // small delay so browser doesn't block multiple downloads
+          await new Promise(r => setTimeout(r, 800));
+
         }
 
         alert("✅ All planning PDFs downloaded!");
 
       } catch (err) {
+
         console.error(err);
         alert("❌ Error downloading plannings");
+
       } finally {
+
         loader.style.display = "none";
+
       }
     }
 
