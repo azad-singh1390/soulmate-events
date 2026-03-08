@@ -41,8 +41,10 @@ body{
 
 <button onclick="updateText()">Update Planning</button>
 <button onclick="downloadFile()">Download Planning</button>
+<button onclick="downloadPdfFile()">Download as PDF</button>
 
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script>
 
@@ -56,6 +58,54 @@ console.log("Client Name:", clientName);
 console.log("Start Date:", startDate);
 
 window.onload = loadText;
+
+
+async function downloadPdfFile() {
+
+    try {
+
+        const res = await fetch(fetchUrl);
+
+        if (res.status === 404) {
+            alert("No planning content found.");
+            return;
+        }
+
+        const text = await res.text();
+
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF();
+
+        const pageHeight = pdf.internal.pageSize.height;
+        const margin = 10;
+        const lineHeight = 7;
+
+        const lines = pdf.splitTextToSize(text, 180);
+
+        let y = margin;
+
+        lines.forEach((line) => {
+
+            if (y + lineHeight > pageHeight - margin) {
+                pdf.addPage();
+                y = margin;
+            }
+
+            pdf.text(line, margin, y);
+            y += lineHeight;
+
+        });
+
+        pdf.save(`${clientName}_${startDate}_planning.pdf`);
+
+    } catch (error) {
+
+        console.error(error);
+        alert("Failed to download planning content.");
+
+    }
+}
+
 
 async function downloadFile() {
 
