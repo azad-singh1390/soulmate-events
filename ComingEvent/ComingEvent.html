@@ -422,6 +422,7 @@
         <th>Time</th>
         <th>Quotation PDF</th>
         <th>Planning PDF</th>
+        <th>Planning Text</th>
         <th>Action</th>
       </tr>
     </thead>
@@ -769,6 +770,11 @@
            )">Download</a>`
             : "No PDF";
 
+
+          const planningTextLink = row.has_planning_text
+            ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-text" target="_blank">View</a>`
+            : "No Text";
+
           const tr = document.createElement("tr");
           tr.innerHTML = `
                 <td>${serial++}</td>
@@ -781,6 +787,7 @@
                 <td>${formatTime(row.event_time)}</td>
                 <td>${pdfLink}</td>
                 <td>${planningpdfLink}</td>
+                <td>${planningTextLink}</td>
                 <td>
                     <button class="edit-btn" onclick="editRow(this, ${row.id})">Edit</button>
                 </td>

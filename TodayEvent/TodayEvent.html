@@ -384,6 +384,7 @@
           <a href="../History/History.html">History Bookings</a>
         </div>
       </div>
+    </div>
   </nav>
 
   <h1>📋 Today's Events </h1>
@@ -399,7 +400,7 @@
     <button onclick="exportToExcel()" class="btn">
       ⬇ Export To Excel
     </button>
-    
+
     <button onclick="downloadAllQuotations()" class="btn">
       📄 Download All Quotations
     </button>
@@ -408,25 +409,27 @@
       📑 Download All Plannings
     </button>
   </div>
-  <div class="table-container"></div>
-  <table id="bookingsTable">
-    <thead>
-      <tr>
-        <th>S.No.</th>
-        <th>Name</th>
-        <th>Contact</th>
-        <th>Start Date</th>
-        <th>End Date</th>
-        <th>Event</th>
-        <th>Venue</th>
-        <th>Time</th>
-        <th>Quotation PDF</th>
-        <th>Planning PDF</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+  <div class="table-container">
+    <table id="bookingsTable">
+      <thead>
+        <tr>
+          <th>S.No.</th>
+          <th>Name</th>
+          <th>Contact</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Event</th>
+          <th>Venue</th>
+          <th>Time</th>
+          <th>Quotation PDF</th>
+          <th>Planning PDF</th>
+          <th>Planning Text</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
   </div>
   <!-- Edit Modal -->
   <div id="editModal">
@@ -708,6 +711,7 @@
 
         if (data.length === 0) {
           tbody.innerHTML = `<tr><td colspan="14">No bookings found</td></tr>`;
+          loader.style.display = "none";
           return;
         }
 
@@ -770,6 +774,14 @@
             : "No PDF";
 
 
+          // const planningTextLink = row.has_planning_text
+          //   ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-text" target="_blank">View</a>`
+          //   : "No Text";
+
+          const planningTextLink = row.has_planning_text
+            ? `<a href="../Quotations/CreateQuotation/ViewPlanning.html?url=https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-text" target="_blank">View</a>`
+            : "No Text";
+
           const tr = document.createElement("tr");
           tr.innerHTML = `
                 <td>${serial++}</td>
@@ -782,6 +794,7 @@
                 <td>${formatTime(row.event_time)}</td>
                 <td>${pdfLink}</td>
                 <td>${planningpdfLink}</td>
+                <td>${planningTextLink}</td>
                 <td>
                     <button class="edit-btn" onclick="editRow(this, ${row.id})">Edit</button>
                 </td>
@@ -792,7 +805,7 @@
 
       } catch (err) {
         console.error("Error fetching bookings:", err);
-        tbody.innerHTML = `<tr><td colspan="14">❌ Error fetching bookings</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="15">❌ Error fetching bookings</td></tr>`;
       } finally {
         loader.style.display = "none";
       }

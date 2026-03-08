@@ -141,9 +141,13 @@
             <input type="file" name="planingpdfUpload" accept=".pdf" onchange="previewFile(this, 'planningPreview')">
             <small id="planningPreview">Default: default.pdf</small>
 
+            <input type="file" name="planningText" accept=".txt" onchange="previewFile(this, 'planningTextPreview')">
+            <small id="planningTextPreview">Default: default.txt</small>
+
             <!-- hidden flags to tell backend to use default -->
             <input type="hidden" name="useDefaultQuotation" value="true">
             <input type="hidden" name="useDefaultPlanning" value="true">
+            <input type="hidden" name="useDefaultPlanningText" value="true">
 
 
             <label>Total Amount</label>
@@ -233,6 +237,10 @@
                 }
                 if (previewId === "planningPreview") {
                     document.querySelector('input[name="useDefaultPlanning"]').value = "false";
+                }
+
+                if (previewId === "planningTextPreview") {
+                    document.querySelector('input[name="useDefaultPlanningText"]').value = "false";
                 }
             } else {
                 preview.innerText = "Default: default.pdf";
@@ -522,7 +530,6 @@
             <button onclick="closeBookingListModal()">Close</button>
         </div>
     </div>
-    >
 
 </body>
 

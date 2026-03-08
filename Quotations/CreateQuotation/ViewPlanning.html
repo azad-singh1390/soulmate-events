@@ -21,13 +21,17 @@
 
 <script>
 
+const params = new URLSearchParams(window.location.search);
+const fetchUrl = params.get("url");
+
+window.onload = loadText;
 async function loadText() {
 
     const textArea = document.getElementById("planningTextArea");
 
     try {
 
-        const res = await fetch("https://soulmate-backend-production.up.railway.app/planning-txt/1");
+        const res = await fetch(fetchUrl);
 
         if (!res.ok) {
             throw new Error(`HTTP error! status: ${res.status}`);
@@ -58,7 +62,7 @@ async function updateText() {
 
     try {
 
-        const res = await fetch("https://soulmate-backend-production.up.railway.app/planning-txt/1", {
+        const res = await fetch(fetchUrl, {
             method: "POST",
             headers: {
                 "Content-Type": "text/plain"
@@ -78,7 +82,6 @@ async function updateText() {
         alert("Failed to update planning content.");
 
     }
-
 }
 
 </script>
