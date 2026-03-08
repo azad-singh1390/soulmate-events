@@ -778,8 +778,9 @@
           //   ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-text" target="_blank">View</a>`
           //   : "No Text";
 
-const planningTextLink = `
-<a href="../Quotations/CreateQuotation/ViewPlanning.html?url=https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-text" target="_blank"
+          const planningTextLink = `
+<a href="../Quotations/CreateQuotation/ViewPlanning.html?url=https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-text&client=${encodeURIComponent(row.client_name)}&date=${encodeURIComponent(eventStartDate)}"
+target="_blank"
 style="${row.has_planning_text ? "" : "color:red;"}">
 ${row.has_planning_text ? "View" : "Add Text"}
 </a>`;

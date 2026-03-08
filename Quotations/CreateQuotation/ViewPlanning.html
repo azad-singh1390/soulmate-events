@@ -40,6 +40,7 @@ body{
 <br><br>
 
 <button onclick="updateText()">Update Planning</button>
+<button onclick="downloadFile()">Download Planning</button>
 
 </div>
 
@@ -47,8 +48,43 @@ body{
 
 const params = new URLSearchParams(window.location.search);
 const fetchUrl = params.get("url");
+const clientName = params.get("client");
+const startDate = params.get("date");
+
+console.log("Fetch URL:", fetchUrl);
+console.log("Client Name:", clientName);
+console.log("Start Date:", startDate);
 
 window.onload = loadText;
+
+async function downloadFile() {
+
+    try {
+
+        const res = await fetch(fetchUrl);
+
+        if(res.status === 404){
+            alert("No planning content found.");
+            return;
+        }
+
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = a.download = `${clientName}_${startDate}_planning.txt`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+
+    } catch (error) {
+
+        console.error(error);
+        alert("Failed to download planning content.");
+
+    }
+}
 
 async function loadText() {
 
