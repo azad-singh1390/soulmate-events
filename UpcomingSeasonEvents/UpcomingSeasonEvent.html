@@ -771,7 +771,7 @@
             : "No PDF";
 
           const planningTextLink = row.has_planning_text
-            ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-text" target="_blank">View</a>`
+            ? `<a href="../Quotations/CreateQuotation/ViewPlanning.html?url=https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-text" target="_blank">View</a>`
             : "No Text";
           const tr = document.createElement("tr");
           tr.innerHTML = `

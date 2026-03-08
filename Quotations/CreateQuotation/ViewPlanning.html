@@ -32,7 +32,13 @@ async function loadText() {
     try {
 
         const res = await fetch(fetchUrl);
-
+        console.log("Fetch response:", res);
+        if(res.status === 404) {
+            alert("No planning content found.");
+            textArea.value = "";
+            textArea.readOnly = false;
+            return;
+        }
         if (!res.ok) {
             throw new Error(`HTTP error! status: ${res.status}`);
         }
