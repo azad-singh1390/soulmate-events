@@ -770,10 +770,11 @@
            )">Download</a>`
             : "No PDF";
 
-
-          const planningTextLink = row.has_planning_text
-            ? `<a href="../Quotations/CreateQuotation/ViewPlanning.html?url=https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-text" target="_blank">View</a>`
-            : "No Text";
+          const planningTextLink = `
+<a href="../Quotations/CreateQuotation/ViewPlanning.html?url=https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-text" target="_blank"
+style="${row.has_planning_text ? "" : "color:red;"}">
+${row.has_planning_text ? "View" : "Add Text"}
+</a>`;
 
           const tr = document.createElement("tr");
           tr.innerHTML = `
