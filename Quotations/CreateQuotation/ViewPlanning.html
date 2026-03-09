@@ -164,6 +164,24 @@
 
     </div>
 
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <h3>Success</h3>
+            <p>Planning updated successfully.</p>
+            <button class="btn btn-success" onclick="closeSuccess()">OK</button>
+        </div>
+    </div>
+
+    
+    <div id="failModal" class="modal">
+        <div class="modal-content">
+            <h3>Failed</h3>
+            <p>Failed to update planning content.</p>
+            <button class="btn btn-success" onclick="closeFail()">OK</button>
+        </div>
+    </div>
+
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
@@ -178,6 +196,21 @@
 
 
 
+        function showSuccess() {
+            document.getElementById("successModal").style.display = "flex";
+        }
+
+        function closeSuccess() {
+            document.getElementById("successModal").style.display = "none";
+        }
+
+        function showFail() {
+            document.getElementById("failModal").style.display = "flex";
+        }
+
+        function closeFail() {
+            document.getElementById("failModal").style.display = "none";
+        }
         async function downloadPdfFile() {
 
             try {
@@ -306,10 +339,11 @@
                 });
 
                 if (!res.ok) {
-                    throw new Error(res.status);
-                }
 
-                alert("Planning content updated successfully!");
+                    showFail();
+                    return;
+                }
+                showSuccess();
 
             } catch (error) {
 
@@ -319,13 +353,12 @@
             }
 
         }
+
         function openModal() {
-
             document.getElementById("passwordModal").style.display = "flex";
+            document.getElementById("passwordInput").value = "";
             document.getElementById("passwordInput").focus();
-
         }
-
 
 
         function closeModal() {
