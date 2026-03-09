@@ -1,249 +1,370 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-<title>View Planning - Soulmate Events</title>
+    <title>View Planning - Soulmate Events</title>
 
-<style>
-body{
-    margin:0;
-    font-family:"Segoe UI", Arial, sans-serif;
-    background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-    height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-}
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
 
-.container{
-    width:95%;
-    max-width:1000px;
-    background:white;
-    padding:30px;
-    border-radius:12px;
-    box-shadow:0 10px 30px rgba(0,0,0,0.3);
-    text-align:center;
-}
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
 
-h2{
-    margin-top:0;
-    color:#333;
-}
+        .modal-content input {
+            width: 90%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
 
-#planningTextArea{
-    width:100%;
-    height:60vh;
-    resize:none;
-    border:1px solid #ccc;
-    border-radius:8px;
-    padding:15px;
-    font-size:15px;
-    line-height:1.5;
-    box-sizing:border-box;
-}
+        .modal-buttons {
+            margin-top: 15px;
+        }
 
-#planningTextArea:focus{
-    outline:none;
-    border-color:#2c5364;
-    box-shadow:0 0 5px rgba(44,83,100,0.4);
-}
+        .btn-secondary {
+            background: #6c757d;
+        }
 
-/* generic button style */
-.btn{
-    padding:10px 20px;
-    margin:6px;
-    border:none;
-    border-radius:6px;
-    font-size:14px;
-    cursor:pointer;
-    color:white;
-    transition:all 0.2s ease;
-}
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-.btn:hover{
-    transform:translateY(-2px);
-    box-shadow:0 5px 10px rgba(0,0,0,0.2);
-}
+        .container {
+            width: 95%;
+            max-width: 1000px;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
 
-/* button colors */
-.btn-primary{ background:#007bff; }
-.btn-success{ background:#28a745; }
-.btn-purple{ background:#6f42c1; }
-.btn-dark{ background:#2c5364; }
-</style>
+        h2 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        #planningTextArea {
+            width: 100%;
+            height: 60vh;
+            resize: none;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 15px;
+            line-height: 1.5;
+            box-sizing: border-box;
+        }
+
+        #planningTextArea:focus {
+            outline: none;
+            border-color: #2c5364;
+            box-shadow: 0 0 5px rgba(44, 83, 100, 0.4);
+        }
+
+        .btn {
+            padding: 10px 20px;
+            margin: 6px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            color: white;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary {
+            background: #007bff;
+        }
+
+        .btn-success {
+            background: #28a745;
+        }
+
+        .btn-purple {
+            background: #6f42c1;
+        }
+
+        .btn-dark {
+            background: #2c5364;
+        }
+    </style>
 
 </head>
 
 <body>
 
-<div class="container">
+    <div class="container">
 
-<h2>Soulmate Event Planning</h2>
+        <h2>Soulmate Event Planning</h2>
 
-<button class="btn btn-dark" onclick="loadText()">Load Planning</button>
+        <button class="btn btn-dark" onclick="loadText()">Load Planning</button>
 
-<br><br>
+        <br><br>
 
-<textarea id="planningTextArea" readonly></textarea>
+        <textarea id="planningTextArea"></textarea>
 
-<br><br>
+        <br><br>
 
-<button class="btn btn-success" onclick="updateText()">Update Planning</button>
+        <button class="btn btn-success" onclick="openModal()">Update Planning</button>
 
-<button class="btn btn-primary" onclick="downloadFile()">Download Planning</button>
+        <button class="btn btn-primary" onclick="downloadFile()">Download Planning</button>
 
-<button class="btn btn-purple" onclick="downloadPdfFile()">Download as PDF</button>
+        <button class="btn btn-purple" onclick="downloadPdfFile()">Download as PDF</button>
 
-</div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-<script>
-
-const params = new URLSearchParams(window.location.search);
-const fetchUrl = params.get("url");
-const clientName = params.get("client");
-const startDate = params.get("date");
-
-console.log("Fetch URL:", fetchUrl);
-console.log("Client Name:", clientName);
-console.log("Start Date:", startDate);
-
-window.onload = loadText;
+    </div>
 
 
-async function downloadPdfFile() {
+    <div id="passwordModal" class="modal">
 
-    try {
+        <div class="modal-content">
 
-        const res = await fetch(fetchUrl);
+            <h3>Enter Password</h3>
 
-        if (res.status === 404) {
-            alert("No planning content found.");
-            return;
-        }
+            <input type="password" id="passwordInput" placeholder="Enter password">
 
-        const text = await res.text();
+            <div class="modal-buttons">
 
-        const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF();
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
 
-        const pageHeight = pdf.internal.pageSize.height;
-        const margin = 10;
-        const lineHeight = 7;
+                <button class="btn btn-success" onclick="submitPassword()">Submit</button>
 
-        const lines = pdf.splitTextToSize(text, 180);
+            </div>
 
-        let y = margin;
+        </div>
 
-        lines.forEach((line) => {
+    </div>
 
-            if (y + lineHeight > pageHeight - margin) {
-                pdf.addPage();
-                y = margin;
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script>
+
+        const params = new URLSearchParams(window.location.search);
+        const fetchUrl = params.get("url");
+        const clientName = params.get("client");
+        const startDate = params.get("date");
+
+        window.onload = loadText;
+
+
+
+        async function downloadPdfFile() {
+
+            try {
+
+                const res = await fetch(fetchUrl);
+
+                if (res.status === 404) {
+                    alert("No planning content found.");
+                    return;
+                }
+
+                const text = await res.text();
+
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF();
+
+                const pageHeight = pdf.internal.pageSize.height;
+                const margin = 10;
+                const lineHeight = 7;
+
+                const lines = pdf.splitTextToSize(text, 180);
+
+                let y = margin;
+
+                lines.forEach((line) => {
+
+                    if (y + lineHeight > pageHeight - margin) {
+                        pdf.addPage();
+                        y = margin;
+                    }
+
+                    pdf.text(line, margin, y);
+                    y += lineHeight;
+
+                });
+
+                pdf.save(`${clientName}_${startDate}_planning.pdf`);
+
+            } catch (error) {
+
+                console.error(error);
+                alert("Failed to download planning content.");
+
             }
 
-            pdf.text(line, margin, y);
-            y += lineHeight;
+        }
+
+
+
+        async function downloadFile() {
+
+            try {
+
+                const res = await fetch(fetchUrl);
+
+                if (res.status === 404) {
+                    alert("No planning content found.");
+                    return;
+                }
+
+                const blob = await res.blob();
+                const url = URL.createObjectURL(blob);
+
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = `${clientName}_${startDate}_planning.txt`;
+
+                document.body.appendChild(a);
+                a.click();
+
+                a.remove();
+                URL.revokeObjectURL(url);
+
+            } catch (error) {
+
+                console.error(error);
+                alert("Failed to download planning content.");
+
+            }
+
+        }
+
+
+
+        async function loadText() {
+
+            const textArea = document.getElementById("planningTextArea");
+
+            try {
+
+                const res = await fetch(fetchUrl);
+
+                if (res.status === 404) {
+                    alert("No planning content found.");
+                    textArea.value = "";
+                    return;
+                }
+
+                const data = await res.text();
+
+                textArea.value = data || "";
+
+            } catch (error) {
+
+                console.error(error);
+                alert("Failed to load planning content.");
+
+            }
+
+        }
+
+
+
+        async function updateText(password) {
+
+            const formData = new FormData();
+
+            formData.append("planningText", document.getElementById("planningTextArea").value);
+            formData.append("password", password);
+
+            try {
+
+                const res = await fetch(fetchUrl, {
+                    method: "PUT",
+                    body: formData
+                });
+
+                if (!res.ok) {
+                    throw new Error(res.status);
+                }
+
+                alert("Planning content updated successfully!");
+
+            } catch (error) {
+
+                console.error(error);
+                alert("Failed to update planning content.");
+
+            }
+
+        }
+        function openModal() {
+
+            document.getElementById("passwordModal").style.display = "flex";
+            document.getElementById("passwordInput").focus();
+
+        }
+
+
+
+        function closeModal() {
+
+            document.getElementById("passwordModal").style.display = "none";
+
+        }
+
+
+
+        function submitPassword() {
+
+            const passwordInput = document.getElementById("passwordInput");
+            const password = passwordInput.value;
+
+            if (!password) {
+                alert("Please enter password");
+                return;
+            }
+
+            closeModal();
+            updateText(password);
+
+            passwordInput.value = "";
+
+        }
+
+
+
+        document.getElementById("passwordInput").addEventListener("keypress", function (e) {
+
+            if (e.key === "Enter") {
+                submitPassword();
+            }
 
         });
 
-        pdf.save(`${clientName}_${startDate}_planning.pdf`);
-
-    } catch (error) {
-
-        console.error(error);
-        alert("Failed to download planning content.");
-
-    }
-}
-
-
-async function downloadFile() {
-
-    try {
-
-        const res = await fetch(fetchUrl);
-
-        if(res.status === 404){
-            alert("No planning content found.");
-            return;
-        }
-
-        const blob = await res.blob();
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = a.download = `${clientName}_${startDate}_planning.txt`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(url);
-
-    } catch (error) {
-
-        console.error(error);
-        alert("Failed to download planning content.");
-
-    }
-}
-
-async function loadText() {
-
-    const textArea = document.getElementById("planningTextArea");
-
-    try {
-
-        const res = await fetch(fetchUrl);
-
-        if(res.status === 404){
-            alert("No planning content found.");
-            textArea.value = "";
-            textArea.readOnly = false;
-            return;
-        }
-
-        const data = await res.text();
-
-        textArea.value = data || "";
-        textArea.readOnly = false;
-
-    } catch (error) {
-
-        console.error(error);
-        alert("Failed to load planning content.");
-
-    }
-}
-
-async function updateText() {
-
-    const textArea = document.getElementById("planningTextArea");
-
-    try {
-
-        const res = await fetch(fetchUrl,{
-            method:"POST",
-            headers:{
-                "Content-Type":"text/plain"
-            },
-            body:textArea.value
-        });
-
-        if(!res.ok){
-            throw new Error(res.status);
-        }
-
-        alert("Planning content updated successfully!");
-
-    } catch(error){
-
-        console.error(error);
-        alert("Failed to update planning content.");
-
-    }
-}
-
-</script>
+    </script>
 
 </body>
+
 </html>
