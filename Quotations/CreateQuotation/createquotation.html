@@ -209,7 +209,7 @@
     <hr>
 
     <div id="pdf">
-        <h2 style="text-align:center; text-decoration-color:underline;" >Soulmate Event Quotation</h2>
+        <h2 style="text-align:center; text-decoration:underline;">Soulmate Event Quotation</h2>
 
         <div class="quotation-header">
             <div class="header-row">
@@ -233,7 +233,7 @@
         <div id="pdfBlocks"></div>
 
         <hr>
-        <div class="total">Grand Total: ₹ <span id="grandTotal"></span></div>
+        <!-- <div class="total">Grand Total: ₹ <span id="grandTotal"></span></div> -->
     </div>
 
     <script>
@@ -597,6 +597,7 @@ Dholies (6)</textarea>
             content += "\n----------------------------------\n\n";
 
             let total = 0;
+            let hasAmount = false;
             let firstBlock = document.querySelector(".blockDate");
             let globaldate = firstBlock ? formatDate(firstBlock.value) : "";
             document.querySelectorAll(".block").forEach((block, index) => {
@@ -608,6 +609,7 @@ Dholies (6)</textarea>
                 if (amountCheckbox.checked) {
                     amount = Number(block.querySelector(".blockAmount").value) || 0;
                     total += amount;
+                    hasAmount = true;
                 }
 
                 let blockVenueSelect = block.querySelector(".blockVenue");
@@ -655,17 +657,19 @@ Dholies (6)</textarea>
                 addSection("Special Effects", ".blockSpecialEffects", ".checkboxSpecialEffects");
                 addSection("Barat Setup", ".blockBaratSetup", ".checkboxBaratSetup");
 
-                
-                if (amountCheckbox.checked) 
-                {
-                content += "Total : " + amount.toLocaleString("en-IN") + "\n";
-                content += "\n----------------------------------\n\n";
+
+                if (amountCheckbox.checked) {
+                    content += "Total : " + amount.toLocaleString("en-IN") + "\n";
+                    content += "\n----------------------------------\n\n";
                 }
-                else
-                {
+                else {
                     content += "\n----------------------------------\n\n";
                 }
             });
+
+            if (hasAmount) {
+                content += "GRAND TOTAL : ₹ " + total.toLocaleString("en-IN") + "\n";
+            }
 
             // content += "GRAND TOTAL : ₹ " + total.toLocaleString("en-IN") + "\n";
 
@@ -866,19 +870,31 @@ ${generateSection(
                     block.querySelector(".checkboxSpecialEffects")
                 )}
 
+${generateSection(
+                    "Barat Setup",
+                    block.querySelector(".blockBaratSetup"),
+                    block.querySelector(".checkboxBaratSetup")
+                )}
+
         ${amount ? `<div class="total">Total: ₹ ${amount.toLocaleString("en-IN")}</div>` : ""}
     </div>
     <hr>`;
             });
 
-            grandTotal.innerText = total.toLocaleString("en-IN");
+            // grandTotal.innerText = total.toLocaleString("en-IN");
 
             if (!pdf.innerHTML.trim()) {
                 alert("No content available to generate PDF.");
                 return;
             }
             console.log("PDF Content:", pdf.innerHTML);
-            grandTotal.innerText = total.toLocaleString("en-IN");
+            // grandTotal.innerText = total.toLocaleString("en-IN");
+
+            // Grand Total (only if at least one block has amount)
+            if (document.querySelector(".checkboxAmount:checked")) {
+                pdfBlocks.innerHTML += `<div class="total">GRAND TOTAL: ₹ ${total.toLocaleString("en-IN")}</div>`;
+            }
+
 
             html2pdf().set({
                 margin: 15,
