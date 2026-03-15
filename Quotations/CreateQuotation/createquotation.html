@@ -1008,21 +1008,39 @@ ${amount ? `
             }
 
 
-            html2pdf().set({
-                margin: 15,
-                filename: "SoulmateEvents_" + client.value + "_" + replaceSpacesWithUnderscore(globaldate) + "_Quotation.pdf",
-                image: { type: "jpeg", quality: 0.98 },
-                html2canvas: {
-                    scale: 1,        // 🔥 important (NOT 2)
-                    scrollY: 0
-                },
-                jsPDF: {
-                    unit: "mm",
-                    format: "a4",
-                    orientation: "portrait"
-                },
-                pagebreak: { mode: ['css'] }
-            }).from(pdf).save();
+            html2pdf()
+                .set({
+                    margin: 15,
+                    filename: "SoulmateEvents_" + client.value + "_" + replaceSpacesWithUnderscore(globaldate) + "_Quotation.pdf",
+                    image: { type: "jpeg", quality: 0.98 },
+                    html2canvas: {
+                        scale: 1,
+                        scrollY: 0,
+                        useCORS: true
+                    },
+                    jsPDF: {
+                        unit: "mm",
+                        format: "a4",
+                        orientation: "portrait"
+                    },
+                    pagebreak: { mode: ['css'] }
+                })
+                .from(pdf)
+                .outputPdf('blob')
+                .then(function (blob) {
+
+                    const url = URL.createObjectURL(blob);
+
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = "SoulmateEvents_" + client.value + "_" + replaceSpacesWithUnderscore(globaldate) + "_Quotation.pdf";
+
+                    document.body.appendChild(a);
+                    a.click();
+
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                });
         }
         addBlock();
         enableAutoResize(document);
