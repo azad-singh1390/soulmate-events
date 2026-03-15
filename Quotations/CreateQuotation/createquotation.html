@@ -8,23 +8,32 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
-        .autoResize {
-            width: 100%;
-            resize: none;
-            overflow: hidden;
-            box-sizing: border-box;
+        .event-box {
+            border: 2px solid #d6d6d6;
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin: 15px 0;
+            background: #fafafa;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
         }
-
 
         .event-line {
             display: grid;
-            grid-template-columns: 110px 15px auto;
-            margin-bottom: 4px;
-            font-size: 15px;
+            grid-template-columns: 120px 15px auto;
+            margin-bottom: 8px;
         }
 
         .label {
             font-weight: bold;
+            color: #444;
+        }
+
+        .colon {
+            text-align: center;
+        }
+
+        .value {
+            color: #222;
         }
 
         body {
@@ -81,11 +90,6 @@
             break-inside: avoid;
         }
 
-        .quotation-header {
-            page-break-inside: avoid;
-            break-inside: avoid;
-        }
-
         #pdf {
             position: relative;
             width: 700px;
@@ -97,39 +101,43 @@
         }
 
         .quotation-header {
-            padding: 20px 25px;
-            margin-bottom: 25px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            background: #fafafa;
+            width: 600px;
+            border: 2px solid #e57f3a;
+            font-family: Arial, sans-serif;
         }
 
-        .header-row {
-            display: flex;
-            margin-bottom: 10px;
-        }
-
-
+        .header-row,
         .quotation-row {
-            display: flex;
-            margin-bottom: 10px;
+            display: grid;
+            grid-template-columns: 220px auto;
+            align-items: center;
+            padding: 8px 16px;
+            font-size: 18px;
+            border-bottom: 1px solid #e57f3a;
+        }
+
+        /* Top row (orange) */
+        .header-row {
+            background-color: #e8a173;
+        }
+
+        /* Other rows (light peach) */
+        .quotation-row {
+            background-color: #f3dfd2;
         }
 
         .header-label {
-            width: 160px;
-            font-weight: 600;
-            position: relative;
-        }
-
-        .header-label::after {
-            content: " :";
-            position: absolute;
-            right: 10px;
+            font-weight: bold;
+            letter-spacing: 3px;
         }
 
         .header-value {
-            flex: 1;
-            font-weight: 500;
+            text-align: left;
+        }
+
+        /* Remove last border */
+        .quotation-header div:last-child {
+            border-bottom: none;
         }
 
         .section {
@@ -216,14 +224,17 @@
                 <div class="header-label">CLIENT NAME</div>
                 <div class="header-value" id="pClient"></div>
             </div>
+
             <div class="quotation-row" id="rowEvent">
                 <div class="header-label">EVENT</div>
                 <div class="header-value" id="pEvent"></div>
             </div>
+
             <div class="quotation-row" id="rowDates">
                 <div class="header-label">DATES</div>
                 <div class="header-value" id="pDates"></div>
             </div>
+
             <div class="quotation-row" id="rowVenue">
                 <div class="header-label">VENUE</div>
                 <div class="header-value" id="pVenue"></div>
@@ -757,9 +768,9 @@ Dholies (6)</textarea>
             // toggle based on checkbox
             if (enableEventDetails.checked) {
 
-                rowEvent.style.display = "flex";
-                rowDates.style.display = "flex";
-                rowVenue.style.display = "flex";
+                rowEvent.style.display = "grid";
+                rowDates.style.display = "grid";
+                rowVenue.style.display = "grid";
 
                 // fill values
                 let eventType = eventTypeSelect.value === "Other"
@@ -815,12 +826,33 @@ Dholies (6)</textarea>
                     : blockEventSelect.value;
 
                 pdfBlocks.innerHTML += `
+<div class="event-box">
     <div class="section">
-        <div class="event-line"><div class="label">DATE</div><div>:</div><div>${formatDate(block.querySelector(".blockDate").value)}</div></div>
-        <div class="event-line"><div class="label">VENUE</div><div>:</div><div>${blockVenue}</div></div>
-        <div class="event-line"><div class="label">TIME</div><div>:</div><div>${formatTime(block.querySelector(".blockTime").value)}</div></div>
-        <div class="event-line"><div class="label">EVENT</div><div>:</div><div>${blockEvent}</div></div>
-        <br>
+        <div class="event-line">
+            <div class="label">DATE</div>
+            <div class="colon">:</div>
+            <div class="value">${formatDate(block.querySelector(".blockDate").value)}</div>
+        </div>
+
+        <div class="event-line">
+            <div class="label">VENUE</div>
+            <div class="colon">:</div>
+            <div class="value">${blockVenue}</div>
+        </div>
+
+        <div class="event-line">
+            <div class="label">TIME</div>
+            <div class="colon">:</div>
+            <div class="value">${formatTime(block.querySelector(".blockTime").value)}</div>
+        </div>
+
+        <div class="event-line">
+            <div class="label">EVENT</div>
+            <div class="colon">:</div>
+            <div class="value">${blockEvent}</div>
+        </div>
+    </div>
+</div>
 
 ${generateSection(
                     "Sound Setup",
