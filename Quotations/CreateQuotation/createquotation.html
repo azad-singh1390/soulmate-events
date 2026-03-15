@@ -1008,7 +1008,7 @@ ${renderSection(block, ".checkboxBaratSetup", ".blockBaratSetup")}
 </div>
 ${amount ? `
 <div class="total-row">
-<div class="total-label">TOTAL (A)</div>
+<div class="total-label">TOTAL (${blockEvent})</div>
 <div class="total-value">₹ ${amount.toLocaleString("en-IN")} /-</div>
 </div>
 ` : ""}
@@ -1023,7 +1023,6 @@ ${amount ? `
                 alert("No content available to generate PDF.");
                 return;
             }
-            console.log("PDF Content:", pdf.innerHTML);
             // grandTotal.innerText = total.toLocaleString("en-IN");
 
             // Grand Total (only if at least one block has amount)
