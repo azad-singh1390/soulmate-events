@@ -8,6 +8,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
+        .section-line {
+            border-top: 4px solid #ccc;
+            margin: 6px 0;
+        }
+
         .event-box {
             border: 2px solid #d6d6d6;
             border-radius: 10px;
@@ -35,6 +40,93 @@
         .value {
             color: #222;
         }
+
+
+
+        .event-card {
+            border: 1px solid #333;
+            margin-top: 20px;
+        }
+
+        .event-header {
+            background: #b7bfce;
+            padding: 5px;
+            font-family: Arial;
+        }
+
+        .event-header .row {
+            display: flex;
+            gap: 20px;
+            font-size: 22px;
+            margin: 4px 0;
+        }
+
+        .event-header .label {
+            width: 90px;
+            font-weight: bold;
+            color: #2f4e85;
+        }
+
+        .event-header .value {
+            color: #2f4e85;
+        }
+
+        .event-header .date {
+            color: #c55200;
+            font-weight: bold;
+        }
+
+        .offer-bar {
+            background: #e97b2d;
+            color: white;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            padding: 18px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            border-top: 1px solid black;
+            border-bottom: 1px solid black;
+        }
+
+        .offer-list {
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        .offer-list ul {
+            margin: 0;
+        }
+
+        .offer-list li {
+            margin: 14px 0;
+        }
+
+        .offer-line {
+            border-top: 1px solid #333;
+            padding: 15px 20px;
+        }
+
+        .total-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border-top: 1px solid black;
+        }
+
+        .total-label {
+            text-align: center;
+            padding: 12px;
+            font-weight: bold;
+            color: #c55200;
+        }
+
+        .total-value {
+            text-align: center;
+            padding: 12px;
+            border-left: 1px solid black;
+            font-weight: bold;
+            color: #c55200;
+        }
+
 
         body {
             font-family: "Times New Roman", serif;
@@ -101,7 +193,7 @@
         }
 
         .quotation-header {
-            width: 600px;
+            width: 635px;
             border: 2px solid #e57f3a;
             font-family: Arial, sans-serif;
         }
@@ -217,7 +309,7 @@
     <hr>
 
     <div id="pdf">
-        <h2 style="text-align:center; text-decoration:underline;">Soulmate Event Quotation</h2>
+        <h2 style="text-align:center; text-decoration:underline; color: #c55200;">Soulmate Events Quotation</h2>
 
         <div class="quotation-header">
             <div class="header-row">
@@ -250,6 +342,28 @@
     <script>
 
         let blockCount = 0;
+
+
+        function renderSection(block, checkboxSelector, textareaSelector) {
+
+            const checkbox = block.querySelector(checkboxSelector);
+            const textarea = block.querySelector(textareaSelector);
+
+            if (checkbox.checked && textarea.value.trim() !== "") {
+                const items = textarea.value
+                    .split("\n")
+                    .filter(i => i.trim() !== "")
+                    .map(i => `<li>${i}</li>`)
+                    .join("");
+
+                return `
+        <ul>${items}</ul>
+        <div class="section-line"></div>
+        `;
+            }
+
+            return "";
+        }
 
         function replaceSpacesWithUnderscore(str) {
             return str.replace(/\s+/g, "_");
@@ -826,91 +940,57 @@ Dholies (6)</textarea>
                     : blockEventSelect.value;
 
                 pdfBlocks.innerHTML += `
-<div class="event-box">
-    <div class="section">
-        <div class="event-line">
-            <div class="label">DATE</div>
-            <div class="colon">:</div>
-            <div class="value">${formatDate(block.querySelector(".blockDate").value)}</div>
-        </div>
 
-        <div class="event-line">
-            <div class="label">VENUE</div>
-            <div class="colon">:</div>
-            <div class="value">${blockVenue}</div>
-        </div>
+<div class="event-card">
 
-        <div class="event-line">
-            <div class="label">TIME</div>
-            <div class="colon">:</div>
-            <div class="value">${formatTime(block.querySelector(".blockTime").value)}</div>
-        </div>
+<div class="event-header">
 
-        <div class="event-line">
-            <div class="label">EVENT</div>
-            <div class="colon">:</div>
-            <div class="value">${blockEvent}</div>
-        </div>
-    </div>
+<div class="row">
+<span class="label">DATE</span>
+<span class="date">${formatDate(block.querySelector(".blockDate").value)}</span>
 </div>
 
-${generateSection(
-                    "Sound Setup",
-                    block.querySelector(".blockSoundSetup"),
-                    block.querySelector(".checkboxSoundSetup")
-                )}
+<div class="row">
+<span class="label">VENUE</span>
+<span class="value">${blockVenue}</span>
+</div>
 
-${generateSection(
-                    "Floor & Stage",
-                    block.querySelector(".blockFloorStage"),
-                    block.querySelector(".checkboxFloorStage")
-                )}
+<div class="row">
+<span class="label">TIME</span>
+<span class="value">${formatTime(block.querySelector(".blockTime").value)}</span>
+</div>
 
-${generateSection(
-                    "Lights & Truss",
-                    block.querySelector(".blockLightsTruss"),
-                    block.querySelector(".checkboxLightsTruss")
-                )}
+<div class="row">
+<span class="label">EVENT</span>
+<span class="value">${blockEvent}</span>
+</div>
 
-${generateSection(
-                    "Led Screen",
-                    block.querySelector(".blockLedScreen"),
-                    block.querySelector(".checkboxLedScreen")
-                )}
+</div>
 
-${generateSection(
-                    "Anchor & Artists",
-                    block.querySelector(".blockAnchorArtists"),
-                    block.querySelector(".checkboxAnchorArtists")
-                )}
+<div class="offer-bar">OFFERINGS</div>
 
-${generateSection(
-                    "Techrider",
-                    block.querySelector(".blockTechrider"),
-                    block.querySelector(".checkboxTechrider")
-                )}
+<div class="offer-list">
 
-${generateSection(
-                    "Other Requirements",
-                    block.querySelector(".blockOtherRequirements"),
-                    block.querySelector(".checkboxOtherRequirements")
-                )}
+${renderSection(block, ".checkboxSoundSetup", ".blockSoundSetup")}
+${renderSection(block, ".checkboxFloorStage", ".blockFloorStage")}
+${renderSection(block, ".checkboxLightsTruss", ".blockLightsTruss")}
+${renderSection(block, ".checkboxLedScreen", ".blockLedScreen")}
+${renderSection(block, ".checkboxAnchorArtists", ".blockAnchorArtists")}
+${renderSection(block, ".checkboxTechrider", ".blockTechrider")}
+${renderSection(block, ".checkboxOtherRequirements", ".blockOtherRequirements")}
+${renderSection(block, ".checkboxSpecialEffects", ".blockSpecialEffects")}
+${renderSection(block, ".checkboxBaratSetup", ".blockBaratSetup")}
 
-${generateSection(
-                    "Special Effects",
-                    block.querySelector(".blockSpecialEffects"),
-                    block.querySelector(".checkboxSpecialEffects")
-                )}
+</div>
+${amount ? `
+<div class="total-row">
+<div class="total-label">TOTAL (A)</div>
+<div class="total-value">₹ ${amount.toLocaleString("en-IN")} /-</div>
+</div>
+` : ""}
 
-${generateSection(
-                    "Barat Setup",
-                    block.querySelector(".blockBaratSetup"),
-                    block.querySelector(".checkboxBaratSetup")
-                )}
-
-        ${amount ? `<div class="total">Total: ₹ ${amount.toLocaleString("en-IN")}</div>` : ""}
-    </div>
-    <hr>`;
+</div>
+`;
             });
 
             // grandTotal.innerText = total.toLocaleString("en-IN");
