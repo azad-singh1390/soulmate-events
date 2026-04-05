@@ -3,9 +3,29 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Soulmate Event Quotation</title>
+    <title>Soulmate Event Bill</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+
+            height: 40px;
+
+            font-size: 12px;
+
+            border-top: 1px solid #ccc;
+
+            background: white;
+
+            display: flex;
+            justify-content: space-between;
+
+            padding: 8px 20px;
+        }
+
         /* Navbar */
         .navbar {
             width: 100%;
@@ -299,22 +319,43 @@ DJ Console</textarea>
             const formattedFrom = formatDate(from);
             const formattedTo = formatDate(to);
             let total = 0;
-            let html = `<div style="max-width:max-width; margin:auto; font-family:Arial, sans-serif; background-color:#e56749; padding:20px;">`;
+            let html = `<div style="max-width:max-width; margin:auto; font-family:Arial, sans-serif; background-color:#1E3A5F; padding:20px;">`;
             html += `
  <!-- Header -->
-    <h2 style="text-align:center; margin-bottom:5px; letter-spacing:1px; color:#181110;">
-        SOULMATE EVENTS
+    <h2 style="text-align:center; margin-bottom:5px; letter-spacing:1px; color:white;">
+        Soulmate Events
     </h2>
 
     <!-- Divider -->
     <hr style="border:0; border-top:1px solid #ddd; margin:10px 0;">
 
-    <!-- Contact Details -->
-    <div style="text-align:right; font-size:13px; color:#e56749; line-height:1.6; background-color:#250f8f; padding:10px; border:1px solid #eee;">
-        <strong>Email:</strong> soulmatevents0009@gmail.com<br>
-        <strong>Phone 1:</strong> 9253707777<br>
-        <strong>Phone 2:</strong> 9729035555
+    <div style="
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:10px;
+    background-color:white;
+">
+
+    <img src="SoulmateLogo.jpeg" alt="Soulmate Events Logo"
+         style="height:70px; object-fit:contain;">
+
+    <div style="
+        text-align:right;
+        font-size:13px;
+        background-color:white;
+        line-height:1.6;
+    ">
+        <strong>
+        soulmatevents0009@gmail.com<br>
+        +91 9253707777<br>
+        +91 9729035555
+        </strong>
     </div>
+
+</div>
+
+<hr style="border:0; border-top:1px solid #ddd; margin:10px 0;">
 
 </div>
 
@@ -358,19 +399,21 @@ DJ Console</textarea>
                 const amount = Number(block.querySelector(".blockAmount").value) || 0;
                 const checkbox = block.querySelector(".checkboxAmount");
 
+                console.log(`Processing Block ${index + 1}: Items="${items}", Amount=${amount}, Checkbox=${checkbox.checked}`);
                 // Convert lines into single cell with line breaks
-                const formattedItems = items
-                    .split("\n")
-                    .map(line => line.trim())
-                    .join("<br>");
-
+                const formattedItems = "<ul>" +
+                    items
+                        .split("\n")
+                        .map(line => `<li>${line.trim()}</li>`)
+                        .join("")
+                    + "</ul>";
                 let row = "";
 
                 if (checkbox.checked) {
                     row = `
         <tr>
             <td style="padding:8px; border:1px solid #ccc;">${formattedItems}</td>
-            <td style="padding:8px; border:1px solid #ccc; text-align:right;">
+            <td style="padding:8px; border:1px solid #ccc; text-align:center;">
                 ₹${amount.toLocaleString("en-IN")}
             </td>
         </tr>`;
@@ -386,10 +429,10 @@ DJ Console</textarea>
 <div style="margin-bottom:15px; page-break-inside:avoid;">
     <table style="width:100%; border-collapse:collapse;">
         
-        <tr style="background:#f5f5f5;">
-            <th style="border:1px solid #ccc; padding:8px; text-align:left;">Items</th>
+        <tr style="background:#1E3A5F;">
+            <th style="border:1px solid #ccc; padding:8px; text-align:center; color:white;">ITEMS</th>
             ${checkbox.checked ? `
-            <th style="border:1px solid #ccc; padding:8px; text-align:right;">Amount</th>
+            <th style="border:1px solid #ccc; padding:8px; text-align:center; color:white;">AMOUNT</th>
             ` : ""}
         </tr>
 
@@ -398,33 +441,35 @@ DJ Console</textarea>
     </table>
 </div>`;
 
-                html += `<hr style="margin:15px 0;">`;
-                //Add Today date and signature line at the end
-                html += `<div style="display:flex; justify-content:space-between; align-items:center; margin-top:30px;">
-    <div style="font-size:14px; color:#555;">Date: ${formatDate(new Date())}</div>
-    <div style="font-size:14px; color:#555;">Signature: Azad Singh Sandhu | Uday Maan </div>
-</div>`;
 
                 if (checkbox.checked) total += amount;
             });
+
+
+            html += `<hr style="margin:15px 0;">`;
+            //Add Today date and signature line at the end
+            html += `<div style="display:flex; justify-content:space-between; align-items:center; margin-top:30px;">
+    <div style="font-size:14px; color:#555;">Date: ${formatDate(new Date())}</div>
+    <div style="font-size:14px; color:#555;">Signature: Azad Singh Sandhu | Uday Maan </div>
+</div>`;
             const container = document.createElement("div");
             container.innerHTML = html;
 
             console.log("Generated HTML for PDF:", html);
 
             // //Show html in new tab
-            // const newWindow = window.open();
-            // newWindow.document.write(html);
-            // newWindow.document.close();
+            const newWindow = window.open();
+            newWindow.document.write(html);
+            newWindow.document.close();
 
             //Download Html Only
-            const blob = new Blob([html], { type: "text/html" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "SoulmatEvents_" + `${client}_Bill.html`;
-            a.click();
-            URL.revokeObjectURL(url);
+            // const blob = new Blob([html], { type: "text/html" });
+            // const url = URL.createObjectURL(blob);
+            // const a = document.createElement("a");
+            // a.href = url;
+            // a.download = "SoulmatEvents_" + `${client}_Bill.html`;
+            // a.click();
+            // URL.revokeObjectURL(url);
 
         }
 
