@@ -6,6 +6,17 @@
     <title>Soulmate Event Bill</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
+        .amount-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .amount-row input[type="number"] {
+            width: 120px;
+        }
+
         .footer {
             position: fixed;
             bottom: 0;
@@ -111,7 +122,17 @@
             page-break-inside: avoid;
         }
 
-        .blockItemsDetails {
+        .blockSoundItemsDetails {
+            width: 100%;
+            min-height: 80px;
+            resize: vertical;
+            box-sizing: border-box;
+            font-family: inherit;
+            font-size: 14px;
+            padding: 8px;
+        }
+
+        .blockStageItemDetails {
             width: 100%;
             min-height: 80px;
             resize: vertical;
@@ -135,7 +156,14 @@
             font-weight: bold;
         }
 
-        .blockAmount {
+        .blockSoundAmount {
+            width: 100px;
+            padding: 5px;
+            font-size: 14px;
+        }
+
+
+        .blockStageAmount {
             width: 100px;
             padding: 5px;
             font-size: 14px;
@@ -264,217 +292,527 @@
 
         // Add new block
         function addBlock() {
+
             blockCount++;
+
             const div = document.createElement("div");
             div.className = "block";
-            div.innerHTML = `
-<h4>Item Block ${blockCount}</h4>
-<textarea class="blockItemsDetails">Sound System
-Cordless Mics
-DJ Console</textarea>
-<div class="block-footer">
-<label class="checkbox-label"><input type="checkbox" class="checkboxAmount"> Total Amount</label>
-<input type="number" class="blockAmount" value="0" disabled>
-<button class="removeBtn" onclick="this.parentElement.parentElement.remove()">Remove</button>
-</div>`;
-            document.getElementById("blocks").appendChild(div);
-            const checkbox = div.querySelector(".checkboxAmount");
-            const amount = div.querySelector(".blockAmount");
-            checkbox.addEventListener("change", () => {
-                amount.disabled = !checkbox.checked;
-                if (!checkbox.checked) amount.value = 0;
-            });
-        }
 
+            div.innerHTML = `
+
+<h4>Item Block ${blockCount}</h4>
+
+<label><b>Sound Details:</b></label>
+<textarea class="blockSoundItemsDetails">
+Sound System
+Cordless Mics
+DJ Console
+</textarea>
+
+<div class="amount-row">
+    <label class="checkbox-label">
+        <input type="checkbox" class="checkboxSoundAmount">
+        Total Amount
+    </label>
+
+    <input type="number"
+           class="blockSoundAmount"
+           value="0"
+           disabled>
+</div>
+
+<br>
+
+<label><b>Stage / Floor Details:</b></label>
+<textarea class="blockStageItemDetails">
+Dance Floor 16x24
+Stage 16x32
+</textarea>
+
+<div class="amount-row">
+    <label class="checkbox-label">
+        <input type="checkbox" class="checkboxStageAmount">
+        Total Amount
+    </label>
+
+    <input type="number"
+           class="blockStageAmount"
+           value="0"
+           disabled>
+</div>
+
+<button class="removeBtn"
+        onclick="this.parentElement.remove()">
+Remove
+</button>
+
+`;
+
+            document.getElementById("blocks").appendChild(div);
+
+            // SOUND checkbox logic
+            const soundCheckbox = div.querySelector(".checkboxSoundAmount");
+            const soundAmount = div.querySelector(".blockSoundAmount");
+
+            soundCheckbox.addEventListener("change", () => {
+                soundAmount.disabled = !soundCheckbox.checked;
+
+                if (!soundCheckbox.checked)
+                    soundAmount.value = 0;
+            });
+
+            // STAGE checkbox logic
+            const stageCheckbox = div.querySelector(".checkboxStageAmount");
+            const stageAmount = div.querySelector(".blockStageAmount");
+
+            stageCheckbox.addEventListener("change", () => {
+                stageAmount.disabled = !stageCheckbox.checked;
+
+                if (!stageCheckbox.checked)
+                    stageAmount.value = 0;
+            });
+
+        }
         // Form validation
         function validateForm() {
+
+            // Validate inputs
             const inputs = document.querySelectorAll("input");
+
             for (let input of inputs) {
+
                 if (input.offsetParent === null) continue;
-                if (input.value.trim() === "") { alert("Please fill all required fields"); input.focus(); return false; }
+
+                // Skip disabled amount fields
+                if (input.disabled) continue;
+
+                if (input.type !== "checkbox" &&
+                    input.value.trim() === "") {
+
+                    alert("Please fill all required fields");
+                    input.focus();
+                    return false;
+                }
             }
+
+            // Validate dropdowns
             const selects = document.querySelectorAll("select");
+
             for (let select of selects) {
-                if (select.value === "") { alert("Please select all dropdowns"); select.focus(); return false; }
+
+                if (select.value === "") {
+
+                    alert("Please select all dropdowns");
+                    select.focus();
+                    return false;
+                }
             }
+
+            // Validate blocks
             const blocks = document.querySelectorAll(".block");
-            if (blocks.length === 0) { alert("Add at least one item block"); return false; }
-            for (let block of blocks) {
-                const textarea = block.querySelector(".blockItemsDetails");
-                if (textarea.value.trim() === "") { alert("Block items cannot be empty"); textarea.focus(); return false; }
+
+            if (blocks.length === 0) {
+
+                alert("Add at least one item block");
+                return false;
             }
+
+            for (let block of blocks) {
+
+                // SOUND textarea
+                const soundTextarea =
+                    block.querySelector(".blockSoundItemsDetails");
+
+                if (soundTextarea.value.trim() === "") {
+
+                    alert("Sound items cannot be empty");
+                    soundTextarea.focus();
+                    return false;
+                }
+
+                // STAGE textarea
+                const stageTextarea =
+                    block.querySelector(".blockStageItemDetails");
+
+                if (stageTextarea.value.trim() === "") {
+
+                    alert("Stage/Floor details cannot be empty");
+                    stageTextarea.focus();
+                    return false;
+                }
+
+                // SOUND amount validation
+                const soundCheckbox =
+                    block.querySelector(".checkboxSoundAmount");
+
+                const soundAmount =
+                    block.querySelector(".blockSoundAmount");
+
+                if (soundCheckbox.checked &&
+                    Number(soundAmount.value) <= 0) {
+
+                    alert("Enter Sound amount");
+                    soundAmount.focus();
+                    return false;
+                }
+
+                // STAGE amount validation
+                const stageCheckbox =
+                    block.querySelector(".checkboxStageAmount");
+
+                const stageAmount =
+                    block.querySelector(".blockStageAmount");
+
+                if (stageCheckbox.checked &&
+                    Number(stageAmount.value) <= 0) {
+
+                    alert("Enter Stage amount");
+                    stageAmount.focus();
+                    return false;
+                }
+            }
+
             return true;
         }
 
         // Generate PDF
         function generatePDF() {
+
             if (!validateForm()) return;
 
             const client = document.getElementById("client").value;
+
             let event = document.getElementById("event").value;
-            if (event === "Other") event = document.getElementById("otherEvent").value;
+            if (event === "Other")
+                event = document.getElementById("otherEvent").value;
+
             let venue = document.getElementById("venue").value;
-            if (venue === "Other") venue = document.getElementById("otherVenue").value;
+            if (venue === "Other")
+                venue = document.getElementById("otherVenue").value;
+
             const from = document.getElementById("dateFrom").value;
             const to = document.getElementById("dateTo").value;
 
             const formattedFrom = formatDate(from);
             const formattedTo = formatDate(to);
+
             let total = 0;
-            let html = `<div style="max-width:max-width; margin:auto; font-family:Arial, sans-serif; background-color:#1E3A5F; padding:20px;">`;
+
+            // ✅ Detect if ANY checkbox is checked
+            let showAmountColumn = false;
+
+            document.querySelectorAll(".block").forEach(block => {
+
+                const soundCheckbox =
+                    block.querySelector(".checkboxSoundAmount");
+
+                const stageCheckbox =
+                    block.querySelector(".checkboxStageAmount");
+
+                if (soundCheckbox.checked ||
+                    stageCheckbox.checked) {
+
+                    showAmountColumn = true;
+                }
+
+            });
+
+            // START HTML
+            let html = `<div style="max-width:max-width; margin:auto; font-family:Arial, sans-serif; background-color:white; padding:20px;">`;
+
             html += `
- <!-- Header -->
-    <h2 style="text-align:center; margin-bottom:5px; letter-spacing:1px; color:white;">
-        Soulmate Events
-    </h2>
 
-    <!-- Divider -->
-    <hr style="border:0; border-top:1px solid #ddd; margin:10px 0;">
-
-    <div style="
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:10px;
-    background-color:white;
-">
-
-    <img src="${logoBase64}" alt="Soulmate Events Logo"
-         style="height:70px; object-fit:contain;">
-
-    <div style="
-        text-align:right;
-        font-size:13px;
-        background-color:white;
-        line-height:1.6;
-    ">
-        <strong>
-        soulmatevents0009@gmail.com<br>
-        +91 9253707777<br>
-        +91 9729035555
-        </strong>
-    </div>
-
-</div>
+<h2 style="text-align:center; margin-bottom:5px; letter-spacing:1px; color:black;">
+Soulmate Events
+</h2>
 
 <hr style="border:0; border-top:1px solid #ddd; margin:10px 0;">
+
+<div style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:10px;
+background-color:white;
+">
+
+<img src="${logoBase64}"
+style="height:70px; object-fit:contain;">
+
+<div style="
+text-align:right;
+font-size:13px;
+line-height:1.6;
+">
+
+<strong>
+soulmatevents0009@gmail.com<br>
++91 9253707777<br>
++91 9729035555
+</strong>
+
+</div>
 
 </div>
 
 <hr style="margin:10px 0;">
 
-<!-- Client & Event Details Table -->
-<table style="width:100%; 
-               font-size:14px; 
-               border-collapse: collapse; 
-               margin-bottom:15px;
-               background-color:#eef6ff;
-               padding:8px;">
+<table style="
+width:100%;
+font-size:14px;
+border-collapse: collapse;
+margin-bottom:15px;
+background-color:#F54927;
+">
 
-    <tr>
-        <td style="width:20%; font-family:Abadi; font-size:18px; font-weight:bold; vertical-align: top;">Name</td>
-        <td style="width:30%;font-family:Abadi; font-size:18px;">${client}</td>
-    </tr>
+<tr>
+<td style="width:20%; font-weight:bold;">Name</td>
+<td>${client}</td>
+</tr>
 
-    <tr>
-        <td style="font-family:Abadi; font-size:18px; font-weight:bold; vertical-align: top;">Event</td>
-        <td style="font-family:Abadi; font-size:18px;">${event}</td>
-    </tr>
+<tr>
+<td style="font-weight:bold;">Event</td>
+<td>${event}</td>
+</tr>
 
-    <tr>
-        <td style="font-family:Abadi; font-size:18px; font-weight:bold; vertical-align: top;">Venue</td>
-        <td style="font-family:Abadi; font-size:18px;">${venue}</td>
-    </tr>
+<tr>
+<td style="font-weight:bold;">Venue</td>
+<td>${venue}</td>
+</tr>
 
-    <tr>
-        <td style="font-family:Abadi; font-size:18px; font-weight:bold; vertical-align: top;">Dates</td>
-        <td style="font-family:Abadi; font-size:18px;">${formattedFrom} - ${formattedTo}</td>
-    </tr>
+<tr>
+<td style="font-weight:bold;">Dates</td>
+<td>${formattedFrom} - ${formattedTo}</td>
+</tr>
 
 </table>
 
 <hr style="margin:15px 0;">
 `;
 
-            document.querySelectorAll(".block").forEach((block, index) => {
-                const items = block.querySelector(".blockItemsDetails").value.trim();
-                const amount = Number(block.querySelector(".blockAmount").value) || 0;
-                const checkbox = block.querySelector(".checkboxAmount");
+            // PROCESS BLOCKS
+            document.querySelectorAll(".block").forEach((block) => {
 
-                console.log(`Processing Block ${index + 1}: Items="${items}", Amount=${amount}, Checkbox=${checkbox.checked}`);
-                // Convert lines into single cell with line breaks
-                const formattedItems = "<ul>" +
-                    items
-                        .split("\n")
-                        .map(line => `<li>${line.trim()}</li>`)
-                        .join("")
-                    + "</ul>";
-                let row = "";
+                let blockRows = "";
 
-                if (checkbox.checked) {
-                    row = `
-        <tr>
-            <td style="padding:8px; border:1px solid #ccc;">${formattedItems}</td>
-            <td style="padding:8px; border:1px solid #ccc; text-align:center;">
-                ₹${amount.toLocaleString("en-IN")}
-            </td>
-        </tr>`;
-                } else {
-                    row = `
-        <tr>
-            <td style="padding:8px; border:1px solid #ccc;" colspan="2">
-                ${formattedItems}
-            </td>
-        </tr>`;
+                // SOUND
+                const soundItems =
+                    block.querySelector(".blockSoundItemsDetails").value.trim();
+
+                const soundAmount =
+                    Number(block.querySelector(".blockSoundAmount").value) || 0;
+
+                const soundCheckbox =
+                    block.querySelector(".checkboxSoundAmount");
+
+
+                if (soundItems !== "") {
+
+                    const formattedSoundItems =
+                        "<ul>" +
+                        soundItems
+                            .split("\n")
+                            .map(line => `<li>${line.trim()}</li>`)
+                            .join("")
+                        + "</ul>";
+
+                    if (soundCheckbox.checked && showAmountColumn) {
+
+                        blockRows += `
+<tr>
+<td style="padding:8px; border:1px solid #ccc;">
+${formattedSoundItems}
+</td>
+
+<td style="padding:8px; border:1px solid #ccc; text-align:center;">
+₹${soundAmount.toLocaleString("en-IN")}
+</td>
+</tr>`;
+
+                        total += soundAmount;
+
+                    } else {
+
+                        blockRows += `
+<tr>
+<td style="padding:8px; border:1px solid #ccc;"
+colspan="${showAmountColumn ? 1 : 2}">
+${formattedSoundItems}
+</td>
+
+${showAmountColumn ? `<td style="border:1px solid #ccc;"></td>` : ""}
+
+</tr>`;
+                    }
                 }
+
+                // STAGE
+                const stageItems =
+                    block.querySelector(".blockStageItemDetails").value.trim();
+
+                const stageAmount =
+                    Number(block.querySelector(".blockStageAmount").value) || 0;
+
+                const stageCheckbox =
+                    block.querySelector(".checkboxStageAmount");
+
+
+                if (stageItems !== "") {
+
+                    const formattedStageItems =
+                        "<ul>" +
+                        stageItems
+                            .split("\n")
+                            .map(line => `<li>${line.trim()}</li>`)
+                            .join("")
+                        + "</ul>";
+
+                    if (stageCheckbox.checked && showAmountColumn) {
+
+                        blockRows += `
+<tr>
+<td style="padding:8px; border:1px solid #ccc;">
+${formattedStageItems}
+</td>
+
+<td style="padding:8px; border:1px solid #ccc; text-align:center;">
+₹${stageAmount.toLocaleString("en-IN")}
+</td>
+</tr>`;
+
+                        total += stageAmount;
+
+                    } else {
+
+                        blockRows += `
+<tr>
+<td style="padding:8px; border:1px solid #ccc;"
+colspan="${showAmountColumn ? 1 : 2}">
+${formattedStageItems}
+</td>
+
+${showAmountColumn ? `<td style="border:1px solid #ccc;"></td>` : ""}
+
+</tr>`;
+                    }
+                }
+
+                // TABLE OUTPUT
                 html += `
 <div style="margin-bottom:15px; page-break-inside:avoid;">
-    <table style="width:100%; border-collapse:collapse;">
-        
-        <tr style="background:#1E3A5F;">
-            <th style="border:1px solid #ccc; padding:8px; text-align:center; color:white;">ITEMS</th>
-            ${checkbox.checked ? `
-            <th style="border:1px solid #ccc; padding:8px; text-align:center; color:white;">AMOUNT</th>
-            ` : ""}
-        </tr>
 
-        ${row}
-        
-    </table>
+<table style="width:100%; border-collapse:collapse;">
+
+<tr style="background:black;">
+
+<th style="
+border:1px solid #ccc;
+padding:8px;
+text-align:center;
+color:white;
+">
+ITEMS
+</th>
+
+${showAmountColumn ? `
+<th style="
+border:1px solid #ccc;
+padding:8px;
+text-align:center;
+color:white;
+">
+AMOUNT
+</th>
+` : ""}
+
+</tr>
+
+${blockRows}
+
+</table>
+
 </div>`;
 
-
-                if (checkbox.checked) total += amount;
             });
 
+            // GRAND TOTAL
+            if (showAmountColumn) {
+
+                html += `
+<table style="
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
+">
+
+<tr>
+
+<td style="
+padding:10px;
+font-weight:bold;
+text-align:right;
+border:1px solid #ccc;
+">
+GRAND TOTAL
+</td>
+
+<td style="
+padding:10px;
+font-weight:bold;
+text-align:center;
+border:1px solid #ccc;
+">
+₹${total.toLocaleString("en-IN")}
+</td>
+
+</tr>
+
+</table>`;
+            }
 
             html += `<hr style="margin:15px 0;">`;
-            //Add Today date and signature line at the end
-            html += `<div style="display:flex; justify-content:space-between; align-items:center; margin-top:30px;">
-    <div style="font-size:14px; color:#555;">Date: ${formatDate(new Date())}</div>
-    <div style="font-size:14px; color:#555;">Signature: Azad Singh Sandhu | Uday Maan </div>
+
+            html += `
+<div style="
+display:flex;
+justify-content:space-between;
+margin-top:30px;
+">
+
+<div>
+Date: ${formatDate(new Date())}
+</div>
+
+<div>
+Signature: Azad Singh Sandhu | Uday Maan
+</div>
+
 </div>`;
-            const container = document.createElement("div");
-            container.innerHTML = html;
 
-            console.log("Generated HTML for PDF:", html);
+            // OPEN HTML IN NEW TAB
+                const newWindow = window.open();
+                newWindow.document.write(html);
+                newWindow.document.close();
 
-            // //Show html in new tab
-            // const newWindow = window.open();
-            // newWindow.document.write(html);
-            // newWindow.document.close();
 
-            //Download Html Only
-             const blob = new Blob([html], { type: "text/html" });
-             const url = URL.createObjectURL(blob);
-             const a = document.createElement("a");
-             a.href = url;
-             a.download = "SoulmatEvents_" + `${client}_Bill.html`;
-             a.click();
-             URL.revokeObjectURL(url);
+            // // DOWNLOAD HTML
+            // const blob = new Blob([html], { type: "text/html" });
 
+            // const url = URL.createObjectURL(blob);
+
+            // const a = document.createElement("a");
+
+            // a.href = url;
+
+            // a.download =
+            //     "SoulmatEvents_" +
+            //     client +
+            //     "_Bill.html";
+
+            // a.click();
+
+            // URL.revokeObjectURL(url);
         }
-
         function formatDate(date) {
             return new Date(date).toLocaleDateString('en-GB', {
                 day: '2-digit',
