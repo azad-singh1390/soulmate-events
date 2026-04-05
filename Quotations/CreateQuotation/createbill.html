@@ -132,6 +132,92 @@
             padding: 8px;
         }
 
+        .blockLightItemDetails {
+            width: 100%;
+            min-height: 80px;
+            resize: vertical;
+            box-sizing: border-box;
+            font-family: inherit;
+            font-size: 14px;
+            padding: 8px;
+        }
+
+        .blockLedScreenItemDetails {
+            width: 100%;
+            min-height: 80px;
+            resize: vertical;
+            box-sizing: border-box;
+            font-family: inherit;
+            font-size: 14px;
+            padding: 8px;
+        }
+
+
+        .blockAnchorItemDetails {
+            width: 100%;
+            min-height: 80px;
+            resize: vertical;
+            box-sizing: border-box;
+            font-family: inherit;
+            font-size: 14px;
+            padding: 8px;
+        }
+
+
+        .blockArtistsItemDetails {
+            width: 100%;
+            min-height: 80px;
+            resize: vertical;
+            box-sizing: border-box;
+            font-family: inherit;
+            font-size: 14px;
+            padding: 8px;
+        }
+
+
+        .blockDholiesItemDetails {
+            width: 100%;
+            min-height: 80px;
+            resize: vertical;
+            box-sizing: border-box;
+            font-family: inherit;
+            font-size: 14px;
+            padding: 8px;
+        }
+
+
+        .blockTechriderItemDetails {
+            width: 100%;
+            min-height: 80px;
+            resize: vertical;
+            box-sizing: border-box;
+            font-family: inherit;
+            font-size: 14px;
+            padding: 8px;
+        }
+
+
+        .blockSpecialEffectsItemDetails {
+            width: 100%;
+            min-height: 80px;
+            resize: vertical;
+            box-sizing: border-box;
+            font-family: inherit;
+            font-size: 14px;
+            padding: 8px;
+        }
+
+        .blockBaratItemDetails {
+            width: 100%;
+            min-height: 80px;
+            resize: vertical;
+            box-sizing: border-box;
+            font-family: inherit;
+            font-size: 14px;
+            padding: 8px;
+        }
+
+
         .blockStageItemDetails {
             width: 100%;
             min-height: 80px;
@@ -157,6 +243,54 @@
         }
 
         .blockSoundAmount {
+            width: 100px;
+            padding: 5px;
+            font-size: 14px;
+        }
+
+        .blockLightAmount {
+            width: 100px;
+            padding: 5px;
+            font-size: 14px;
+        }
+
+        .blockLedScreenAmount {
+            width: 100px;
+            padding: 5px;
+            font-size: 14px;
+        }
+
+        .blockAnchorAmount {
+            width: 100px;
+            padding: 5px;
+            font-size: 14px;
+        }
+
+        .blockArtistsAmount {
+            width: 100px;
+            padding: 5px;
+            font-size: 14px;
+        }
+
+        .blockDholiesAmount {
+            width: 100px;
+            padding: 5px;
+            font-size: 14px;
+        }
+
+        .blockTechriderAmount {
+            width: 100px;
+            padding: 5px;
+            font-size: 14px;
+        }
+
+        .blockSpecialEffectsAmount {
+            width: 100px;
+            padding: 5px;
+            font-size: 14px;
+        }
+
+        .blockBaratAmount {
             width: 100px;
             padding: 5px;
             font-size: 14px;
@@ -205,62 +339,105 @@
 
     <h2 align="center">Soulmate Bill Generation Page</h2>
 
-    <div class="form-row">
-        <label for="client" class="form-label">NAME</label>
-        <input id="client" class="form-input" placeholder="Client Name" value="Rahul Sharma">
+    <div class="form-box">
+
+        <!-- Checkbox -->
+        <div class="form-row">
+            <label>
+                <input type="checkbox" id="enableHeader"> Enable Header
+            </label>
+        </div>
+
+        <!-- Form Fields Wrapper -->
+        <div id="formFields">
+
+            <div class="form-row">
+                <label for="client" class="form-label">NAME</label>
+                <input id="client" class="form-input" placeholder="Client Name" value="Rahul Sharma">
+            </div>
+
+            <div class="form-row">
+                <label for="event" class="form-label">EVENT</label>
+                <select id="event" class="form-input">
+                    <option value="">Select Event</option>
+                    <option>Destination Wedding</option>
+                    <option>Wedding</option>
+                    <option>Sangeet</option>
+                    <option>Cocktail</option>
+                    <option>Haldi</option>
+                    <option>Engagement</option>
+                    <option>Roka ceremony</option>
+                    <option>Anniversary</option>
+                    <option>Reception</option>
+                    <option>Conference</option>
+                    <option>Corporate</option>
+                    <option>Birthday</option>
+                    <option>Other</option>
+                </select>
+            </div>
+
+            <div class="form-row" id="otherEventRow" style="display:none;">
+                <label for="otherEvent" class="form-label">OTHER</label>
+                <input id="otherEvent" class="form-input" placeholder="Enter Other Event">
+            </div>
+
+            <div class="form-row">
+                <label for="dateFrom" class="form-label">FROM</label>
+                <input type="date" id="dateFrom" class="form-input">
+            </div>
+
+            <div class="form-row">
+                <label for="dateTo" class="form-label">TO</label>
+                <input type="date" id="dateTo" class="form-input">
+            </div>
+
+            <div class="form-row">
+                <label for="venue" class="form-label">VENUE</label>
+                <select id="venue" class="form-input">
+                    <option value="">Select Venue</option>
+                    <option>Noor Mahal</option>
+                    <option>Eden</option>
+                    <option>Amani Farms</option>
+                    <option>Other</option>
+                </select>
+            </div>
+
+            <div class="form-row" id="otherVenueRow" style="display:none;">
+                <label for="otherVenue" class="form-label">OTHER</label>
+                <input id="otherVenue" class="form-input" placeholder="Enter Other Venue">
+            </div>
+
+        </div>
     </div>
 
-    <div class="form-row">
-        <label for="event" class="form-label">EVENT</label>
-        <select id="event" class="form-input">
-            <option value="">Select Event</option>
-            <option value="Destination Wedding">Destination Wedding</option>
-            <option value="Wedding">Wedding</option>
-            <option value="Sangeet">Sangeet</option>
-            <option value="Cocktail">Cocktail</option>
-            <option value="Haldi">Haldi</option>
-            <option value="Engagement">Engagement</option>
-            <option value="Roka ceremony">Roka ceremony</option>
-            <option value="Anniversary">Anniversary</option>
-            <option value="Reception">Reception</option>
-            <option value="Conference">Conference</option>
-            <option value="Corporate">Corporate</option>
-            <option value="Birthday">Birthday</option>
-            <option value="Other">Other</option>
-        </select>
-    </div>
+    <style>
+        .form-box {
+            border: 2px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: maximum;
+        }
 
-    <div class="form-row" id="otherEventRow" style="display:none;">
-        <label for="otherEvent" class="form-label">OTHER</label>
-        <input id="otherEvent" class="form-input" placeholder="Enter Other Event">
-    </div>
+        .form-row {
+            margin-bottom: 10px;
+        }
 
-    <div class="form-row">
-        <label for="dateFrom" class="form-label">FROM</label>
-        <input type="date" id="dateFrom" class="form-input">
-    </div>
+        .form-input {
+            width: 100%;
+            padding: 6px;
+        }
+    </style>
 
-    <div class="form-row">
-        <label for="dateTo" class="form-label">TO</label>
-        <input type="date" id="dateTo" class="form-input">
-    </div>
+    <script>
+        // Disable all fields initially
+        const formFields = document.querySelectorAll("#formFields input, #formFields select");
+        formFields.forEach(field => field.disabled = true);
 
-    <div class="form-row">
-        <label for="venue" class="form-label">VENUE</label>
-        <select id="venue" class="form-input">
-            <option value="">Select Venue</option>
-            <option value="Noor Mahal">Noor Mahal</option>
-            <option value="Eden">Eden</option>
-            <option value="Amani Farms">Amani Farm</option>
-            <option value="Other">Other</option>
-        </select>
-    </div>
-
-    <div class="form-row" id="otherVenueRow" style="display:none;">
-        <label for="otherVenue" class="form-label">OTHER</label>
-        <input id="otherVenue" class="form-input" placeholder="Enter Other Venue">
-    </div>
-
+        // Toggle enable/disable
+        document.getElementById("enableHeader").addEventListener("change", function () {
+            formFields.forEach(field => field.disabled = !this.checked);
+        });
+    </script>
     <h3>ITEM BLOCKS</h3>
     <div id="blocks"></div>
 
@@ -303,10 +480,13 @@
 <h4>Item Block ${blockCount}</h4>
 
 <label><b>Sound Details:</b></label>
-<textarea class="blockSoundItemsDetails">
-Sound System
+<textarea class="blockSoundItemsDetails">Sound System
 Cordless Mics
 DJ Console
+Professional DJ Jockey
+Sound Engineer
+Labor & Transport
+Genset & Maintainence
 </textarea>
 
 <div class="amount-row">
@@ -321,12 +501,56 @@ DJ Console
            disabled>
 </div>
 
+
 <br>
+<hr>
+
+<label><b>Light / Truss Details:</b></label>
+<textarea class="blockLightItemDetails">
+2 Pole Truss
+Sharpy, Led , Blinder & Flasher Lights
+Professional Light Operator
+</textarea>
+
+<div class="amount-row">
+    <label class="checkbox-label">
+        <input type="checkbox" class="checkboxLightAmount">
+        Total Amount
+    </label>
+
+    <input type="number"
+           class="blockLightAmount"
+           value="0"
+           disabled>
+</div>
+<br>
+<hr>
+
+
+<label><b>Led Screen Details:</b></label>
+<textarea class="blockLedScreenItemDetails">
+Double Led Screen [300 Sq. Ft.]
+Professional Video Operator
+</textarea>
+
+<div class="amount-row">
+    <label class="checkbox-label">
+        <input type="checkbox" class="checkboxLedScreenAmount">
+        Total Amount
+    </label>
+
+    <input type="number"
+           class="blockLedScreenAmount"
+           value="0"
+           disabled>
+</div>
+<br>
+<hr>
 
 <label><b>Stage / Floor Details:</b></label>
 <textarea class="blockStageItemDetails">
-Dance Floor 16x24
-Stage 16x32
+Dance Led or White Floor size As per Requirement
+Stage Plaform 16x32 With Stairs & Carpet
 </textarea>
 
 <div class="amount-row">
@@ -340,6 +564,120 @@ Stage 16x32
            value="0"
            disabled>
 </div>
+
+<br>
+<hr>
+
+<label><b>Anchor / Emcee Details:</b></label>
+<textarea class="blockAnchorItemDetails">
+Professional Anchor / Emcee
+</textarea>
+
+<div class="amount-row">
+    <label class="checkbox-label">
+        <input type="checkbox" class="checkboxAnchorAmount">
+        Total Amount
+    </label>
+    <input type="number"
+           class="blockAnchorAmount"
+           value="0"
+           disabled>
+</div>
+
+<br>
+<hr>
+
+
+<label><b>Artist Details:</b></label>
+<textarea class="blockArtistsItemDetails">
+Professional Artist / Performance
+</textarea>
+
+<div class="amount-row">
+    <label class="checkbox-label">
+        <input type="checkbox" class="checkboxArtistAmount">
+        Total Amount
+    </label>
+    <input type="number"
+           class="blockArtistAmount"
+           value="0"
+           disabled>
+</div>
+
+<br>
+<hr>
+
+<label><b>Dhol Details:</b></label>
+<textarea class="blockDholiesItemDetails">
+Professional Dhol Players
+</textarea>
+
+<div class="amount-row">
+    <label class="checkbox-label">
+        <input type="checkbox" class="checkboxDholAmount">
+        Total Amount
+    </label>
+    <input type="number"
+           class="blockDholAmount"
+           value="0"
+           disabled>
+</div>
+<br>
+<hr>
+<label><b>Tech Rider Details:</b></label>
+<textarea class="blockTechriderItemDetails">
+Tech Rider As Per Requirement
+</textarea>
+
+<div class="amount-row">
+    <label class="checkbox-label">
+        <input type="checkbox" class="checkboxTechRiderAmount">
+        Total Amount
+    </label>
+    <input type="number"
+           class="blockTechRiderAmount"
+           value="0"
+           disabled>
+</div>
+
+<br>
+<hr>
+<label><b> Special Effects Details:</b></label>
+<textarea class="blockSpecialEffectsItemDetails">
+Special Effects As Per Requirement
+</textarea>
+
+<div class="amount-row">
+    <label class="checkbox-label">
+        <input type="checkbox" class="checkboxSpecialEffectsAmount">
+        Total Amount
+    </label>
+    <input type="number"
+           class="blockSpecialEffectsAmount"
+           value="0"
+           disabled>
+</div>
+
+<br>
+<hr>
+
+<label><b>Barat Details:</b></label>
+<textarea class="blockBaratItemDetails">
+Professional Barat / Procession
+</textarea>
+
+<div class="amount-row">
+    <label class="checkbox-label">
+        <input type="checkbox" class="checkboxBaratAmount">
+        Total Amount
+    </label>
+    <input type="number"
+           class="blockBaratAmount"
+           value="0"
+           disabled>
+</div>
+
+
 
 <button class="removeBtn"
         onclick="this.parentElement.remove()">
@@ -360,6 +698,87 @@ Remove
                 if (!soundCheckbox.checked)
                     soundAmount.value = 0;
             });
+
+            // LIGHT checkbox logic 
+            const lightCheckbox = div.querySelector(".checkboxLightAmount");
+            const lightAmount = div.querySelector(".blockLightAmount");
+            lightCheckbox.addEventListener("change", () => {
+                lightAmount.disabled = !lightCheckbox.checked;
+
+                if (!lightCheckbox.checked)
+                    lightAmount.value = 0;
+            });
+
+            // LED SCREEN checkbox logic
+            const ledScreenCheckbox = div.querySelector(".checkboxLedScreenAmount");
+            const ledScreenAmount = div.querySelector(".blockLedScreenAmount");
+            ledScreenCheckbox.addEventListener("change", () => {
+                ledScreenAmount.disabled = !ledScreenCheckbox.checked;
+
+                if (!ledScreenCheckbox.checked)
+                    ledScreenAmount.value = 0;
+            });
+
+            // ANCHOR checkbox logic
+            const anchorCheckbox = div.querySelector(".checkboxAnchorAmount");
+            const anchorAmount = div.querySelector(".blockAnchorAmount");
+            anchorCheckbox.addEventListener("change", () => {
+                anchorAmount.disabled = !anchorCheckbox.checked;
+
+                if (!anchorCheckbox.checked)
+                    anchorAmount.value = 0;
+            });
+
+            // ARTIST checkbox logic
+            const artistCheckbox = div.querySelector(".checkboxArtistAmount");
+            const artistAmount = div.querySelector(".blockArtistAmount");
+            artistCheckbox.addEventListener("change", () => {
+                artistAmount.disabled = !artistCheckbox.checked;
+
+                if (!artistCheckbox.checked)
+                    artistAmount.value = 0;
+            });
+
+            // DHOL checkbox logic
+            const dholCheckbox = div.querySelector(".checkboxDholAmount");
+            const dholAmount = div.querySelector(".blockDholAmount");
+            dholCheckbox.addEventListener("change", () => {
+                dholAmount.disabled = !dholCheckbox.checked;
+
+                if (!dholCheckbox.checked)
+                    dholAmount.value = 0;
+            });
+
+            // TECH RIDER checkbox logic
+            const techRiderCheckbox = div.querySelector(".checkboxTechRiderAmount");
+            const techRiderAmount = div.querySelector(".blockTechRiderAmount");
+            techRiderCheckbox.addEventListener("change", () => {
+                techRiderAmount.disabled = !techRiderCheckbox.checked;
+
+                if (!techRiderCheckbox.checked)
+                    techRiderAmount.value = 0;
+            });
+
+            // SPECIAL EFFECTS checkbox logic
+            const specialEffectsCheckbox = div.querySelector(".checkboxSpecialEffectsAmount");
+            const specialEffectsAmount = div.querySelector(".blockSpecialEffectsAmount");
+            specialEffectsCheckbox.addEventListener("change", () => {
+                specialEffectsAmount.disabled = !specialEffectsCheckbox.checked;
+
+                if (!specialEffectsCheckbox.checked)
+                    specialEffectsAmount.value = 0;
+            });
+
+            // BARAT checkbox logic
+            const baratCheckbox = div.querySelector(".checkboxBaratAmount");
+            const baratAmount = div.querySelector(".blockBaratAmount");
+            baratCheckbox.addEventListener("change", () => {
+                baratAmount.disabled = !baratCheckbox.checked;
+
+                if (!baratCheckbox.checked)
+                    baratAmount.value = 0;
+            });
+
 
             // STAGE checkbox logic
             const stageCheckbox = div.querySelector(".checkboxStageAmount");
@@ -430,6 +849,80 @@ Remove
                     return false;
                 }
 
+                // LIGHT textarea
+                const lightTextarea =
+                    block.querySelector(".blockLightItemDetails");
+
+                if (lightTextarea.value.trim() === "") {
+
+                    alert("Light items cannot be empty");
+                    lightTextarea.focus();
+                    return false;
+                }
+
+                // LED SCREEN textarea
+                const ledScreenTextarea =
+                    block.querySelector(".blockLedScreenItemDetails");
+
+                if (ledScreenTextarea.value.trim() === "") {
+
+                    alert("Led Screen items cannot be empty");
+                    ledScreenTextarea.focus();
+                    return false;
+                }
+
+                // ANCHOR textarea
+                const anchorTextarea =
+                    block.querySelector(".blockAnchorItemDetails");
+                if (anchorTextarea.value.trim() === "") {
+                    alert("Anchor/Emcee details cannot be empty");
+                    anchorTextarea.focus();
+                    return false;
+                }
+
+                // ARTIST textarea
+                const artistTextarea =
+                    block.querySelector(".blockArtistsItemDetails");
+                if (artistTextarea.value.trim() === "") {
+                    alert("Artist details cannot be empty");
+                    artistTextarea.focus();
+                    return false;
+                }
+                // DHOL textarea
+                const dholTextarea =
+                    block.querySelector(".blockDholiesItemDetails");
+                if (dholTextarea.value.trim() === "") {
+                    alert("Dhol details cannot be empty");
+                    dholTextarea.focus();
+                    return false;
+                }
+                // TECH RIDER textarea
+                const techRiderTextarea =
+                    block.querySelector(".blockTechriderItemDetails");
+                if (techRiderTextarea.value.trim() === "") {
+                    alert("Tech Rider details cannot be empty");
+                    techRiderTextarea.focus();
+                    return false;
+                }
+                // SPECIAL EFFECTS textarea
+                const specialEffectsTextarea =
+                    block.querySelector(".blockSpecialEffectsItemDetails");
+                if (specialEffectsTextarea.value.trim() === "") {
+                    alert("Special Effects details cannot be empty");
+                    specialEffectsTextarea.focus();
+                    return false;
+                }
+
+                // BARAT textarea
+                const baratTextarea =
+                    block.querySelector(".blockBaratItemDetails");
+                if (baratTextarea.value.trim() === "") {
+                    alert("Barat details cannot be empty");
+                    baratTextarea.focus();
+                    return false;
+                }
+
+
                 // STAGE textarea
                 const stageTextarea =
                     block.querySelector(".blockStageItemDetails");
@@ -456,6 +949,80 @@ Remove
                     return false;
                 }
 
+                // ANCHOR amount validation
+                const anchorCheckbox =
+                    block.querySelector(".checkboxAnchorAmount");
+                const anchorAmount =
+                    block.querySelector(".blockAnchorAmount");
+                if (anchorCheckbox.checked &&
+                    Number(anchorAmount.value) <= 0) {
+                    alert("Enter Anchor/Emcee amount");
+                    anchorAmount.focus();
+                    return false;
+                }
+                // ARTIST amount validation
+                const artistCheckbox =
+                    block.querySelector(".checkboxArtistAmount");
+                const artistAmount =
+                    block.querySelector(".blockArtistAmount");
+
+                if (artistCheckbox.checked &&
+                    Number(artistAmount.value) <= 0) {
+                    alert("Enter Artist amount");
+                    artistAmount.focus();
+                    return false;
+                }
+
+                // DHOL amount validation
+                const dholCheckbox =
+                    block.querySelector(".checkboxDholAmount");
+                const dholAmount =
+                    block.querySelector(".blockDholAmount");
+                if (dholCheckbox.checked &&
+                    Number(dholAmount.value) <= 0) {
+                    alert("Enter Dhol amount");
+                    dholAmount.focus();
+                    return false;
+                }
+
+                // TECH RIDER amount validation
+                const techRiderCheckbox =
+                    block.querySelector(".checkboxTechRiderAmount");
+                const techRiderAmount =
+                    block.querySelector(".blockTechRiderAmount");
+                if (techRiderCheckbox.checked &&
+                    Number(techRiderAmount.value) <= 0) {
+                    alert("Enter Tech Rider amount");
+                    techRiderAmount.focus();
+                    return false;
+                }
+
+                // SPECIAL EFFECTS amount validation
+                const specialEffectsCheckbox =
+                    block.querySelector(".checkboxSpecialEffectsAmount");
+                const specialEffectsAmount =
+                    block.querySelector(".blockSpecialEffectsAmount");
+                if (specialEffectsCheckbox.checked &&
+                    Number(specialEffectsAmount.value) <= 0) {
+                    alert("Enter Special Effects amount");
+                    specialEffectsAmount.focus();
+                    return false;
+                }
+
+                // BARAT amount validation
+                const baratCheckbox =
+                    block.querySelector(".checkboxBaratAmount");
+                const baratAmount =
+                    block.querySelector(".blockBaratAmount");
+                if (baratCheckbox.checked &&
+                    Number(baratAmount.value) <= 0) {
+                    alert("Enter Barat amount");
+                    baratAmount.focus();
+                    return false;
+                }
+
+
+
                 // STAGE amount validation
                 const stageCheckbox =
                     block.querySelector(".checkboxStageAmount");
@@ -468,6 +1035,33 @@ Remove
 
                     alert("Enter Stage amount");
                     stageAmount.focus();
+                    return false;
+                }
+
+                // LED SCREEN amount validation
+                const ledScreenCheckbox =
+                    block.querySelector(".checkboxLedScreenAmount");
+                const ledScreenAmount =
+                    block.querySelector(".blockLedScreenAmount");
+                if (ledScreenCheckbox.checked &&
+                    Number(ledScreenAmount.value) <= 0) {
+                    alert("Enter Led Screen amount");
+                    ledScreenAmount.focus();
+                    return false;
+                }
+
+                // LIGHT amount validation
+                const lightCheckbox =
+                    block.querySelector(".checkboxLightAmount");
+
+                const lightAmount =
+                    block.querySelector(".blockLightAmount");
+
+                if (lightCheckbox.checked &&
+                    Number(lightAmount.value) <= 0) {
+
+                    alert("Enter Light amount");
+                    lightAmount.focus();
                     return false;
                 }
             }
@@ -509,86 +1103,129 @@ Remove
                 const stageCheckbox =
                     block.querySelector(".checkboxStageAmount");
 
+                const ledScreenCheckbox =
+                    block.querySelector(".checkboxLedScreenAmount");
+
+                const lightCheckbox =
+                    block.querySelector(".checkboxLightAmount");
+
                 if (soundCheckbox.checked ||
-                    stageCheckbox.checked) {
+                    stageCheckbox.checked ||
+                    ledScreenCheckbox.checked ||
+                    lightCheckbox.checked) {
 
                     showAmountColumn = true;
                 }
 
             });
 
-            // START HTML
-            let html = `<div style="max-width:max-width; margin:auto; font-family:Arial, sans-serif; background-color:white; padding:20px;">`;
+            const enableHeader = document.getElementById("enableHeader").checked;
 
-            html += `
-
+            html = `
 <h2 style="text-align:center; margin-bottom:5px; letter-spacing:1px; color:black;">
 Soulmate Events
 </h2>
 
 <hr style="border:0; border-top:1px solid #ddd; margin:10px 0;">
-
-<div style="
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:10px;
-background-color:white;
-">
-
-<img src="${logoBase64}"
-style="height:70px; object-fit:contain;">
-
-<div style="
-text-align:right;
-font-size:13px;
-line-height:1.6;
-">
-
-<strong>
-soulmatevents0009@gmail.com<br>
-+91 9253707777<br>
-+91 9729035555
-</strong>
-
-</div>
-
-</div>
-
-<hr style="margin:10px 0;">
-
-<table style="
-width:100%;
-font-size:14px;
-border-collapse: collapse;
-margin-bottom:15px;
-background-color:#F54927;
-">
-
-<tr>
-<td style="width:20%; font-weight:bold;">Name</td>
-<td>${client}</td>
-</tr>
-
-<tr>
-<td style="font-weight:bold;">Event</td>
-<td>${event}</td>
-</tr>
-
-<tr>
-<td style="font-weight:bold;">Venue</td>
-<td>${venue}</td>
-</tr>
-
-<tr>
-<td style="font-weight:bold;">Dates</td>
-<td>${formattedFrom} - ${formattedTo}</td>
-</tr>
-
-</table>
-
-<hr style="margin:15px 0;">
 `;
+
+            if (enableHeader) {
+
+                html += `
+    <div style="
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:10px;
+    background-color:white;
+    ">
+
+    <img src="${logoBase64}"
+    style="height:70px; object-fit:contain;">
+
+    <div style="
+    text-align:right;
+    font-size:13px;
+    line-height:1.6;
+    ">
+
+    <strong>
+    soulmatevents0009@gmail.com<br>
+    +91 9253707777<br>
+    +91 9729035555
+    </strong>
+
+    </div>
+
+    </div>
+
+    <hr style="margin:10px 0;">
+
+    <table style="
+    width:100%;
+    font-size:14px;
+    border-collapse: collapse;
+    margin-bottom:15px;
+    background-color:#F54927;
+    ">
+
+    <tr>
+    <td style="width:20%; font-weight:bold;">Name</td>
+    <td>${client}</td>
+    </tr>
+
+    <tr>
+    <td style="font-weight:bold;">Event</td>
+    <td>${event}</td>
+    </tr>
+
+    <tr>
+    <td style="font-weight:bold;">Venue</td>
+    <td>${venue}</td>
+    </tr>
+
+    <tr>
+    <td style="font-weight:bold;">Dates</td>
+    <td>${formattedFrom} - ${formattedTo}</td>
+    </tr>
+
+    </table>
+
+    <hr style="margin:15px 0;">
+    `;
+            }
+            else {
+                              html += `
+    <div style="
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:10px;
+    background-color:white;
+    ">
+
+    <img src="${logoBase64}"
+    style="height:70px; object-fit:contain;">
+
+    <div style="
+    text-align:right;
+    font-size:13px;
+    line-height:1.6;
+    ">
+
+    <strong>
+    soulmatevents0009@gmail.com<br>
+    +91 9253707777<br>
+    +91 9729035555
+    </strong>
+
+    </div>
+
+    </div>
+
+    <hr style="margin:10px 0;">`;
+            }
+            
 
             // PROCESS BLOCKS
             document.querySelectorAll(".block").forEach((block) => {
@@ -642,6 +1279,317 @@ ${formattedSoundItems}
 
 ${showAmountColumn ? `<td style="border:1px solid #ccc;"></td>` : ""}
 
+</tr>`;
+                    }
+                }
+
+                // LIGHT
+                const lightItems =
+                    block.querySelector(".blockLightItemDetails").value.trim();
+                const lightAmount =
+                    Number(block.querySelector(".blockLightAmount").value) || 0;
+                const lightCheckbox =
+                    block.querySelector(".checkboxLightAmount");
+                if (lightItems !== "") {
+                    const formattedLightItems =
+                        "<ul>" +
+                        lightItems
+                            .split("\n")
+                            .map(line => `<li>${line.trim()}</li>`)
+                            .join("")
+                        + "</ul>";
+
+                    if (lightCheckbox.checked && showAmountColumn) {
+
+                        blockRows += `
+<tr>
+<td style="padding:8px; border:1px solid #ccc;">
+${formattedLightItems}
+</td>
+<td style="padding:8px; border:1px solid #ccc; text-align:center;">
+₹${lightAmount.toLocaleString("en-IN")}
+</td>
+</tr>`;
+
+                        total += lightAmount;
+
+                    } else {
+
+                        blockRows += `
+
+<tr>
+<td style="padding:8px; border:1px solid #ccc;"
+colspan="${showAmountColumn ? 1 : 2}">
+${formattedLightItems}
+</td>
+${showAmountColumn ? `<td style="border:1px solid #ccc;"></td>` : ""}
+</tr>`;
+                    }
+                }
+
+                // LED SCREEN
+                const ledScreenItems =
+                    block.querySelector(".blockLedScreenItemDetails").value.trim();
+                const ledScreenAmount =
+                    Number(block.querySelector(".blockLedScreenAmount").value) || 0;
+                const ledScreenCheckbox =
+                    block.querySelector(".checkboxLedScreenAmount");
+                if (ledScreenItems !== "") {
+                    const formattedLedScreenItems =
+                        "<ul>" +
+                        ledScreenItems
+                            .split("\n")
+                            .map(line => `<li>${line.trim()}</li>`)
+                            .join("")
+                        + "</ul>";
+                    if (ledScreenCheckbox.checked && showAmountColumn) {
+                        blockRows += `
+<tr>
+<td style="padding:8px; border:1px solid #ccc;">
+${formattedLedScreenItems}
+</td>
+<td style="padding:8px; border:1px solid #ccc; text-align:center;">
+₹${ledScreenAmount.toLocaleString("en-IN")}
+</td>
+</tr>`;
+                        total += ledScreenAmount;
+                    } else {
+                        blockRows += `
+<tr>
+<td style="padding:8px; border:1px solid #ccc;"
+colspan="${showAmountColumn ? 1 : 2}">
+${formattedLedScreenItems}
+</td>
+${showAmountColumn ? `<td style="border:1px solid #ccc;"></td>` : ""}
+</tr>`;
+                    }
+                }
+
+
+                // ANCHOR
+                const anchorItems =
+                    block.querySelector(".blockAnchorItemDetails").value.trim();
+                const anchorAmount =
+                    Number(block.querySelector(".blockAnchorAmount").value) || 0;
+                const anchorCheckbox =
+                    block.querySelector(".checkboxAnchorAmount");
+                if (anchorItems !== "") {
+                    const formattedAnchorItems =
+                        "<ul>" +
+                        anchorItems
+                            .split("\n")
+                            .map(line => `<li>${line.trim()}</li>`)
+                            .join("")
+                        + "</ul>";
+                    if (anchorCheckbox.checked && showAmountColumn) {
+                        blockRows += `
+<tr>
+<td style="padding:8px; border:1px solid #ccc;">
+${formattedAnchorItems}
+</td>
+<td style="padding:8px; border:1px solid #ccc; text-align:center;">
+₹${anchorAmount.toLocaleString("en-IN")}
+</td>
+</tr>`;
+                        total += anchorAmount;
+                    } else {
+                        blockRows += `
+<tr>
+<td style="padding:8px; border:1px solid #ccc;"
+colspan="${showAmountColumn ? 1 : 2}">
+${formattedAnchorItems}
+</td>
+${showAmountColumn ? `<td style="border:1px solid #ccc;"></td>` : ""}
+</tr>`;
+                    }
+                }
+
+                // ARTIST
+                const artistItems =
+                    block.querySelector(".blockArtistsItemDetails").value.trim();
+                const artistAmount =
+                    Number(block.querySelector(".blockArtistAmount").value) || 0;
+                const artistCheckbox =
+                    block.querySelector(".checkboxArtistAmount");
+                if (artistItems !== "") {
+                    const formattedArtistItems =
+                        "<ul>" +
+                        artistItems
+                            .split("\n")
+                            .map(line => `<li>${line.trim()}</li>`)
+                            .join("")
+                        + "</ul>";
+                    if (artistCheckbox.checked && showAmountColumn) {
+                        blockRows += `
+<tr>
+<td style="padding:8px; border:1px solid #ccc;">
+${formattedArtistItems}
+</td>
+<td style="padding:8px; border:1px solid #ccc; text-align:center;">
+₹${artistAmount.toLocaleString("en-IN")}
+</td>
+</tr>`;
+                        total += artistAmount;
+                    } else {
+                        blockRows += `
+<tr>
+<td style="padding:8px; border:1px solid #ccc;"
+colspan="${showAmountColumn ? 1 : 2}">
+${formattedArtistItems}
+</td>
+${showAmountColumn ? `<td style="border:1px solid #ccc;"></td>` : ""}
+</tr>`;
+                    }
+                }
+
+                // DHOL
+                const dholItems =
+                    block.querySelector(".blockDholiesItemDetails").value.trim();
+                const dholAmount =
+                    Number(block.querySelector(".blockDholAmount").value) || 0;
+                const dholCheckbox =
+                    block.querySelector(".checkboxDholAmount");
+                if (dholItems !== "") {
+                    const formattedDholItems =
+                        "<ul>" +
+                        dholItems
+                            .split("\n")
+                            .map(line => `<li>${line.trim()}</li>`)
+                            .join("")
+                        + "</ul>";
+                    if (dholCheckbox.checked && showAmountColumn) {
+                        blockRows += `
+<tr>
+<td style="padding:8px; border:1px solid #ccc;">
+${formattedDholItems}
+</td>
+<td style="padding:8px; border:1px solid #ccc; text-align:center;">
+₹${dholAmount.toLocaleString("en-IN")}
+</td>
+</tr>`;
+                        total += dholAmount;
+                    } else {
+                        blockRows += `
+<tr>
+<td style="padding:8px; border:1px solid #ccc;"
+colspan="${showAmountColumn ? 1 : 2}">
+${formattedDholItems}
+</td>
+${showAmountColumn ? `<td style="border:1px solid #ccc;"></td>` : ""}
+</tr>`;
+                    }
+                }
+
+                // TECH RIDER
+                const techRiderItems =
+                    block.querySelector(".blockTechriderItemDetails").value.trim();
+                const techRiderAmount =
+                    Number(block.querySelector(".blockTechRiderAmount").value) || 0;
+                const techRiderCheckbox =
+                    block.querySelector(".checkboxTechRiderAmount");
+                if (techRiderItems !== "") {
+                    const formattedTechRiderItems =
+                        "<ul>" +
+                        techRiderItems
+                            .split("\n")
+                            .map(line => `<li>${line.trim()}</li>`)
+                            .join("")
+                        + "</ul>";
+                    if (techRiderCheckbox.checked && showAmountColumn) {
+                        blockRows += `
+<tr>
+<td style="padding:8px; border:1px solid #ccc;">
+${formattedTechRiderItems}
+</td>
+<td style="padding:8px; border:1px solid #ccc; text-align:center;">
+₹${techRiderAmount.toLocaleString("en-IN")}
+</td>
+</tr>`;
+                        total += techRiderAmount;
+                    } else {
+                        blockRows += `
+<tr>
+<td style="padding:8px; border:1px solid #ccc;"
+colspan="${showAmountColumn ? 1 : 2}">
+${formattedTechRiderItems}
+</td>
+${showAmountColumn ? `<td style="border:1px solid #ccc;"></td>` : ""}
+</tr>`;
+                    }
+                }
+
+                // SPECIAL EFFECTS
+                const specialEffectsItems =
+                    block.querySelector(".blockSpecialEffectsItemDetails").value.trim();
+                const specialEffectsAmount =
+                    Number(block.querySelector(".blockSpecialEffectsAmount").value) || 0;
+                const specialEffectsCheckbox =
+                    block.querySelector(".checkboxSpecialEffectsAmount");
+                if (specialEffectsItems !== "") {
+                    const formattedSpecialEffectsItems =
+                        "<ul>" +
+                        specialEffectsItems
+                            .split("\n")
+                            .map(line => `<li>${line.trim()}</li>`)
+                            .join("")
+                        + "</ul>";
+                    if (specialEffectsCheckbox.checked && showAmountColumn) {
+                        blockRows += `
+<tr>
+<td style="padding:8px; border:1px solid #ccc;">
+${formattedSpecialEffectsItems}
+</td>
+<td style="padding:8px; border:1px solid #ccc; text-align:center;">
+₹${specialEffectsAmount.toLocaleString("en-IN")}
+</td>
+</tr>`;
+                        total += specialEffectsAmount;
+                    } else {
+                        blockRows += `
+<tr>
+<td style="padding:8px; border:1px solid #ccc;"
+colspan="${showAmountColumn ? 1 : 2}">
+${formattedSpecialEffectsItems}
+</td>
+${showAmountColumn ? `<td style="border:1px solid #ccc;"></td>` : ""}
+</tr>`;
+                    }
+                }
+
+                // BARAT
+                const baratItems =
+                    block.querySelector(".blockBaratItemDetails").value.trim();
+                const baratAmount =
+                    Number(block.querySelector(".blockBaratAmount").value) || 0;
+                const baratCheckbox =
+                    block.querySelector(".checkboxBaratAmount");
+                if (baratItems !== "") {
+                    const formattedBaratItems =
+                        "<ul>" +
+                        baratItems
+                            .split("\n")
+                            .map(line => `<li>${line.trim()}</li>`)
+                            .join("")
+                        + "</ul>";
+                    if (baratCheckbox.checked && showAmountColumn) {
+                        blockRows += `
+<tr>
+<td style="padding:8px; border:1px solid #ccc;">
+${formattedBaratItems}
+</td>
+<td style="padding:8px; border:1px solid #ccc; text-align:center;">
+₹${baratAmount.toLocaleString("en-IN")}
+</td>
+</tr>`;
+                        total += baratAmount;
+                    } else {
+                        blockRows += `
+<tr>
+<td style="padding:8px; border:1px solid #ccc;"
+colspan="${showAmountColumn ? 1 : 2}">
+${formattedBaratItems}
+</td>
+${showAmountColumn ? `<td style="border:1px solid #ccc;"></td>` : ""}
 </tr>`;
                     }
                 }
@@ -790,9 +1738,9 @@ Signature: Azad Singh Sandhu | Uday Maan
 </div>`;
 
             // OPEN HTML IN NEW TAB
-                const newWindow = window.open();
-                newWindow.document.write(html);
-                newWindow.document.close();
+            const newWindow = window.open();
+            newWindow.document.write(html);
+            newWindow.document.close();
 
 
             // // DOWNLOAD HTML
