@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Soulmate Event Quotation</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .form-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            width: 30%;
+        }
+
+        .form-label {
+            width: 80px;
+            font-weight: bold;
+        }
+
+        .form-input {
+            flex: 1;
+        }
+
+        .block {
+            background: white;
+            padding: 15px;
+            margin-bottom: 12px;
+            border: 1px solid #ccc;
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        .blockItemsDetails {
+            width: 100%;
+            min-height: 80px;
+            resize: vertical;
+            box-sizing: border-box;
+            font-family: inherit;
+            font-size: 14px;
+            padding: 8px;
+        }
+
+        .block-footer {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: bold;
+        }
+
+        .blockAmount {
+            width: 100px;
+            padding: 5px;
+            font-size: 14px;
+        }
+
+        .removeBtn {
+            margin-left: auto;
+            padding: 6px 12px;
+            background-color: #d9534f;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .removeBtn:hover {
+            background-color: #c9302c;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 6px 12px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2 align="center">Soulmate Bill Generation Page</h2>
+
+    <div class="form-row">
+        <label for="client" class="form-label">NAME</label>
+        <input id="client" class="form-input" placeholder="Client Name" value="Rahul Sharma">
+    </div>
+
+    <div class="form-row">
+        <label for="event" class="form-label">EVENT</label>
+        <select id="event" class="form-input">
+            <option value="">Select Event</option>
+            <option value="Destination Wedding">Destination Wedding</option>
+            <option value="Wedding">Wedding</option>
+            <option value="Sangeet">Sangeet</option>
+            <option value="Cocktail">Cocktail</option>
+            <option value="Haldi">Haldi</option>
+            <option value="Engagement">Engagement</option>
+            <option value="Roka ceremony">Roka ceremony</option>
+            <option value="Anniversary">Anniversary</option>
+            <option value="Reception">Reception</option>
+            <option value="Conference">Conference</option>
+            <option value="Corporate">Corporate</option>
+            <option value="Birthday">Birthday</option>
+            <option value="Other">Other</option>
+        </select>
+    </div>
+
+    <div class="form-row" id="otherEventRow" style="display:none;">
+        <label for="otherEvent" class="form-label">OTHER</label>
+        <input id="otherEvent" class="form-input" placeholder="Enter Other Event">
+    </div>
+
+    <div class="form-row">
+        <label for="dateFrom" class="form-label">FROM</label>
+        <input type="date" id="dateFrom" class="form-input">
+    </div>
+
+    <div class="form-row">
+        <label for="dateTo" class="form-label">TO</label>
+        <input type="date" id="dateTo" class="form-input">
+    </div>
+
+    <div class="form-row">
+        <label for="venue" class="form-label">VENUE</label>
+        <select id="venue" class="form-input">
+            <option value="">Select Venue</option>
+            <option value="Noor Mahal">Noor Mahal</option>
+            <option value="Eden">Eden</option>
+            <option value="Amani Farms">Amani Farm</option>
+            <option value="Other">Other</option>
+        </select>
+    </div>
+
+    <div class="form-row" id="otherVenueRow" style="display:none;">
+        <label for="otherVenue" class="form-label">OTHER</label>
+        <input id="otherVenue" class="form-input" placeholder="Enter Other Venue">
+    </div>
+
+    <h3>ITEM BLOCKS</h3>
+    <div id="blocks"></div>
+
+    <button onclick="addBlock()">➕ Add New Item Block</button>
+    <button onclick="generatePDF()">📄 Generate PDF</button>
+
+    <script>
+        let blockCount = 0;
+
+        // On page load
+        window.onload = function () {
+            const today = new Date().toISOString().split("T")[0];
+            document.getElementById("dateFrom").value = today;
+            document.getElementById("dateTo").value = today;
+            document.getElementById("event").value = "Destination Wedding";
+            document.getElementById("venue").value = "Noor Mahal";
+            addBlock();
+        };
+
+        // Show/hide other fields
+        document.getElementById("event").addEventListener("change", () => {
+            document.getElementById("otherEventRow").style.display = (document.getElementById("event").value === "Other") ? "flex" : "none";
+        });
+        document.getElementById("venue").addEventListener("change", () => {
+            document.getElementById("otherVenueRow").style.display = (document.getElementById("venue").value === "Other") ? "flex" : "none";
+        });
+
+        // Add new block
+        function addBlock() {
+            blockCount++;
+            const div = document.createElement("div");
+            div.className = "block";
+            div.innerHTML = `
+<h4>Item Block ${blockCount}</h4>
+<textarea class="blockItemsDetails">Sound System
+Cordless Mics
+DJ Console</textarea>
+<div class="block-footer">
+<label class="checkbox-label"><input type="checkbox" class="checkboxAmount"> Total Amount</label>
+<input type="number" class="blockAmount" value="0" disabled>
+<button class="removeBtn" onclick="this.parentElement.parentElement.remove()">Remove</button>
+</div>`;
+            document.getElementById("blocks").appendChild(div);
+            const checkbox = div.querySelector(".checkboxAmount");
+            const amount = div.querySelector(".blockAmount");
+            checkbox.addEventListener("change", () => {
+                amount.disabled = !checkbox.checked;
+                if (!checkbox.checked) amount.value = 0;
+            });
+        }
+
+        // Form validation
+        function validateForm() {
+            const inputs = document.querySelectorAll("input");
+            for (let input of inputs) {
+                if (input.offsetParent === null) continue;
+                if (input.value.trim() === "") { alert("Please fill all required fields"); input.focus(); return false; }
+            }
+            const selects = document.querySelectorAll("select");
+            for (let select of selects) {
+                if (select.value === "") { alert("Please select all dropdowns"); select.focus(); return false; }
+            }
+            const blocks = document.querySelectorAll(".block");
+            if (blocks.length === 0) { alert("Add at least one item block"); return false; }
+            for (let block of blocks) {
+                const textarea = block.querySelector(".blockItemsDetails");
+                if (textarea.value.trim() === "") { alert("Block items cannot be empty"); textarea.focus(); return false; }
+            }
+            return true;
+        }
+
+        // Generate PDF
+        function generatePDF() {
+            if (!validateForm()) return;
+
+            const client = document.getElementById("client").value;
+            let event = document.getElementById("event").value;
+            if (event === "Other") event = document.getElementById("otherEvent").value;
+            let venue = document.getElementById("venue").value;
+            if (venue === "Other") venue = document.getElementById("otherVenue").value;
+            const from = document.getElementById("dateFrom").value;
+            const to = document.getElementById("dateTo").value;
+
+            const formattedFrom = formatDate(from);
+            const formattedTo = formatDate(to);
+            let total = 0;
+            let html = `<div style="max-width:max-width; margin:auto; font-family:Arial, sans-serif; background-color:#e56749; padding:20px;">`;
+            html += `
+ <!-- Header -->
+    <h2 style="text-align:center; margin-bottom:5px; letter-spacing:1px; color:#181110;">
+        SOULMATE EVENTS
+    </h2>
+
+    <!-- Divider -->
+    <hr style="border:0; border-top:1px solid #ddd; margin:10px 0;">
+
+    <!-- Contact Details -->
+    <div style="text-align:right; font-size:13px; color:#e56749; line-height:1.6; background-color:#250f8f; padding:10px; border:1px solid #eee;">
+        <strong>Email:</strong> soulmatevents0009@gmail.com<br>
+        <strong>Phone 1:</strong> 9253707777<br>
+        <strong>Phone 2:</strong> 9729035555
+    </div>
+
+</div>
+
+<hr style="margin:10px 0;">
+
+<!-- Client & Event Details Table -->
+<table style="width:100%; 
+               font-size:14px; 
+               border-collapse: collapse; 
+               margin-bottom:15px;
+               background-color:#eef6ff;
+               padding:8px;">
+
+    <tr>
+        <td style="width:20%; font-family:Abadi; font-size:18px; font-weight:bold; vertical-align: top;">Name</td>
+        <td style="width:30%;font-family:Abadi; font-size:18px;">${client}</td>
+    </tr>
+
+    <tr>
+        <td style="font-family:Abadi; font-size:18px; font-weight:bold; vertical-align: top;">Event</td>
+        <td style="font-family:Abadi; font-size:18px;">${event}</td>
+    </tr>
+
+    <tr>
+        <td style="font-family:Abadi; font-size:18px; font-weight:bold; vertical-align: top;">Venue</td>
+        <td style="font-family:Abadi; font-size:18px;">${venue}</td>
+    </tr>
+
+    <tr>
+        <td style="font-family:Abadi; font-size:18px; font-weight:bold; vertical-align: top;">Dates</td>
+        <td style="font-family:Abadi; font-size:18px;">${formattedFrom} - ${formattedTo}</td>
+    </tr>
+
+</table>
+
+<hr style="margin:15px 0;">
+`;
+
+            document.querySelectorAll(".block").forEach((block, index) => {
+                const items = block.querySelector(".blockItemsDetails").value.trim();
+                const amount = Number(block.querySelector(".blockAmount").value) || 0;
+                const checkbox = block.querySelector(".checkboxAmount");
+
+                // Convert lines into single cell with line breaks
+                const formattedItems = items
+                    .split("\n")
+                    .map(line => line.trim())
+                    .join("<br>");
+
+                let row = "";
+
+                if (checkbox.checked) {
+                    row = `
+        <tr>
+            <td style="padding:8px; border:1px solid #ccc;">${formattedItems}</td>
+            <td style="padding:8px; border:1px solid #ccc; text-align:right;">
+                ₹${amount.toLocaleString("en-IN")}
+            </td>
+        </tr>`;
+                } else {
+                    row = `
+        <tr>
+            <td style="padding:8px; border:1px solid #ccc;" colspan="2">
+                ${formattedItems}
+            </td>
+        </tr>`;
+                }
+                html += `
+<div style="margin-bottom:15px; page-break-inside:avoid;">
+    <table style="width:100%; border-collapse:collapse;">
+        
+        <tr style="background:#f5f5f5;">
+            <th style="border:1px solid #ccc; padding:8px; text-align:left;">Items</th>
+            ${checkbox.checked ? `
+            <th style="border:1px solid #ccc; padding:8px; text-align:right;">Amount</th>
+            ` : ""}
+        </tr>
+
+        ${row}
+        
+    </table>
+</div>`;
+
+                html += `<hr style="margin:15px 0;">`;
+                //Add Today date and signature line at the end
+                html += `<div style="display:flex; justify-content:space-between; align-items:center; margin-top:30px;">
+    <div style="font-size:14px; color:#555;">Date: ${formatDate(new Date())}</div>
+    <div style="font-size:14px; color:#555;">Signature: Azad Singh Sandhu | Uday Maan </div>
+</div>`;
+
+                if (checkbox.checked) total += amount;
+            });
+            const container = document.createElement("div");
+            container.innerHTML = html;
+
+            console.log("Generated HTML for PDF:", html);
+
+            // //Show html in new tab
+            // const newWindow = window.open();
+            // newWindow.document.write(html);
+            // newWindow.document.close();
+
+            //Download Html Only
+            const blob = new Blob([html], { type: "text/html" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "SoulmatEvents_" + `${client}_Bill.html`;
+            a.click();
+            URL.revokeObjectURL(url);
+
+        }
+
+        function formatDate(date) {
+            return new Date(date).toLocaleDateString('en-GB', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric'
+            });
+        }
+
+    </script>
+
+</body>
+
+</html>
