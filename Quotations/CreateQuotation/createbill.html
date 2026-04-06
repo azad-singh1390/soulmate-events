@@ -467,7 +467,40 @@
             document.getElementById("otherVenueRow").style.display = (document.getElementById("venue").value === "Other") ? "flex" : "none";
         });
 
+
+        function createSection(title, textareaClass, defaultText) {
+
+            return `
+
+<label><b>${title}:</b></label>
+
+<textarea class="${textareaClass}" disabled>
+${defaultText}
+</textarea>
+
+<div class="amount-row">
+
+    <label class="checkbox-label">
+        <input type="checkbox" class="checkboxAmount">
+        Total Amount
+    </label>
+
+    <input type="number"
+           class="blockAmount"
+           value="0"
+           disabled>
+
+</div>
+
+<br>
+<hr>
+
+`;
+
+        }
+
         // Add new block
+
         function addBlock() {
 
             blockCount++;
@@ -477,210 +510,109 @@
 
             div.innerHTML = `
 
+<div class="formFields">
+
+    <div class="form-row">
+        <label class="form-label">EVENT</label>
+        <select class="form-input itemblockevent">
+            <option value="">Select Event</option>
+            <option>Destination Wedding</option>
+            <option>Wedding</option>
+            <option>Sangeet</option>
+            <option>Cocktail</option>
+            <option>Haldi</option>
+            <option>Engagement</option>
+            <option>Roka ceremony</option>
+            <option>Anniversary</option>
+            <option>Reception</option>
+            <option>Conference</option>
+            <option>Corporate</option>
+            <option>Birthday</option>
+            <option>Other</option>
+        </select>
+    </div>
+
+    <div class="form-row itemblockotherEventRow" style="display:none;">
+        <label class="form-label">OTHER</label>
+        <input class="form-input itemblockotherEvent"
+               placeholder="Enter Other Event">
+    </div>
+
+    <div class="form-row">
+        <label class="form-label">DATE</label>
+        <input type="date"
+               class="form-input itemblockdate">
+    </div>
+
+    <div class="form-row">
+        <label class="form-label">TIME</label>
+        <input type="time"
+               class="form-input itemblocktime">
+    </div>
+
+    <div class="form-row">
+        <label class="form-label">VENUE</label>
+        <select class="form-input itemblockvenue">
+            <option value="">Select Venue</option>
+            <option>Noor Mahal</option>
+            <option>Eden</option>
+            <option>Amani Farms</option>
+            <option>Other</option>
+        </select>
+    </div>
+
+    <div class="form-row itemblockotherVenueRow" style="display:none;">
+        <label class="form-label">OTHER</label>
+        <input class="form-input itemblockotherVenue"
+               placeholder="Enter Other Venue">
+    </div>
+
+</div>
+
 <h4>Item Block ${blockCount}</h4>
 
-<label><b>Sound Details:</b></label>
-<textarea class="blockSoundItemsDetails">Sound System
+${createSection("Sound Details", "blockSoundItemsDetails",
+                `Sound System
 Cordless Mics
 DJ Console
 Professional DJ Jockey
 Sound Engineer
 Labor & Transport
-Genset & Maintainence
-</textarea>
+Genset & Maintainence`)}
 
-<div class="amount-row">
-    <label class="checkbox-label">
-        <input type="checkbox" class="checkboxSoundAmount">
-        Total Amount
-    </label>
-
-    <input type="number"
-           class="blockSoundAmount"
-           value="0"
-           disabled>
-</div>
-
-
-<br>
-<hr>
-
-<label><b>Light / Truss Details:</b></label>
-<textarea class="blockLightItemDetails">
-2 Pole Truss
+${createSection("Light / Truss Details", "blockLightItemDetails",
+                    `2 Pole Truss
 Sharpy, Led , Blinder & Flasher Lights
-Professional Light Operator
-</textarea>
+Professional Light Operator`)}
 
-<div class="amount-row">
-    <label class="checkbox-label">
-        <input type="checkbox" class="checkboxLightAmount">
-        Total Amount
-    </label>
+${createSection("Led Screen Details", "blockLedScreenItemDetails",
+                        `Double Led Screen [300 Sq. Ft.]
+Professional Video Operator`)}
 
-    <input type="number"
-           class="blockLightAmount"
-           value="0"
-           disabled>
-</div>
-<br>
-<hr>
+${createSection("Stage / Floor Details", "blockStageItemDetails",
+                            `Dance Led or White Floor size As per Requirement
+Stage Plaform 16x32 With Stairs & Carpet`)}
 
+${createSection("Anchor / Emcee Details", "blockAnchorItemDetails",
+                                `Professional Anchor / Emcee`)}
 
-<label><b>Led Screen Details:</b></label>
-<textarea class="blockLedScreenItemDetails">
-Double Led Screen [300 Sq. Ft.]
-Professional Video Operator
-</textarea>
+${createSection("Artist Details", "blockArtistsItemDetails",
+                                    `Professional Artist / Performance`)}
 
-<div class="amount-row">
-    <label class="checkbox-label">
-        <input type="checkbox" class="checkboxLedScreenAmount">
-        Total Amount
-    </label>
+${createSection("Dhol Details", "blockDholiesItemDetails",
+                                        `Professional Dhol Players`)}
 
-    <input type="number"
-           class="blockLedScreenAmount"
-           value="0"
-           disabled>
-</div>
-<br>
-<hr>
+${createSection("Tech Rider Details", "blockTechriderItemDetails",
+                                            `Tech Rider As Per Requirement`)}
 
-<label><b>Stage / Floor Details:</b></label>
-<textarea class="blockStageItemDetails">
-Dance Led or White Floor size As per Requirement
-Stage Plaform 16x32 With Stairs & Carpet
-</textarea>
+${createSection("Special Effects Details", "blockSpecialEffectsItemDetails",
+                                                `Special Effects As Per Requirement`)}
 
-<div class="amount-row">
-    <label class="checkbox-label">
-        <input type="checkbox" class="checkboxStageAmount">
-        Total Amount
-    </label>
-
-    <input type="number"
-           class="blockStageAmount"
-           value="0"
-           disabled>
-</div>
-
-<br>
-<hr>
-
-<label><b>Anchor / Emcee Details:</b></label>
-<textarea class="blockAnchorItemDetails">
-Professional Anchor / Emcee
-</textarea>
-
-<div class="amount-row">
-    <label class="checkbox-label">
-        <input type="checkbox" class="checkboxAnchorAmount">
-        Total Amount
-    </label>
-    <input type="number"
-           class="blockAnchorAmount"
-           value="0"
-           disabled>
-</div>
-
-<br>
-<hr>
-
-
-<label><b>Artist Details:</b></label>
-<textarea class="blockArtistsItemDetails">
-Professional Artist / Performance
-</textarea>
-
-<div class="amount-row">
-    <label class="checkbox-label">
-        <input type="checkbox" class="checkboxArtistAmount">
-        Total Amount
-    </label>
-    <input type="number"
-           class="blockArtistAmount"
-           value="0"
-           disabled>
-</div>
-
-<br>
-<hr>
-
-<label><b>Dhol Details:</b></label>
-<textarea class="blockDholiesItemDetails">
-Professional Dhol Players
-</textarea>
-
-<div class="amount-row">
-    <label class="checkbox-label">
-        <input type="checkbox" class="checkboxDholAmount">
-        Total Amount
-    </label>
-    <input type="number"
-           class="blockDholAmount"
-           value="0"
-           disabled>
-</div>
-<br>
-<hr>
-<label><b>Tech Rider Details:</b></label>
-<textarea class="blockTechriderItemDetails">
-Tech Rider As Per Requirement
-</textarea>
-
-<div class="amount-row">
-    <label class="checkbox-label">
-        <input type="checkbox" class="checkboxTechRiderAmount">
-        Total Amount
-    </label>
-    <input type="number"
-           class="blockTechRiderAmount"
-           value="0"
-           disabled>
-</div>
-
-<br>
-<hr>
-<label><b> Special Effects Details:</b></label>
-<textarea class="blockSpecialEffectsItemDetails">
-Special Effects As Per Requirement
-</textarea>
-
-<div class="amount-row">
-    <label class="checkbox-label">
-        <input type="checkbox" class="checkboxSpecialEffectsAmount">
-        Total Amount
-    </label>
-    <input type="number"
-           class="blockSpecialEffectsAmount"
-           value="0"
-           disabled>
-</div>
-
-<br>
-<hr>
-
-<label><b>Barat Details:</b></label>
-<textarea class="blockBaratItemDetails">
-Professional Barat / Procession
-</textarea>
-
-<div class="amount-row">
-    <label class="checkbox-label">
-        <input type="checkbox" class="checkboxBaratAmount">
-        Total Amount
-    </label>
-    <input type="number"
-           class="blockBaratAmount"
-           value="0"
-           disabled>
-</div>
-
-
+${createSection("Barat Details", "blockBaratItemDetails",
+                                                    `Professional Barat / Procession`)}
 
 <button class="removeBtn"
-        onclick="this.parentElement.remove()">
+onclick="this.parentElement.remove()">
 Remove
 </button>
 
@@ -688,111 +620,77 @@ Remove
 
             document.getElementById("blocks").appendChild(div);
 
-            // SOUND checkbox logic
-            const soundCheckbox = div.querySelector(".checkboxSoundAmount");
-            const soundAmount = div.querySelector(".blockSoundAmount");
+            // ✅ Set default time to 09:00 AM
+            const timeInput = div.querySelector(".itemblocktime");
+            timeInput.value = "09:00";
 
-            soundCheckbox.addEventListener("change", () => {
-                soundAmount.disabled = !soundCheckbox.checked;
+            // ✅ EVENT Other logic
+            const eventSelect = div.querySelector(".itemblockevent");
+            const otherEventRow = div.querySelector(".itemblockotherEventRow");
 
-                if (!soundCheckbox.checked)
-                    soundAmount.value = 0;
+            eventSelect.addEventListener("change", function () {
+
+                if (this.value === "Other") {
+
+                    otherEventRow.style.display = "flex";
+
+                } else {
+
+                    otherEventRow.style.display = "none";
+                    otherEventRow.querySelector(".itemblockotherEvent").value = "";
+
+                }
+
             });
 
-            // LIGHT checkbox logic 
-            const lightCheckbox = div.querySelector(".checkboxLightAmount");
-            const lightAmount = div.querySelector(".blockLightAmount");
-            lightCheckbox.addEventListener("change", () => {
-                lightAmount.disabled = !lightCheckbox.checked;
+            // ✅ VENUE Other logic
+            const venueSelect = div.querySelector(".itemblockvenue");
+            const otherVenueRow = div.querySelector(".itemblockotherVenueRow");
 
-                if (!lightCheckbox.checked)
-                    lightAmount.value = 0;
+            venueSelect.addEventListener("change", function () {
+
+                if (this.value === "Other") {
+
+                    otherVenueRow.style.display = "flex";
+
+                } else {
+
+                    otherVenueRow.style.display = "none";
+                    otherVenueRow.querySelector(".itemblockotherVenue").value = "";
+
+                }
+
             });
 
-            // LED SCREEN checkbox logic
-            const ledScreenCheckbox = div.querySelector(".checkboxLedScreenAmount");
-            const ledScreenAmount = div.querySelector(".blockLedScreenAmount");
-            ledScreenCheckbox.addEventListener("change", () => {
-                ledScreenAmount.disabled = !ledScreenCheckbox.checked;
+            // ✅ Checkbox enable logic
+            div.querySelectorAll(".checkboxAmount")
+                .forEach(checkbox => {
 
-                if (!ledScreenCheckbox.checked)
-                    ledScreenAmount.value = 0;
-            });
+                    checkbox.addEventListener("change", () => {
 
-            // ANCHOR checkbox logic
-            const anchorCheckbox = div.querySelector(".checkboxAnchorAmount");
-            const anchorAmount = div.querySelector(".blockAnchorAmount");
-            anchorCheckbox.addEventListener("change", () => {
-                anchorAmount.disabled = !anchorCheckbox.checked;
+                        const amountInput =
+                            checkbox.closest(".amount-row")
+                                .querySelector(".blockAmount");
 
-                if (!anchorCheckbox.checked)
-                    anchorAmount.value = 0;
-            });
+                        const textarea =
+                            checkbox.closest(".amount-row")
+                                .previousElementSibling;
 
-            // ARTIST checkbox logic
-            const artistCheckbox = div.querySelector(".checkboxArtistAmount");
-            const artistAmount = div.querySelector(".blockArtistAmount");
-            artistCheckbox.addEventListener("change", () => {
-                artistAmount.disabled = !artistCheckbox.checked;
+                        amountInput.disabled = !checkbox.checked;
 
-                if (!artistCheckbox.checked)
-                    artistAmount.value = 0;
-            });
+                        if (textarea) {
+                            textarea.disabled = !checkbox.checked;
+                        }
 
-            // DHOL checkbox logic
-            const dholCheckbox = div.querySelector(".checkboxDholAmount");
-            const dholAmount = div.querySelector(".blockDholAmount");
-            dholCheckbox.addEventListener("change", () => {
-                dholAmount.disabled = !dholCheckbox.checked;
+                        if (!checkbox.checked) {
+                            amountInput.value = 0;
+                        }
 
-                if (!dholCheckbox.checked)
-                    dholAmount.value = 0;
-            });
+                    });
 
-            // TECH RIDER checkbox logic
-            const techRiderCheckbox = div.querySelector(".checkboxTechRiderAmount");
-            const techRiderAmount = div.querySelector(".blockTechRiderAmount");
-            techRiderCheckbox.addEventListener("change", () => {
-                techRiderAmount.disabled = !techRiderCheckbox.checked;
+                });
 
-                if (!techRiderCheckbox.checked)
-                    techRiderAmount.value = 0;
-            });
-
-            // SPECIAL EFFECTS checkbox logic
-            const specialEffectsCheckbox = div.querySelector(".checkboxSpecialEffectsAmount");
-            const specialEffectsAmount = div.querySelector(".blockSpecialEffectsAmount");
-            specialEffectsCheckbox.addEventListener("change", () => {
-                specialEffectsAmount.disabled = !specialEffectsCheckbox.checked;
-
-                if (!specialEffectsCheckbox.checked)
-                    specialEffectsAmount.value = 0;
-            });
-
-            // BARAT checkbox logic
-            const baratCheckbox = div.querySelector(".checkboxBaratAmount");
-            const baratAmount = div.querySelector(".blockBaratAmount");
-            baratCheckbox.addEventListener("change", () => {
-                baratAmount.disabled = !baratCheckbox.checked;
-
-                if (!baratCheckbox.checked)
-                    baratAmount.value = 0;
-            });
-
-
-            // STAGE checkbox logic
-            const stageCheckbox = div.querySelector(".checkboxStageAmount");
-            const stageAmount = div.querySelector(".blockStageAmount");
-
-            stageCheckbox.addEventListener("change", () => {
-                stageAmount.disabled = !stageCheckbox.checked;
-
-                if (!stageCheckbox.checked)
-                    stageAmount.value = 0;
-            });
-
-        }
-        // Form validation
+        }// Form validation
         function validateForm() {
 
             // Validate inputs
@@ -1195,7 +1093,7 @@ Soulmate Events
     `;
             }
             else {
-                              html += `
+                html += `
     <div style="
     display:flex;
     justify-content:space-between;
@@ -1225,7 +1123,7 @@ Soulmate Events
 
     <hr style="margin:10px 0;">`;
             }
-            
+
 
             // PROCESS BLOCKS
             document.querySelectorAll(".block").forEach((block) => {
