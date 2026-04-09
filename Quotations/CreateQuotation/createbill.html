@@ -472,7 +472,20 @@
 
             return `
 
-<label><b>${title}:</b></label>
+<div class="section">
+
+<label class="section-title">
+
+    <b></b>
+
+    <!-- ✅ Header Checkbox -->
+    <label class="header-checkbox">
+        <input type="checkbox"
+               class="sectionEnableCheckbox">
+        ${title}
+    </label>
+
+</label>
 
 <textarea class="${textareaClass}" disabled>
 ${defaultText}
@@ -480,9 +493,15 @@ ${defaultText}
 
 <div class="amount-row">
 
+    <!-- ✅ Keep Amount Checkbox -->
     <label class="checkbox-label">
-        <input type="checkbox" class="checkboxAmount">
+
+        <input type="checkbox"
+               class="checkboxAmount"
+               disabled>
+
         Total Amount
+
     </label>
 
     <input type="number"
@@ -495,11 +514,11 @@ ${defaultText}
 <br>
 <hr>
 
+</div>
+
 `;
 
-        }
-
-        // Add new block
+        }// Add new block
 
         function addBlock() {
 
@@ -690,7 +709,54 @@ Remove
 
                 });
 
+
+            // ✅ Header Checkbox Logic (Enable Section)
+
+            div.querySelectorAll(".sectionEnableCheckbox")
+                .forEach(headerCheckbox => {
+
+                    headerCheckbox.addEventListener("change", () => {
+
+                        const section =
+                            headerCheckbox.closest(".section");
+
+                        const textarea =
+                            section.querySelector("textarea");
+
+                        const amountCheckbox =
+                            section.querySelector(".checkboxAmount");
+
+                        const amountInput =
+                            section.querySelector(".blockAmount");
+
+                        if (headerCheckbox.checked) {
+
+                            // Enable textarea
+                            textarea.disabled = false;
+
+                            // Enable amount checkbox
+                            amountCheckbox.disabled = false;
+
+                        } else {
+
+                            // Disable everything
+                            textarea.disabled = true;
+                            amountCheckbox.disabled = true;
+                            amountInput.disabled = true;
+
+                            // Reset values
+                            textarea.value = "";
+                            amountCheckbox.checked = false;
+                            amountInput.value = 0;
+
+                        }
+
+                    });
+
+                });
+
         }// Form validation
+
         function validateForm() {
 
             // Validate inputs
