@@ -703,23 +703,40 @@
 
             try {
                 const res = await fetch("https://soulmate-backend-production.up.railway.app/followups");
-                const data = await res.json();
+                let data = await res.json();
+
                 tbody.innerHTML = "";
 
-                if (data.length === 0) {
+                if (!data || data.length === 0) {
                     tbody.innerHTML = `<tr><td colspan="10">No followups found</td></tr>`;
                     return;
                 }
+
+                // ✅ SORT DATA BY EVENT DATE (Ascending Month Order)
+                data.sort((a, b) => {
+                    const dateA = new Date(a.event_date);
+                    const dateB = new Date(b.event_date);
+
+                    if (isNaN(dateA)) return 1;
+                    if (isNaN(dateB)) return -1;
+
+                    return dateA - dateB;
+                });
 
                 let serial = 1;
                 let lastMonth = "";
 
                 data.forEach(row => {
+
+                    // Skip invalid dates
+                    if (!row.event_date) return;
+
                     const eventDate = formatDate(row.event_date);
                     const currentMonth = getMonthYear(row.event_date);
 
-                    // 🔹 Month Header Row
+                    // ✅ ADD MONTH HEADER ONLY WHEN MONTH CHANGES
                     if (currentMonth !== lastMonth) {
+
                         const monthRow = document.createElement("tr");
                         monthRow.classList.add("month-header-row");
 
@@ -730,43 +747,62 @@
                 `;
 
                         tbody.appendChild(monthRow);
+
                         lastMonth = currentMonth;
                     }
 
                     const tr = document.createElement("tr");
 
+                    // PDF Column
                     const pdfLink = row.has_quotation_pdf
                         ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/followup-quotation-pdf" target="_blank">View</a>`
                         : "No PDF";
 
+                    // Status Styling
+                    const statusClass =
+                        row.booking_status?.toLowerCase() === "confirmed"
+                            ? "status-confirmed"
+                            : "status-other";
+
                     tr.innerHTML = `
                 <td>${serial++}</td>
-                <td>${row.client_name}</td>
-                <td>${row.client_number}</td>
+                <td>${row.client_name || ""}</td>
+                <td>${row.client_number || ""}</td>
                 <td>${eventDate}</td>
-                <td>${row.event_type}</td>
-                <td>${row.booker_name}</td>
-                <td>${row.decorator}</td>
-                <td class="status-cell ${row.booking_status?.toLowerCase() === 'confirmed' ? 'status-confirmed' : 'status-other'}">
-    ${row.booking_status}
-</td>
+                <td>${row.event_type || ""}</td>
+                <td>${row.booker_name || ""}</td>
+                <td>${row.decorator || ""}</td>
+
+                <td class="status-cell ${statusClass}">
+                    ${row.booking_status || ""}
+                </td>
+
                 <td>${pdfLink}</td>
+
                 <td>
-                    <button class="edit-btn" onclick="editRow(this, ${row.id})">Edit</button>
+                    <button class="edit-btn" onclick="editRow(this, ${row.id})">
+                        Edit
+                    </button>
                 </td>
             `;
 
                     tbody.appendChild(tr);
+
                 });
 
             } catch (err) {
+
                 console.error("Error fetching bookings:", err);
-                tbody.innerHTML = `<tr><td colspan="10">❌ Error fetching bookings</td></tr>`;
+
+                tbody.innerHTML =
+                    `<tr><td colspan="10">❌ Error fetching bookings</td></tr>`;
+
             } finally {
+
                 loader.style.display = "none";
+
             }
         }
-
         function formatDateForInput(dateString) {
             if (!dateString) return "";
             const date = new Date(dateString);
