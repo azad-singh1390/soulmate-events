@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Soulmate Event Quotation</title>
+    <title>Soulmate Event Plannning</title>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
@@ -260,7 +260,7 @@
 
 <body>
 
-    <h2>Quotation Details</h2>
+    <h2 align="center">Soulmate Events Planning Details</h2>
 
     <input id="client" placeholder="Client Name" value="Rahul Sharma">
 
@@ -313,9 +313,9 @@
     <div id="blocks"></div>
 
     <button onclick="addBlock()">➕ Add New Event Block</button>
-    <button onclick="generatePDF()">📄 Generate PDF</button>
-    <button onclick="createTextFile()">Download TXT</button>
-    <button onclick="viewTextFile()">View TXT</button>
+     <!-- <button onclick="generatePDF()">📄 Download Planning HTML</button> -->
+    <button onclick="createTextFile()">Download Planning TXT</button>
+    <button onclick="viewTextFile()">View Planning TXT</button>
 
     <hr>
 
@@ -1029,41 +1029,17 @@ ${amount ? `
             if (document.querySelector(".checkboxAmount:checked")) {
                 pdfBlocks.innerHTML += `<div class="total" style="page-break-inside: avoid; color: #000;">GRAND TOTAL: ₹ ${total.toLocaleString("en-IN")}</div>`;
             }
+            // Download The Inner HTML
+
+            
+            // OPEN HTML IN NEW TAB
+            const newWindow = window.open();
+            newWindow.document.write(pdf.outerHTML);
+            newWindow.document.close();
 
 
-            html2pdf()
-                .set({
-                    margin: 15,
-                    filename: "SoulmateEvents_" + client.value + "_" + replaceSpacesWithUnderscore(globaldate) + "_Quotation.pdf",
-                    image: { type: "jpeg", quality: 0.98 },
-                    html2canvas: {
-                        scale: 1,
-                        scrollY: 0,
-                        useCORS: true
-                    },
-                    jsPDF: {
-                        unit: "mm",
-                        format: "a4",
-                        orientation: "portrait"
-                    },
-                    pagebreak: { mode: ['css'] }
-                })
-                .from(pdf)
-                .outputPdf('blob')
-                .then(function (blob) {
 
-                    const url = URL.createObjectURL(blob);
-
-                    const a = document.createElement("a");
-                    a.href = url;
-                    a.download = "SoulmateEvents_" + client.value + "_" + replaceSpacesWithUnderscore(globaldate) + "_Quotation.pdf";
-
-                    document.body.appendChild(a);
-                    a.click();
-
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(url);
-                });
+            // filename: "SoulmateEvents_" + client.value + "_" + replaceSpacesWithUnderscore(globaldate) + "_Quotation.pdf",
         }
         addBlock();
         enableAutoResize(document);
