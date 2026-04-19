@@ -472,17 +472,18 @@
 
             return `
 
-<div class="section">
+<div class="section" data-title="${title}">
 
 <label class="section-title">
 
-    <b></b>
-
     <!-- ✅ Header Checkbox -->
     <label class="header-checkbox">
+
         <input type="checkbox"
                class="sectionEnableCheckbox">
+
         ${title}
+
     </label>
 
 </label>
@@ -493,7 +494,7 @@ ${defaultText}
 
 <div class="amount-row">
 
-    <!-- ✅ Keep Amount Checkbox -->
+    <!-- ✅ Amount Checkbox -->
     <label class="checkbox-label">
 
         <input type="checkbox"
@@ -517,9 +518,7 @@ ${defaultText}
 </div>
 
 `;
-
-        }// Add new block
-
+        }
         function addBlock() {
 
             blockCount++;
@@ -535,8 +534,7 @@ ${defaultText}
         <label class="form-label">EVENT</label>
         <select class="form-input itemblockevent">
             <option value="">Select Event</option>
-            <option>Destination Wedding</option>
-            <option>Wedding</option>
+            <option selected>Wedding</option>
             <option>Sangeet</option>
             <option>Cocktail</option>
             <option>Haldi</option>
@@ -573,7 +571,14 @@ ${defaultText}
         <label class="form-label">VENUE</label>
         <select class="form-input itemblockvenue">
             <option value="">Select Venue</option>
-            <option>Noor Mahal</option>
+            <option selected>Noor Mahal</option>
+            <option>Sheesh Mahal</option>
+            <option>Darbar Hall</option>
+            <option>Jal Mahal</option>
+            <option>Rani Bagh</option>
+            <option>Dera</option>
+            <option>Rang Mahal</option>
+            <option>Raja Bagh</option>
             <option>Eden</option>
             <option>Amani Farms</option>
             <option>Other</option>
@@ -642,6 +647,17 @@ Remove
             // ✅ Set default time to 09:00 AM
             const timeInput = div.querySelector(".itemblocktime");
             timeInput.value = "09:00";
+
+
+            // ✅ Set default date to today's date
+            const dateInput = div.querySelector(".itemblockdate");
+
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+
+            dateInput.value = `${yyyy}-${mm}-${dd}`;
 
             // ✅ EVENT Other logic
             const eventSelect = div.querySelector(".itemblockevent");
@@ -717,6 +733,8 @@ Remove
 
                     headerCheckbox.addEventListener("change", () => {
 
+                        console.log("Header checkbox changed:", headerCheckbox.checked);
+
                         const section =
                             headerCheckbox.closest(".section");
 
@@ -745,9 +763,9 @@ Remove
                             amountInput.disabled = true;
 
                             // Reset values
-                            textarea.value = "";
+                            // textarea.value = "";
                             amountCheckbox.checked = false;
-                            amountInput.value = 0;
+                            // amountInput.value = 0;
 
                         }
 
@@ -759,14 +777,14 @@ Remove
 
         function validateForm() {
 
-            // Validate inputs
+            // Validate visible inputs
             const inputs = document.querySelectorAll("input");
 
             for (let input of inputs) {
 
                 if (input.offsetParent === null) continue;
 
-                // Skip disabled amount fields
+                // Skip disabled fields
                 if (input.disabled) continue;
 
                 if (input.type !== "checkbox" &&
@@ -782,6 +800,8 @@ Remove
             const selects = document.querySelectorAll("select");
 
             for (let select of selects) {
+
+                if (select.offsetParent === null) continue;
 
                 if (select.value === "") {
 
@@ -802,232 +822,170 @@ Remove
 
             for (let block of blocks) {
 
-                // SOUND textarea
-                const soundTextarea =
-                    block.querySelector(".blockSoundItemsDetails");
+                // Skip disabled block (if you use block enable checkbox)
+                const blockEnabled =
+                    block.querySelector(".enableBlockCheckbox");
 
-                if (soundTextarea.value.trim() === "") {
+                if (blockEnabled && !blockEnabled.checked)
+                    continue;
 
-                    alert("Sound items cannot be empty");
-                    soundTextarea.focus();
-                    return false;
+                // ============================
+                // TEXTAREA VALIDATION
+                // ============================
+
+                const sections = [
+
+                    {
+                        textarea: ".blockSoundItemsDetails",
+                        title: "Sound Details"
+                    },
+
+                    {
+                        textarea: ".blockLightItemDetails",
+                        title: "Light / Truss Details"
+                    },
+
+                    {
+                        textarea: ".blockLedScreenItemDetails",
+                        title: "Led Screen Details"
+                    },
+
+                    {
+                        textarea: ".blockAnchorItemDetails",
+                        title: "Anchor / Emcee Details"
+                    },
+
+                    {
+                        textarea: ".blockArtistsItemDetails",
+                        title: "Artist Details"
+                    },
+
+                    {
+                        textarea: ".blockDholiesItemDetails",
+                        title: "Dhol Details"
+                    },
+
+                    {
+                        textarea: ".blockTechriderItemDetails",
+                        title: "Tech Rider Details"
+                    },
+
+                    {
+                        textarea: ".blockSpecialEffectsItemDetails",
+                        title: "Special Effects Details"
+                    },
+
+                    {
+                        textarea: ".blockBaratItemDetails",
+                        title: "Barat Details"
+                    },
+
+                    {
+                        textarea: ".blockStageItemDetails",
+                        title: "Stage / Floor Details"
+                    }
+
+                ];
+
+                for (let section of sections) {
+
+                    const headerCheckbox =
+                        block.querySelector(section.header);
+
+                    const textarea =
+                        block.querySelector(section.textarea);
+
+                    if (
+                        headerCheckbox &&
+                        headerCheckbox.checked &&
+                        textarea.value.trim() === ""
+                    ) {
+
+                        alert(section.message);
+                        textarea.focus();
+                        return false;
+                    }
                 }
 
-                // LIGHT textarea
-                const lightTextarea =
-                    block.querySelector(".blockLightItemDetails");
+                // ============================
+                // AMOUNT VALIDATION
+                // ============================
 
-                if (lightTextarea.value.trim() === "") {
+                const amountSections = [
 
-                    alert("Light items cannot be empty");
-                    lightTextarea.focus();
-                    return false;
+                    {
+                        checkbox: ".checkboxSoundAmount",
+                        amount: ".blockSoundAmount",
+                        message: "Enter Sound amount"
+                    },
+                    {
+                        checkbox: ".checkboxLightAmount",
+                        amount: ".blockLightAmount",
+                        message: "Enter Light amount"
+                    },
+                    {
+                        checkbox: ".checkboxLedScreenAmount",
+                        amount: ".blockLedScreenAmount",
+                        message: "Enter Led Screen amount"
+                    },
+                    {
+                        checkbox: ".checkboxAnchorAmount",
+                        amount: ".blockAnchorAmount",
+                        message: "Enter Anchor/Emcee amount"
+                    },
+                    {
+                        checkbox: ".checkboxArtistAmount",
+                        amount: ".blockArtistAmount",
+                        message: "Enter Artist amount"
+                    },
+                    {
+                        checkbox: ".checkboxDholAmount",
+                        amount: ".blockDholAmount",
+                        message: "Enter Dhol amount"
+                    },
+                    {
+                        checkbox: ".checkboxTechRiderAmount",
+                        amount: ".blockTechRiderAmount",
+                        message: "Enter Tech Rider amount"
+                    },
+                    {
+                        checkbox: ".checkboxSpecialEffectsAmount",
+                        amount: ".blockSpecialEffectsAmount",
+                        message: "Enter Special Effects amount"
+                    },
+                    {
+                        checkbox: ".checkboxBaratAmount",
+                        amount: ".blockBaratAmount",
+                        message: "Enter Barat amount"
+                    },
+                    {
+                        checkbox: ".checkboxStageAmount",
+                        amount: ".blockStageAmount",
+                        message: "Enter Stage amount"
+                    }
+
+                ];
+
+                for (let item of amountSections) {
+
+                    const checkbox =
+                        block.querySelector(item.checkbox);
+
+                    const amount =
+                        block.querySelector(item.amount);
+
+                    if (
+                        checkbox &&
+                        checkbox.checked &&
+                        Number(amount.value) <= 0
+                    ) {
+
+                        alert(item.message);
+                        amount.focus();
+                        return false;
+                    }
                 }
 
-                // LED SCREEN textarea
-                const ledScreenTextarea =
-                    block.querySelector(".blockLedScreenItemDetails");
-
-                if (ledScreenTextarea.value.trim() === "") {
-
-                    alert("Led Screen items cannot be empty");
-                    ledScreenTextarea.focus();
-                    return false;
-                }
-
-                // ANCHOR textarea
-                const anchorTextarea =
-                    block.querySelector(".blockAnchorItemDetails");
-                if (anchorTextarea.value.trim() === "") {
-                    alert("Anchor/Emcee details cannot be empty");
-                    anchorTextarea.focus();
-                    return false;
-                }
-
-                // ARTIST textarea
-                const artistTextarea =
-                    block.querySelector(".blockArtistsItemDetails");
-                if (artistTextarea.value.trim() === "") {
-                    alert("Artist details cannot be empty");
-                    artistTextarea.focus();
-                    return false;
-                }
-                // DHOL textarea
-                const dholTextarea =
-                    block.querySelector(".blockDholiesItemDetails");
-                if (dholTextarea.value.trim() === "") {
-                    alert("Dhol details cannot be empty");
-                    dholTextarea.focus();
-                    return false;
-                }
-                // TECH RIDER textarea
-                const techRiderTextarea =
-                    block.querySelector(".blockTechriderItemDetails");
-                if (techRiderTextarea.value.trim() === "") {
-                    alert("Tech Rider details cannot be empty");
-                    techRiderTextarea.focus();
-                    return false;
-                }
-                // SPECIAL EFFECTS textarea
-                const specialEffectsTextarea =
-                    block.querySelector(".blockSpecialEffectsItemDetails");
-                if (specialEffectsTextarea.value.trim() === "") {
-                    alert("Special Effects details cannot be empty");
-                    specialEffectsTextarea.focus();
-                    return false;
-                }
-
-                // BARAT textarea
-                const baratTextarea =
-                    block.querySelector(".blockBaratItemDetails");
-                if (baratTextarea.value.trim() === "") {
-                    alert("Barat details cannot be empty");
-                    baratTextarea.focus();
-                    return false;
-                }
-
-
-                // STAGE textarea
-                const stageTextarea =
-                    block.querySelector(".blockStageItemDetails");
-
-                if (stageTextarea.value.trim() === "") {
-
-                    alert("Stage/Floor details cannot be empty");
-                    stageTextarea.focus();
-                    return false;
-                }
-
-                // SOUND amount validation
-                const soundCheckbox =
-                    block.querySelector(".checkboxSoundAmount");
-
-                const soundAmount =
-                    block.querySelector(".blockSoundAmount");
-
-                if (soundCheckbox.checked &&
-                    Number(soundAmount.value) <= 0) {
-
-                    alert("Enter Sound amount");
-                    soundAmount.focus();
-                    return false;
-                }
-
-                // ANCHOR amount validation
-                const anchorCheckbox =
-                    block.querySelector(".checkboxAnchorAmount");
-                const anchorAmount =
-                    block.querySelector(".blockAnchorAmount");
-                if (anchorCheckbox.checked &&
-                    Number(anchorAmount.value) <= 0) {
-                    alert("Enter Anchor/Emcee amount");
-                    anchorAmount.focus();
-                    return false;
-                }
-                // ARTIST amount validation
-                const artistCheckbox =
-                    block.querySelector(".checkboxArtistAmount");
-                const artistAmount =
-                    block.querySelector(".blockArtistAmount");
-
-                if (artistCheckbox.checked &&
-                    Number(artistAmount.value) <= 0) {
-                    alert("Enter Artist amount");
-                    artistAmount.focus();
-                    return false;
-                }
-
-                // DHOL amount validation
-                const dholCheckbox =
-                    block.querySelector(".checkboxDholAmount");
-                const dholAmount =
-                    block.querySelector(".blockDholAmount");
-                if (dholCheckbox.checked &&
-                    Number(dholAmount.value) <= 0) {
-                    alert("Enter Dhol amount");
-                    dholAmount.focus();
-                    return false;
-                }
-
-                // TECH RIDER amount validation
-                const techRiderCheckbox =
-                    block.querySelector(".checkboxTechRiderAmount");
-                const techRiderAmount =
-                    block.querySelector(".blockTechRiderAmount");
-                if (techRiderCheckbox.checked &&
-                    Number(techRiderAmount.value) <= 0) {
-                    alert("Enter Tech Rider amount");
-                    techRiderAmount.focus();
-                    return false;
-                }
-
-                // SPECIAL EFFECTS amount validation
-                const specialEffectsCheckbox =
-                    block.querySelector(".checkboxSpecialEffectsAmount");
-                const specialEffectsAmount =
-                    block.querySelector(".blockSpecialEffectsAmount");
-                if (specialEffectsCheckbox.checked &&
-                    Number(specialEffectsAmount.value) <= 0) {
-                    alert("Enter Special Effects amount");
-                    specialEffectsAmount.focus();
-                    return false;
-                }
-
-                // BARAT amount validation
-                const baratCheckbox =
-                    block.querySelector(".checkboxBaratAmount");
-                const baratAmount =
-                    block.querySelector(".blockBaratAmount");
-                if (baratCheckbox.checked &&
-                    Number(baratAmount.value) <= 0) {
-                    alert("Enter Barat amount");
-                    baratAmount.focus();
-                    return false;
-                }
-
-
-
-                // STAGE amount validation
-                const stageCheckbox =
-                    block.querySelector(".checkboxStageAmount");
-
-                const stageAmount =
-                    block.querySelector(".blockStageAmount");
-
-                if (stageCheckbox.checked &&
-                    Number(stageAmount.value) <= 0) {
-
-                    alert("Enter Stage amount");
-                    stageAmount.focus();
-                    return false;
-                }
-
-                // LED SCREEN amount validation
-                const ledScreenCheckbox =
-                    block.querySelector(".checkboxLedScreenAmount");
-                const ledScreenAmount =
-                    block.querySelector(".blockLedScreenAmount");
-                if (ledScreenCheckbox.checked &&
-                    Number(ledScreenAmount.value) <= 0) {
-                    alert("Enter Led Screen amount");
-                    ledScreenAmount.focus();
-                    return false;
-                }
-
-                // LIGHT amount validation
-                const lightCheckbox =
-                    block.querySelector(".checkboxLightAmount");
-
-                const lightAmount =
-                    block.querySelector(".blockLightAmount");
-
-                if (lightCheckbox.checked &&
-                    Number(lightAmount.value) <= 0) {
-
-                    alert("Enter Light amount");
-                    lightAmount.focus();
-                    return false;
-                }
             }
 
             return true;
@@ -1038,604 +996,337 @@ Remove
 
             if (!validateForm()) return;
 
-            const client = document.getElementById("client").value;
+            const client =
+                document.getElementById("client")?.value || "";
 
-            let event = document.getElementById("event").value;
+            let event =
+                document.getElementById("event")?.value || "";
+
             if (event === "Other")
-                event = document.getElementById("otherEvent").value;
+                event =
+                    document.getElementById("otherEvent")?.value || "";
 
-            let venue = document.getElementById("venue").value;
+            let venue =
+                document.getElementById("venue")?.value || "";
+
             if (venue === "Other")
-                venue = document.getElementById("otherVenue").value;
+                venue =
+                    document.getElementById("otherVenue")?.value || "";
 
-            const from = document.getElementById("dateFrom").value;
-            const to = document.getElementById("dateTo").value;
+            const from =
+                document.getElementById("dateFrom")?.value || "";
+
+            const to =
+                document.getElementById("dateTo")?.value || "";
 
             const formattedFrom = formatDate(from);
             const formattedTo = formatDate(to);
 
-            let total = 0;
+            const enableHeader =
+                document.getElementById("enableHeader")?.checked;
 
-            // ✅ Detect if ANY checkbox is checked
+            let total = 0;
+            let html = "";
+
             let showAmountColumn = false;
+
+            // =========================
+            // Detect Amount Column
+            // =========================
 
             document.querySelectorAll(".block").forEach(block => {
 
-                const soundCheckbox =
-                    block.querySelector(".checkboxSoundAmount");
+                const blockEnabled =
+                    block.querySelector(".enableBlockCheckbox");
 
-                const stageCheckbox =
-                    block.querySelector(".checkboxStageAmount");
+                if (blockEnabled && !blockEnabled.checked)
+                    return;
 
-                const ledScreenCheckbox =
-                    block.querySelector(".checkboxLedScreenAmount");
+                block.querySelectorAll(".section").forEach(section => {
 
-                const lightCheckbox =
-                    block.querySelector(".checkboxLightAmount");
+                    const amountCheckbox =
+                        section.querySelector(".checkboxAmount");
 
-                if (soundCheckbox.checked ||
-                    stageCheckbox.checked ||
-                    ledScreenCheckbox.checked ||
-                    lightCheckbox.checked) {
+                    if (amountCheckbox?.checked)
+                        showAmountColumn = true;
 
-                    showAmountColumn = true;
-                }
+                });
 
             });
 
-            const enableHeader = document.getElementById("enableHeader").checked;
+            // =========================
+            // HEADER
+            // =========================
 
-            html = `
-<h2 style="text-align:center; margin-bottom:5px; letter-spacing:1px; color:black;">
+            html += `
+<h2 style="text-align:center; margin-bottom:5px;">
 Soulmate Events
 </h2>
 
-<hr style="border:0; border-top:1px solid #ddd; margin:10px 0;">
+<hr>
 `;
 
             if (enableHeader) {
 
                 html += `
-    <div style="
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:10px;
-    background-color:white;
-    ">
+<table style="width:100%; border-collapse:collapse; margin-bottom:15px;">
 
-    <img src="${logoBase64}"
-    style="height:70px; object-fit:contain;">
+<tr>
+<td><b>Name</b></td>
+<td>${client}</td>
+</tr>
 
-    <div style="
-    text-align:right;
-    font-size:13px;
-    line-height:1.6;
-    ">
+<tr>
+<td><b>Event</b></td>
+<td>${event}</td>
+</tr>
 
-    <strong>
-    soulmatevents0009@gmail.com<br>
-    +91 9253707777<br>
-    +91 9729035555
-    </strong>
+<tr>
+<td><b>Venue</b></td>
+<td>${venue}</td>
+</tr>
 
-    </div>
+<tr>
+<td><b>Dates</b></td>
+<td>${formattedFrom} - ${formattedTo}</td>
+</tr>
 
-    </div>
+</table>
 
-    <hr style="margin:10px 0;">
+<hr>
+`;
 
-    <table style="
-    width:100%;
-    font-size:14px;
-    border-collapse: collapse;
-    margin-bottom:15px;
-    background-color:#F54927;
-    ">
-
-    <tr>
-    <td style="width:20%; font-weight:bold;">Name</td>
-    <td>${client}</td>
-    </tr>
-
-    <tr>
-    <td style="font-weight:bold;">Event</td>
-    <td>${event}</td>
-    </tr>
-
-    <tr>
-    <td style="font-weight:bold;">Venue</td>
-    <td>${venue}</td>
-    </tr>
-
-    <tr>
-    <td style="font-weight:bold;">Dates</td>
-    <td>${formattedFrom} - ${formattedTo}</td>
-    </tr>
-
-    </table>
-
-    <hr style="margin:15px 0;">
-    `;
-            }
-            else {
-                html += `
-    <div style="
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:10px;
-    background-color:white;
-    ">
-
-    <img src="${logoBase64}"
-    style="height:70px; object-fit:contain;">
-
-    <div style="
-    text-align:right;
-    font-size:13px;
-    line-height:1.6;
-    ">
-
-    <strong>
-    soulmatevents0009@gmail.com<br>
-    +91 9253707777<br>
-    +91 9729035555
-    </strong>
-
-    </div>
-
-    </div>
-
-    <hr style="margin:10px 0;">`;
             }
 
-
+            // =========================
             // PROCESS BLOCKS
-            document.querySelectorAll(".block").forEach((block) => {
+            // =========================
+
+            document.querySelectorAll(".block").forEach(block => {
+
+                const blockEnabled =
+                    block.querySelector(".enableBlockCheckbox");
+
+                if (blockEnabled && !blockEnabled.checked)
+                    return;
 
                 let blockRows = "";
 
-                // SOUND
-                const soundItems =
-                    block.querySelector(".blockSoundItemsDetails").value.trim();
+                // =========================
+                // READ BLOCK DETAILS
+                // =========================
 
-                const soundAmount =
-                    Number(block.querySelector(".blockSoundAmount").value) || 0;
+                let blockEvent =
+                    block.querySelector(".itemblockevent")?.value || "";
 
-                const soundCheckbox =
-                    block.querySelector(".checkboxSoundAmount");
+                if (blockEvent === "Other")
+                    blockEvent =
+                        block.querySelector(".otherEventInput")?.value || "";
 
+                let blockVenue =
+                    block.querySelector(".itemblockvenue")?.value || "";
 
-                if (soundItems !== "") {
+                if (blockVenue === "Other")
+                    blockVenue =
+                        block.querySelector(".otherVenueInput")?.value || "";
 
-                    const formattedSoundItems =
-                        "<ul>" +
-                        soundItems
+                let blockDate =
+                    block.querySelector(".itemblockdate")?.value || "";
+
+                let blockTime =
+                    block.querySelector(".itemblocktime")?.value || "";
+
+                block.querySelectorAll(".section").forEach(section => {
+
+                    const headerCheckbox =
+                        section.querySelector(".sectionEnableCheckbox");
+
+                    if (!headerCheckbox?.checked)
+                        return;
+
+                    const textarea =
+                        section.querySelector("textarea");
+
+                    if (!textarea)
+                        return;
+
+                    const textValue =
+                        textarea.value.trim();
+
+                    if (textValue === "")
+                        return;
+
+                    const title =
+                        section.dataset.title || "Items";
+
+                    const amountCheckbox =
+                        section.querySelector(".checkboxAmount");
+
+                    const amountInput =
+                        section.querySelector(".blockAmount");
+
+                    const amount =
+                        Number(amountInput?.value) || 0;
+
+                    // Convert textarea lines → list
+                    const itemLines =
+                        textValue
                             .split("\n")
-                            .map(line => `<li>${line.trim()}</li>`)
-                            .join("")
-                        + "</ul>";
+                            .map(line => line.trim())
+                            .filter(line => line !== "");
 
-                    if (soundCheckbox.checked && showAmountColumn) {
+                    if (itemLines.length === 0)
+                        return;
+
+                    let itemHTML =
+                        `<b>${title}</b><ul>`;
+
+                    itemLines.forEach(line => {
+
+                        itemHTML += `<li>${line}</li>`;
+
+                    });
+
+                    itemHTML += "</ul>";
+
+                    // Row with amount
+                    if (amountCheckbox?.checked &&
+                        showAmountColumn) {
 
                         blockRows += `
 <tr>
+
 <td style="padding:8px; border:1px solid #ccc;">
-${formattedSoundItems}
+${itemHTML}
 </td>
 
 <td style="padding:8px; border:1px solid #ccc; text-align:center;">
-₹${soundAmount.toLocaleString("en-IN")}
-</td>
-</tr>`;
-
-                        total += soundAmount;
-
-                    } else {
-
-                        blockRows += `
-<tr>
-<td style="padding:8px; border:1px solid #ccc;"
-colspan="${showAmountColumn ? 1 : 2}">
-${formattedSoundItems}
+₹${amount.toLocaleString("en-IN")}
 </td>
 
-${showAmountColumn ? `<td style="border:1px solid #ccc;"></td>` : ""}
+</tr>
+`;
 
-</tr>`;
+                        total += amount;
+
                     }
-                }
 
-                // LIGHT
-                const lightItems =
-                    block.querySelector(".blockLightItemDetails").value.trim();
-                const lightAmount =
-                    Number(block.querySelector(".blockLightAmount").value) || 0;
-                const lightCheckbox =
-                    block.querySelector(".checkboxLightAmount");
-                if (lightItems !== "") {
-                    const formattedLightItems =
-                        "<ul>" +
-                        lightItems
-                            .split("\n")
-                            .map(line => `<li>${line.trim()}</li>`)
-                            .join("")
-                        + "</ul>";
-
-                    if (lightCheckbox.checked && showAmountColumn) {
+                    // Row without amount
+                    else {
 
                         blockRows += `
 <tr>
+
 <td style="padding:8px; border:1px solid #ccc;">
-${formattedLightItems}
+${itemHTML}
 </td>
-<td style="padding:8px; border:1px solid #ccc; text-align:center;">
-₹${lightAmount.toLocaleString("en-IN")}
-</td>
-</tr>`;
 
-                        total += lightAmount;
+${showAmountColumn
+                                ? `<td style="border:1px solid #ccc;"></td>`
+                                : ""}
 
-                    } else {
+</tr>
+`;
 
-                        blockRows += `
-
-<tr>
-<td style="padding:8px; border:1px solid #ccc;"
-colspan="${showAmountColumn ? 1 : 2}">
-${formattedLightItems}
-</td>
-${showAmountColumn ? `<td style="border:1px solid #ccc;"></td>` : ""}
-</tr>`;
                     }
-                }
 
-                // LED SCREEN
-                const ledScreenItems =
-                    block.querySelector(".blockLedScreenItemDetails").value.trim();
-                const ledScreenAmount =
-                    Number(block.querySelector(".blockLedScreenAmount").value) || 0;
-                const ledScreenCheckbox =
-                    block.querySelector(".checkboxLedScreenAmount");
-                if (ledScreenItems !== "") {
-                    const formattedLedScreenItems =
-                        "<ul>" +
-                        ledScreenItems
-                            .split("\n")
-                            .map(line => `<li>${line.trim()}</li>`)
-                            .join("")
-                        + "</ul>";
-                    if (ledScreenCheckbox.checked && showAmountColumn) {
-                        blockRows += `
-<tr>
-<td style="padding:8px; border:1px solid #ccc;">
-${formattedLedScreenItems}
-</td>
-<td style="padding:8px; border:1px solid #ccc; text-align:center;">
-₹${ledScreenAmount.toLocaleString("en-IN")}
-</td>
-</tr>`;
-                        total += ledScreenAmount;
-                    } else {
-                        blockRows += `
-<tr>
-<td style="padding:8px; border:1px solid #ccc;"
-colspan="${showAmountColumn ? 1 : 2}">
-${formattedLedScreenItems}
-</td>
-${showAmountColumn ? `<td style="border:1px solid #ccc;"></td>` : ""}
-</tr>`;
-                    }
-                }
+                });
 
+                // =========================
+                // RENDER BLOCK
+                // =========================
 
-                // ANCHOR
-                const anchorItems =
-                    block.querySelector(".blockAnchorItemDetails").value.trim();
-                const anchorAmount =
-                    Number(block.querySelector(".blockAnchorAmount").value) || 0;
-                const anchorCheckbox =
-                    block.querySelector(".checkboxAnchorAmount");
-                if (anchorItems !== "") {
-                    const formattedAnchorItems =
-                        "<ul>" +
-                        anchorItems
-                            .split("\n")
-                            .map(line => `<li>${line.trim()}</li>`)
-                            .join("")
-                        + "</ul>";
-                    if (anchorCheckbox.checked && showAmountColumn) {
-                        blockRows += `
-<tr>
-<td style="padding:8px; border:1px solid #ccc;">
-${formattedAnchorItems}
-</td>
-<td style="padding:8px; border:1px solid #ccc; text-align:center;">
-₹${anchorAmount.toLocaleString("en-IN")}
-</td>
-</tr>`;
-                        total += anchorAmount;
-                    } else {
-                        blockRows += `
-<tr>
-<td style="padding:8px; border:1px solid #ccc;"
-colspan="${showAmountColumn ? 1 : 2}">
-${formattedAnchorItems}
-</td>
-${showAmountColumn ? `<td style="border:1px solid #ccc;"></td>` : ""}
-</tr>`;
-                    }
-                }
+                if (blockRows !== "") {
 
-                // ARTIST
-                const artistItems =
-                    block.querySelector(".blockArtistsItemDetails").value.trim();
-                const artistAmount =
-                    Number(block.querySelector(".blockArtistAmount").value) || 0;
-                const artistCheckbox =
-                    block.querySelector(".checkboxArtistAmount");
-                if (artistItems !== "") {
-                    const formattedArtistItems =
-                        "<ul>" +
-                        artistItems
-                            .split("\n")
-                            .map(line => `<li>${line.trim()}</li>`)
-                            .join("")
-                        + "</ul>";
-                    if (artistCheckbox.checked && showAmountColumn) {
-                        blockRows += `
-<tr>
-<td style="padding:8px; border:1px solid #ccc;">
-${formattedArtistItems}
-</td>
-<td style="padding:8px; border:1px solid #ccc; text-align:center;">
-₹${artistAmount.toLocaleString("en-IN")}
-</td>
-</tr>`;
-                        total += artistAmount;
-                    } else {
-                        blockRows += `
-<tr>
-<td style="padding:8px; border:1px solid #ccc;"
-colspan="${showAmountColumn ? 1 : 2}">
-${formattedArtistItems}
-</td>
-${showAmountColumn ? `<td style="border:1px solid #ccc;"></td>` : ""}
-</tr>`;
-                    }
-                }
-
-                // DHOL
-                const dholItems =
-                    block.querySelector(".blockDholiesItemDetails").value.trim();
-                const dholAmount =
-                    Number(block.querySelector(".blockDholAmount").value) || 0;
-                const dholCheckbox =
-                    block.querySelector(".checkboxDholAmount");
-                if (dholItems !== "") {
-                    const formattedDholItems =
-                        "<ul>" +
-                        dholItems
-                            .split("\n")
-                            .map(line => `<li>${line.trim()}</li>`)
-                            .join("")
-                        + "</ul>";
-                    if (dholCheckbox.checked && showAmountColumn) {
-                        blockRows += `
-<tr>
-<td style="padding:8px; border:1px solid #ccc;">
-${formattedDholItems}
-</td>
-<td style="padding:8px; border:1px solid #ccc; text-align:center;">
-₹${dholAmount.toLocaleString("en-IN")}
-</td>
-</tr>`;
-                        total += dholAmount;
-                    } else {
-                        blockRows += `
-<tr>
-<td style="padding:8px; border:1px solid #ccc;"
-colspan="${showAmountColumn ? 1 : 2}">
-${formattedDholItems}
-</td>
-${showAmountColumn ? `<td style="border:1px solid #ccc;"></td>` : ""}
-</tr>`;
-                    }
-                }
-
-                // TECH RIDER
-                const techRiderItems =
-                    block.querySelector(".blockTechriderItemDetails").value.trim();
-                const techRiderAmount =
-                    Number(block.querySelector(".blockTechRiderAmount").value) || 0;
-                const techRiderCheckbox =
-                    block.querySelector(".checkboxTechRiderAmount");
-                if (techRiderItems !== "") {
-                    const formattedTechRiderItems =
-                        "<ul>" +
-                        techRiderItems
-                            .split("\n")
-                            .map(line => `<li>${line.trim()}</li>`)
-                            .join("")
-                        + "</ul>";
-                    if (techRiderCheckbox.checked && showAmountColumn) {
-                        blockRows += `
-<tr>
-<td style="padding:8px; border:1px solid #ccc;">
-${formattedTechRiderItems}
-</td>
-<td style="padding:8px; border:1px solid #ccc; text-align:center;">
-₹${techRiderAmount.toLocaleString("en-IN")}
-</td>
-</tr>`;
-                        total += techRiderAmount;
-                    } else {
-                        blockRows += `
-<tr>
-<td style="padding:8px; border:1px solid #ccc;"
-colspan="${showAmountColumn ? 1 : 2}">
-${formattedTechRiderItems}
-</td>
-${showAmountColumn ? `<td style="border:1px solid #ccc;"></td>` : ""}
-</tr>`;
-                    }
-                }
-
-                // SPECIAL EFFECTS
-                const specialEffectsItems =
-                    block.querySelector(".blockSpecialEffectsItemDetails").value.trim();
-                const specialEffectsAmount =
-                    Number(block.querySelector(".blockSpecialEffectsAmount").value) || 0;
-                const specialEffectsCheckbox =
-                    block.querySelector(".checkboxSpecialEffectsAmount");
-                if (specialEffectsItems !== "") {
-                    const formattedSpecialEffectsItems =
-                        "<ul>" +
-                        specialEffectsItems
-                            .split("\n")
-                            .map(line => `<li>${line.trim()}</li>`)
-                            .join("")
-                        + "</ul>";
-                    if (specialEffectsCheckbox.checked && showAmountColumn) {
-                        blockRows += `
-<tr>
-<td style="padding:8px; border:1px solid #ccc;">
-${formattedSpecialEffectsItems}
-</td>
-<td style="padding:8px; border:1px solid #ccc; text-align:center;">
-₹${specialEffectsAmount.toLocaleString("en-IN")}
-</td>
-</tr>`;
-                        total += specialEffectsAmount;
-                    } else {
-                        blockRows += `
-<tr>
-<td style="padding:8px; border:1px solid #ccc;"
-colspan="${showAmountColumn ? 1 : 2}">
-${formattedSpecialEffectsItems}
-</td>
-${showAmountColumn ? `<td style="border:1px solid #ccc;"></td>` : ""}
-</tr>`;
-                    }
-                }
-
-                // BARAT
-                const baratItems =
-                    block.querySelector(".blockBaratItemDetails").value.trim();
-                const baratAmount =
-                    Number(block.querySelector(".blockBaratAmount").value) || 0;
-                const baratCheckbox =
-                    block.querySelector(".checkboxBaratAmount");
-                if (baratItems !== "") {
-                    const formattedBaratItems =
-                        "<ul>" +
-                        baratItems
-                            .split("\n")
-                            .map(line => `<li>${line.trim()}</li>`)
-                            .join("")
-                        + "</ul>";
-                    if (baratCheckbox.checked && showAmountColumn) {
-                        blockRows += `
-<tr>
-<td style="padding:8px; border:1px solid #ccc;">
-${formattedBaratItems}
-</td>
-<td style="padding:8px; border:1px solid #ccc; text-align:center;">
-₹${baratAmount.toLocaleString("en-IN")}
-</td>
-</tr>`;
-                        total += baratAmount;
-                    } else {
-                        blockRows += `
-<tr>
-<td style="padding:8px; border:1px solid #ccc;"
-colspan="${showAmountColumn ? 1 : 2}">
-${formattedBaratItems}
-</td>
-${showAmountColumn ? `<td style="border:1px solid #ccc;"></td>` : ""}
-</tr>`;
-                    }
-                }
-
-                // STAGE
-                const stageItems =
-                    block.querySelector(".blockStageItemDetails").value.trim();
-
-                const stageAmount =
-                    Number(block.querySelector(".blockStageAmount").value) || 0;
-
-                const stageCheckbox =
-                    block.querySelector(".checkboxStageAmount");
-
-
-                if (stageItems !== "") {
-
-                    const formattedStageItems =
-                        "<ul>" +
-                        stageItems
-                            .split("\n")
-                            .map(line => `<li>${line.trim()}</li>`)
-                            .join("")
-                        + "</ul>";
-
-                    if (stageCheckbox.checked && showAmountColumn) {
-
-                        blockRows += `
-<tr>
-<td style="padding:8px; border:1px solid #ccc;">
-${formattedStageItems}
-</td>
-
-<td style="padding:8px; border:1px solid #ccc; text-align:center;">
-₹${stageAmount.toLocaleString("en-IN")}
-</td>
-</tr>`;
-
-                        total += stageAmount;
-
-                    } else {
-
-                        blockRows += `
-<tr>
-<td style="padding:8px; border:1px solid #ccc;"
-colspan="${showAmountColumn ? 1 : 2}">
-${formattedStageItems}
-</td>
-
-${showAmountColumn ? `<td style="border:1px solid #ccc;"></td>` : ""}
-
-</tr>`;
-                    }
-                }
-
-                // TABLE OUTPUT
-                html += `
+                    html += `
 <div style="margin-bottom:15px; page-break-inside:avoid;">
 
 <table style="width:100%; border-collapse:collapse;">
 
+<!-- EVENT -->
+<tr>
+<td colspan="${showAmountColumn ? 2 : 1}"
+    style="
+        padding:10px;
+        border:1px solid #ccc;
+        font-weight:bold;
+        letter-spacing:0.5px;
+    ">
+
+EVENT  
+<span style="font-weight:normal; margin-left:20px;">
+${blockEvent}
+</span>
+
+</td>
+</tr>
+
+<!-- DATE -->
+<tr>
+<td colspan="${showAmountColumn ? 2 : 1}"
+    style="
+        padding:10px;
+        border:1px solid #ccc;
+        font-weight:bold;
+        letter-spacing:0.5px;
+    ">
+
+DATE  
+<span style="font-weight:normal; margin-left:26px;">
+${formatDate(blockDate)}
+</span>
+
+</td>
+</tr>
+
+<!-- TIME -->
+<tr>
+<td colspan="${showAmountColumn ? 2 : 1}"
+    style="
+        padding:10px;
+        border:1px solid #ccc;
+        font-weight:bold;
+        letter-spacing:0.5px;
+    ">
+
+TIME  
+<span style="font-weight:normal; margin-left:28px;">
+${blockTime}
+</span>
+
+</td>
+</tr>
+
+<!-- VENUE -->
+<tr>
+<td colspan="${showAmountColumn ? 2 : 1}"
+    style="
+        padding:10px;
+        border:1px solid #ccc;
+        font-weight:bold;
+        letter-spacing:0.5px;
+    ">
+
+VENUE  
+<span style="font-weight:normal; margin-left:10px;">
+${blockVenue}
+</span>
+
+</td>
+</tr>
+<!-- TABLE HEADER -->
+
 <tr style="background:black;">
 
-<th style="
-border:1px solid #ccc;
-padding:8px;
-text-align:center;
-color:white;
-">
+<th style="color:white; padding:8px; border:1px solid #ccc;">
 ITEMS
 </th>
 
-${showAmountColumn ? `
-<th style="
-border:1px solid #ccc;
-padding:8px;
-text-align:center;
-color:white;
-">
+${showAmountColumn
+                            ? `<th style="color:white; padding:8px; border:1px solid #ccc;">
 AMOUNT
-</th>
-` : ""}
+</th>`
+                            : ""}
 
 </tr>
 
@@ -1643,53 +1334,45 @@ ${blockRows}
 
 </table>
 
-</div>`;
+</div>
+`;
 
-            });
+                }
 
+            });            // =========================
             // GRAND TOTAL
+            // =========================
+
             if (showAmountColumn) {
 
                 html += `
-<table style="
-width:100%;
-border-collapse:collapse;
-margin-top:10px;
-">
+<table style="width:100%; border-collapse:collapse; margin-top:10px;">
 
 <tr>
 
-<td style="
-padding:10px;
-font-weight:bold;
-text-align:right;
-border:1px solid #ccc;
-">
+<td style="padding:10px; font-weight:bold; text-align:right; border:1px solid #ccc;">
 GRAND TOTAL
 </td>
 
-<td style="
-padding:10px;
-font-weight:bold;
-text-align:center;
-border:1px solid #ccc;
-">
+<td style="padding:10px; font-weight:bold; text-align:center; border:1px solid #ccc;">
 ₹${total.toLocaleString("en-IN")}
 </td>
 
 </tr>
 
-</table>`;
+</table>
+`;
+
             }
 
-            html += `<hr style="margin:15px 0;">`;
+            // =========================
+            // FOOTER
+            // =========================
 
             html += `
-<div style="
-display:flex;
-justify-content:space-between;
-margin-top:30px;
-">
+<hr style="margin:15px 0;">
+
+<div style="display:flex; justify-content:space-between;">
 
 <div>
 Date: ${formatDate(new Date())}
@@ -1699,39 +1382,82 @@ Date: ${formatDate(new Date())}
 Signature: Azad Singh Sandhu | Uday Maan
 </div>
 
-</div>`;
+</div>
+`;
 
-            // OPEN HTML IN NEW TAB
+            // =========================
+            // OPEN PDF VIEW
+            // =========================
+
             const newWindow = window.open();
+
             newWindow.document.write(html);
+
             newWindow.document.close();
 
 
-            // // DOWNLOAD HTML
-            // const blob = new Blob([html], { type: "text/html" });
+            //Download the html 
+            const blob = new Blob([html], { type: "text/html" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `Quotation_${client}_${Date.now()}.html`;
+            a.click();
 
-            // const url = URL.createObjectURL(blob);
 
-            // const a = document.createElement("a");
-
-            // a.href = url;
-
-            // a.download =
-            //     "SoulmatEvents_" +
-            //     client +
-            //     "_Bill.html";
-
-            // a.click();
-
-            // URL.revokeObjectURL(url);
         }
         function formatDate(date) {
+
             return new Date(date).toLocaleDateString('en-GB', {
                 day: '2-digit',
                 month: 'short',
                 year: 'numeric'
             });
         }
+
+        document.addEventListener("change", function (e) {
+
+            if (e.target.classList.contains("sectionEnableCheckbox")) {
+
+                const section =
+                    e.target.closest(".section");
+
+                const textarea =
+                    section.querySelector("textarea");
+
+                const amountCheckbox =
+                    section.querySelector(".checkboxAmount");
+
+                const amountInput =
+                    section.querySelector(".blockAmount");
+
+                const enabled = e.target.checked;
+
+                // Enable textarea
+                textarea.disabled = !enabled;
+
+                // Enable amount checkbox
+                amountCheckbox.disabled = !enabled;
+
+                // Enable amount input only if checkbox checked
+                amountInput.disabled =
+                    !enabled || !amountCheckbox.checked;
+            }
+
+            // Amount checkbox toggle
+            if (e.target.classList.contains("checkboxAmount")) {
+
+                const section =
+                    e.target.closest(".section");
+
+                const amountInput =
+                    section.querySelector(".blockAmount");
+
+                amountInput.disabled =
+                    !e.target.checked;
+            }
+
+        });
 
     </script>
 
