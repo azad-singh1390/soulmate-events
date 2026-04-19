@@ -1401,7 +1401,13 @@ Signature: Azad Singh Sandhu | Uday Maan
             const url = URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url;
-            a.download = `Quotation_${client}_${Date.now()}.html`;
+
+            if (enableHeader) {
+                a.download = `SoulmateEventsQuotation_${client}_${event}.html`;
+            } 
+            else {
+                a.download = `SoulmateEventsQuotation.html`;
+            }
             a.click();
 
 
