@@ -122,41 +122,27 @@
             page-break-inside: avoid;
         }
 
-        .blockSoundItemsDetails {
+        .blockItem1Details {
             width: 100%;
-            min-height: 80px;
-            resize: vertical;
+            min-height: 150px;
             box-sizing: border-box;
             font-family: inherit;
             font-size: 14px;
             padding: 8px;
         }
 
-        .blockLightItemDetails {
+        .blockItem2Details {
             width: 100%;
             min-height: 80px;
-            resize: vertical;
             box-sizing: border-box;
             font-family: inherit;
             font-size: 14px;
             padding: 8px;
         }
 
-        .blockLedScreenItemDetails {
+        .blockItem3Details {
             width: 100%;
             min-height: 80px;
-            resize: vertical;
-            box-sizing: border-box;
-            font-family: inherit;
-            font-size: 14px;
-            padding: 8px;
-        }
-
-
-        .blockAnchorItemDetails {
-            width: 100%;
-            min-height: 80px;
-            resize: vertical;
             box-sizing: border-box;
             font-family: inherit;
             font-size: 14px;
@@ -164,10 +150,9 @@
         }
 
 
-        .blockArtistsItemDetails {
+        .blockItem4Details {
             width: 100%;
             min-height: 80px;
-            resize: vertical;
             box-sizing: border-box;
             font-family: inherit;
             font-size: 14px;
@@ -175,10 +160,9 @@
         }
 
 
-        .blockDholiesItemDetails {
+        .blockItem5Details {
             width: 100%;
-            min-height: 80px;
-            resize: vertical;
+            min-height: 30px;
             box-sizing: border-box;
             font-family: inherit;
             font-size: 14px;
@@ -186,10 +170,9 @@
         }
 
 
-        .blockTechriderItemDetails {
+        .blockItem6Details {
             width: 100%;
             min-height: 80px;
-            resize: vertical;
             box-sizing: border-box;
             font-family: inherit;
             font-size: 14px;
@@ -197,20 +180,9 @@
         }
 
 
-        .blockSpecialEffectsItemDetails {
+        .blockItem7Details {
             width: 100%;
-            min-height: 80px;
-            resize: vertical;
-            box-sizing: border-box;
-            font-family: inherit;
-            font-size: 14px;
-            padding: 8px;
-        }
-
-        .blockBaratItemDetails {
-            width: 100%;
-            min-height: 80px;
-            resize: vertical;
+            min-height: 30px;
             box-sizing: border-box;
             font-family: inherit;
             font-size: 14px;
@@ -218,10 +190,28 @@
         }
 
 
-        .blockStageItemDetails {
+        .blockItem8Details {
+            width: 100%;
+            min-height: 30px;
+            box-sizing: border-box;
+            font-family: inherit;
+            font-size: 14px;
+            padding: 8px;
+        }
+
+        .blockItem9Details {
+            width: 100%;
+            min-height: 150px;
+            box-sizing: border-box;
+            font-family: inherit;
+            font-size: 14px;
+            padding: 8px;
+        }
+
+
+        .blockItem10Details {
             width: 100%;
             min-height: 80px;
-            resize: vertical;
             box-sizing: border-box;
             font-family: inherit;
             font-size: 14px;
@@ -242,62 +232,80 @@
             font-weight: bold;
         }
 
-        .blockSoundAmount {
+        .blockItem1Amount {
             width: 100px;
             padding: 5px;
             font-size: 14px;
         }
 
-        .blockLightAmount {
+        .blockItem2Amount {
             width: 100px;
             padding: 5px;
             font-size: 14px;
         }
 
-        .blockLedScreenAmount {
+        .blockItem3Amount {
             width: 100px;
             padding: 5px;
             font-size: 14px;
         }
 
-        .blockAnchorAmount {
+        .blockItem4Amount {
             width: 100px;
             padding: 5px;
             font-size: 14px;
         }
 
-        .blockArtistsAmount {
+        .blockItem5Amount {
             width: 100px;
             padding: 5px;
             font-size: 14px;
         }
 
-        .blockDholiesAmount {
+        .blockItem6Amount {
             width: 100px;
             padding: 5px;
             font-size: 14px;
         }
 
-        .blockTechriderAmount {
+        .blockItem7Amount {
             width: 100px;
             padding: 5px;
             font-size: 14px;
         }
 
-        .blockSpecialEffectsAmount {
+        .blockItem8Amount {
             width: 100px;
             padding: 5px;
             font-size: 14px;
         }
 
-        .blockBaratAmount {
+        .blockItem9Amount {
+            width: 100px;
+            padding: 5px;
+            font-size: 14px;
+        }
+
+        .blockItem10Amount {
+            width: 100px;
+            padding: 5px;
+            font-size: 14px;
+        }
+
+        .blockItem11Amount {
+            width: 100px;
+            padding: 5px;
+            font-size: 14px;
+        }
+
+        .blockItem12Amount {
             width: 100px;
             padding: 5px;
             font-size: 14px;
         }
 
 
-        .blockStageAmount {
+        .blockItem13Amount {
             width: 100px;
             padding: 5px;
             font-size: 14px;
@@ -429,6 +437,18 @@
     </style>
 
     <script>
+
+        function autoResizeTextarea(textarea) {
+
+            // Reset height
+            textarea.style.height = "auto";
+
+            // Set height based on content
+            textarea.style.height =
+                textarea.scrollHeight + "px";
+
+        }
+
         // Disable all fields initially
         const formFields = document.querySelectorAll("#formFields input, #formFields select");
         formFields.forEach(field => field.disabled = true);
@@ -595,7 +615,8 @@ ${defaultText}
 
 <h4>Item Block ${blockCount}</h4>
 
-${createSection("Sound Details", "blockSoundItemsDetails",
+<div class="itemsContainer">
+${createSection("ITEM 1", "blockItem1Details",
                 `Sound System
 Cordless Mics
 DJ Console
@@ -604,37 +625,65 @@ Sound Engineer
 Labor & Transport
 Genset & Maintainence`)}
 
-${createSection("Light / Truss Details", "blockLightItemDetails",
+${createSection("ITEM 2", "blockItem2Details",
                     `2 Pole Truss
 Sharpy, Led , Blinder & Flasher Lights
 Professional Light Operator`)}
 
-${createSection("Led Screen Details", "blockLedScreenItemDetails",
+${createSection("ITEM 3", "blockItem3Details",
                         `Double Led Screen [300 Sq. Ft.]
 Professional Video Operator`)}
 
-${createSection("Stage / Floor Details", "blockStageItemDetails",
+${createSection("ITEM 4", "blockItem4Details",
                             `Dance Led or White Floor size As per Requirement
 Stage Plaform 16x32 With Stairs & Carpet`)}
 
-${createSection("Anchor / Emcee Details", "blockAnchorItemDetails",
+${createSection("ITEM 5", "blockItem5Details",
                                 `Professional Anchor / Emcee`)}
 
-${createSection("Artist Details", "blockArtistsItemDetails",
+${createSection("ITEM 6", "blockItem6Details",
                                     `Professional Artist / Performance`)}
 
-${createSection("Dhol Details", "blockDholiesItemDetails",
+${createSection("ITEM 7", "blockItem7Details",
                                         `Professional Dhol Players`)}
 
-${createSection("Tech Rider Details", "blockTechriderItemDetails",
+${createSection("ITEM 8", "blockItem8Details",
                                             `Tech Rider As Per Requirement`)}
 
-${createSection("Special Effects Details", "blockSpecialEffectsItemDetails",
-                                                `Special Effects As Per Requirement`)}
+${createSection("ITEM 9", "blockItem9Details",
+                                                `Special Effects As Per Requirement
+Sparkle Machines
+Bubble Machine
+Co2 Jets
+Co2 Gun
+Cold Pyro
+Cold Pyro Guns
+Color Guns
+Low Fog 
+Helium Balloons
+Fireworks
+Stick Lights
+Color Shots
+Laser Light
+Spot Light`)}
 
-${createSection("Barat Details", "blockBaratItemDetails",
-                                                    `Professional Barat / Procession`)}
-
+${createSection("ITEM 10", "blockItem10Details",
+                                                    `21 Piece Barat With Decor & Lighting
+Ghori For Rituals
+Vintage car
+Dholies Team(6)
+DJ On Wheels( With DJ Jockey & Sound System)
+Fireworks (As Per Requirement)
+Co2 Guns (As Per Requirement)
+Cold Pyros
+                                                    `)}
+</div>
+<button class="addItemBtn"
+class ="addItemBtn"
+onclick="addItem(this)">
+Add Item
+</button>
+<br>
 <button class="removeBtn"
 onclick="this.parentElement.remove()">
 Remove
@@ -1179,7 +1228,7 @@ Soulmate Events
                         return;
 
                     let itemHTML =
-                        `<b>${title}</b><ul>`;
+                        ``;
 
                     itemLines.forEach(line => {
 
@@ -1404,7 +1453,7 @@ Signature: Azad Singh Sandhu | Uday Maan
 
             if (enableHeader) {
                 a.download = `SoulmateEventsQuotation_${client}_${event}.html`;
-            } 
+            }
             else {
                 a.download = `SoulmateEventsQuotation.html`;
             }
@@ -1464,6 +1513,52 @@ Signature: Azad Singh Sandhu | Uday Maan
             }
 
         });
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            document.querySelectorAll("textarea").forEach(textarea => {
+
+                autoResizeTextarea(textarea);
+
+                textarea.addEventListener("input", function () {
+
+                    autoResizeTextarea(this);
+
+                });
+
+            });
+
+        });
+
+        function addItem(button) {
+
+            const block =
+                button.closest(".block");
+
+            const container =
+                block.querySelector(".itemsContainer");
+
+            // Count existing items
+            const itemCount =
+                container.querySelectorAll(".section").length;
+
+            // Next item number
+            const nextItemNumber =
+                itemCount + 1;
+
+            const newItemHTML =
+                createSection(
+                    `ITEM ${nextItemNumber}`,
+                    "blockItem1Details",
+                    "Add Details here..."
+                );
+
+            container.insertAdjacentHTML(
+                "beforeend",
+                newItemHTML
+            );
+        }
 
     </script>
 
