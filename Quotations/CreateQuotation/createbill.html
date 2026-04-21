@@ -1229,12 +1229,29 @@ Remove
                     if (itemLines.length === 0)
                         return;
 
+                    let check_special_effects = false;
                     let itemHTML =
                         ``;
-
                     itemLines.forEach(line => {
 
-                        itemHTML += `<li>${line}</li>`;
+                        console.log("Processing line:", line);
+                        if (line.includes("Special Effects")) {
+
+                            itemHTML += `<b style="color: #FF5733;">❖ ${line.replace("❖", "").trim()}</b><br>`;
+                            check_special_effects = true;
+
+
+                        } else {
+
+                            if (check_special_effects == false) {
+                                itemHTML += `<li>${line}</li>`;
+                            } 
+                            else
+                             {
+                                itemHTML += `<li style="margin-left:100px;">${line}</li>`;
+                            }
+
+                        }
 
                     });
 
