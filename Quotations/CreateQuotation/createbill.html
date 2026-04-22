@@ -1299,13 +1299,16 @@ ${itemHTML}
 </td>
 
 <td style="padding:8px; border:1px solid #ccc; text-align:center;">
-₹${amount.toLocaleString("en-IN")}
+${amount === 0
+                                ? "On Final Call"
+                                : "₹" + amount.toLocaleString("en-IN")}
 </td>
-
-</tr>
 `;
 
-                        total += amount;
+                        // Ignore 0 amounts (Final Call items)
+                        if (amount > 0) {
+                            total += amount;
+                        }
 
                     }
 
