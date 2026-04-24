@@ -88,8 +88,13 @@
             <input type="date" name="eventDate" required>
 
             <label>Event</label>
-            <select name="eventType" required>
-                <option value="" disabled selected hidden>Select Event</option>
+
+            <select name="eventType" onchange="toggleManualInput(this, 'eventManual')" required>
+
+                <option value="" disabled selected hidden>
+                    Select Event
+                </option>
+
                 <option>Birthday</option>
                 <option>Anniversary</option>
                 <option>Engagement</option>
@@ -100,37 +105,70 @@
                 <option>Destination Wedding</option>
                 <option>Corporate</option>
                 <option>Get Together</option>
-                <option>Other</option>
+
+                <option value="manual">
+                    Enter Manually
+                </option>
+
             </select>
 
+            <input type="text" name="eventManual" id="eventManual" placeholder="Enter Event Name" style="display:none;">
+
             <label>Booker Name</label>
-            <select name="bookerName" required>
-                <option value="" disabled selected hidden>Select Booker Name</option>
+
+            <select name="bookerName" onchange="toggleManualInput(this, 'bookerManual')" required>
+
+                <option value="" disabled selected hidden>
+                    Select Booker Name
+                </option>
+
                 <option>tarun</option>
                 <option>Madhu</option>
                 <option>sachin</option>
                 <option>kapil</option>
-                <option>Other</option>
+
+                <option value="manual">
+                    Enter Manually
+                </option>
+
             </select>
 
+            <input type="text" name="bookerManual" id="bookerManual" placeholder="Enter Booker Name"
+                style="display:none;">
 
             <label>Decorator</label>
-            <select name="decorator" required>
-                <option value="" disabled selected hidden>Select Decorator</option>
+
+            <select name="decorator" onchange="toggleManualInput(this, 'decoratorManual')" required>
+
+                <option value="" disabled selected hidden>
+                    Select Decorator
+                </option>
+
                 <option>Anshul</option>
                 <option>Ashima</option>
                 <option>Namarta</option>
                 <option>Jedi</option>
                 <option>Not Booked Yet</option>
                 <option>No Details Shared</option>
-                <option>Other</option>
+
+                <option value="manual">
+                    Enter Manually
+                </option>
+
             </select>
 
+            <input type="text" name="decoratorManual" id="decoratorManual" placeholder="Enter Decorator Name"
+                style="display:none;">
 
 
             <label>Booking Status</label>
-            <select name="bookingStatus" required>
-                <option value="" disabled selected hidden>Select Booking Status</option>
+
+            <select name="bookingStatus" onchange="toggleManualInput(this, 'bookingStatusManual')" required>
+
+                <option value="" disabled selected hidden>
+                    Select Booking Status
+                </option>
+
                 <option>Confirmed</option>
                 <option>Pending</option>
                 <option>Cancelled</option>
@@ -139,11 +177,18 @@
                 <option>Azad Sandhu Is Following</option>
                 <option>Uday Is Following</option>
                 <option>Palki Is Following</option>
-                <option>In Dicussuion</option>
                 <option>Quotation Shared</option>
-                <option>Client Not Responding </option>
+                <option>Client Not Responding</option>
                 <option>Booked By Other</option>
+
+                <option value="manual">
+                    Enter Manually
+                </option>
+
             </select>
+
+            <input type="text" name="bookingStatusManual" id="bookingStatusManual" placeholder="Enter Booking Status"
+                style="display:none;">
 
             <label>Upload Quotation PDF</label>
             <input type="file" name="pdfUpload" accept=".pdf" onchange="previewFile(this, 'quotationPreview')">
@@ -206,6 +251,27 @@
         </div>
     </div>
     <script>
+
+        function toggleManualInput(select, manualId) {
+
+            const manualInput =
+                document.getElementById(manualId);
+
+            if (select.value === "manual") {
+
+                manualInput.style.display = "block";
+                manualInput.required = true;
+
+            } else {
+
+                manualInput.style.display = "none";
+                manualInput.required = false;
+                manualInput.value = "";
+
+            }
+
+        }
+
         let formPendingSubmit = null;
 
         function previewFile(input, previewId) {
@@ -252,7 +318,76 @@
             closePasswordModal();
 
             const formData = new FormData(form);
+
+            /* ---------- FIX MANUAL FIELDS ---------- */
+
+            // Event
+            if (formData.get("eventType") === "manual") {
+
+                const manualValue =
+                    document.getElementById("eventManual").value;
+                if (!manualValue.trim()) {
+
+                    alert("Please enter Event manually.");
+                    return;
+
+                }
+                formData.set("eventType", manualValue);
+            }
+
+            // Booker Name
+            if (formData.get("bookerName") === "manual") {
+
+                const manualValue =
+                    document.getElementById("bookerManual").value;
+
+                if (!manualValue.trim()) {
+
+                    alert("Please enter Event manually.");
+                    return;
+
+                }
+
+                formData.set("bookerName", manualValue);
+            }
+
+            // Decorator
+            if (formData.get("decorator") === "manual") {
+
+                const manualValue =
+                    document.getElementById("decoratorManual").value;
+
+                if (!manualValue.trim()) {
+
+                    alert("Please enter Event manually.");
+                    return;
+
+                }
+                formData.set("decorator", manualValue);
+            }
+
+            // Booking Status
+            if (formData.get("bookingStatus") === "manual") {
+
+                const manualValue =
+                    document.getElementById("bookingStatusManual").value;
+
+                if (!manualValue.trim()) {
+
+                    alert("Please enter Event manually.");
+                    return;
+
+                }
+                formData.set("bookingStatus", manualValue);
+            }
             formData.append("password", password);
+
+            console.log("Form data to be submitted:");
+            for (let pair of formData.entries()) {
+                console.log(pair[0] + ": " + pair[1]);
+            }
+
+            console.log("Submitting form with password:", password);
 
             // Show uploading message
 
