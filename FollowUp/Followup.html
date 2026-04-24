@@ -421,11 +421,13 @@
                 <label>Client Number</label>
                 <input type="text" id="editClientNumber" required>
 
-                <label>Event Event</label>
+                <label>Event Date</label>
                 <input type="date" id="editEventDate" required>
 
                 <label>Event</label>
-                <select id="editEvent" required>
+
+                <select id="editEvent" required onchange="handleManualField('editEvent','manualEvent')">
+
                     <option>Birthday</option>
                     <option>Anniversary</option>
                     <option>Engagement</option>
@@ -437,20 +439,35 @@
                     <option>Corporate</option>
                     <option>Get Together</option>
                     <option>Other</option>
+                    <option>Enter Manually</option>
+
                 </select>
 
+                <textarea id="manualEvent" placeholder="Enter custom event..."
+                    style="display:none; grid-column: span 2;"></textarea>
+
+
                 <label>Booker Name</label>
-                <select id="editBookerName" required>
+
+                <select id="editBookerName" required onchange="handleManualField('editBookerName','manualBooker')">
+
                     <option>tarun</option>
                     <option>Madhu</option>
                     <option>sachin</option>
                     <option>kapil</option>
                     <option>Other</option>
+                    <option>Enter Manually</option>
+
                 </select>
+
+                <textarea id="manualBooker" placeholder="Enter custom booker..."
+                    style="display:none; grid-column: span 2;"></textarea>
 
 
                 <label>Decorator</label>
-                <select id="editDecorator" required>
+
+                <select id="editDecorator" required onchange="handleManualField('editDecorator','manualDecorator')">
+
                     <option>Anshul</option>
                     <option>Ashima</option>
                     <option>Namarta</option>
@@ -458,11 +475,18 @@
                     <option>Not Booked Yet</option>
                     <option>No Details Shared</option>
                     <option>Other</option>
+                    <option>Enter Manually</option>
+
                 </select>
+
+                <textarea id="manualDecorator" placeholder="Enter custom decorator..."
+                    style="display:none; grid-column: span 2;"></textarea>
 
 
                 <label>Booking Status </label>
-                <select id="editBookingStatus" required>
+
+                <select id="editBookingStatus" required
+                    onchange="handleManualField('editBookingStatus','manualBookingStatus')">
                     <option>Confirmed</option>
                     <option>Pending</option>
                     <option>Cancelled</option>
@@ -471,11 +495,15 @@
                     <option>Azad Sandhu Is Following</option>
                     <option>Uday Is Following</option>
                     <option>Palki Is Following</option>
-                    <option>In Dicussuion</option>
                     <option>Quotation Shared</option>
-                    <option>Client Not Responding </option>
+                    <option>Client Not Responding</option>
                     <option>Booked By Other</option>
+                    <option>Enter Manually</option>
                 </select>
+
+                <!-- Manual Input -->
+                <textarea id="manualBookingStatus" placeholder="Enter custom booking status..."
+                    style="display:none; grid-column: span 2; padding:8px; border-radius:6px;"></textarea>
 
                 <label>Upload Quotation PDF</label>
                 <input type="file" id="editQuotationPdf" name="pdfUpload" accept=".pdf">
@@ -541,6 +569,84 @@
 
     <script>
 
+
+        function getFinalValue(selectId, textareaId, fieldName) {
+
+            let dropdown =
+                document.getElementById(selectId).value;
+
+            let manual =
+                document.getElementById(textareaId)
+                    .value
+                    .trim();
+
+            if (dropdown === "Enter Manually") {
+
+                if (manual === "") {
+
+                    alert("❌ Please enter " + fieldName);
+                    throw "manual missing";
+
+                }
+
+                return manual;
+
+            }
+
+            return dropdown;
+        }
+
+        function handleManualField(selectId, textareaId) {
+
+            const dropdown =
+                document.getElementById(selectId);
+
+            const textarea =
+                document.getElementById(textareaId);
+
+            if (dropdown.value === "Enter Manually") {
+
+                textarea.style.display = "block";
+                textarea.required = true;
+
+            } else {
+
+                textarea.style.display = "none";
+                textarea.required = false;
+                textarea.value = "";
+
+            }
+        }
+
+
+        function setFieldValue(selectId, textareaId, value) {
+
+            let dropdown =
+                document.getElementById(selectId);
+
+            let textarea =
+                document.getElementById(textareaId);
+
+            let exists =
+                [...dropdown.options]
+                    .some(opt => opt.value === value);
+
+            if (exists) {
+
+                dropdown.value = value;
+
+                textarea.style.display = "none";
+                textarea.value = "";
+
+            } else {
+
+                dropdown.value = "Enter Manually";
+
+                textarea.style.display = "block";
+                textarea.value = value;
+
+            }
+        }
 
         function exportToExcel() {
             const table = document.getElementById("bookingsTable");
@@ -845,7 +951,7 @@
                 event_type: tds[4].innerText.trim(),
                 booker_name: tds[5].innerText.trim(),
                 decorator: tds[6].innerText.trim(),
-                booking_status: tds[7].innerText.replace("₹", "").replace(/,/g, "").trim()
+                booking_status: tds[7].innerText.trim()
             };
 
             console.log("Original Data Set:", originalData);
@@ -855,10 +961,29 @@
             document.querySelector("#editClientName").value = tds[1].innerText.trim();
             document.querySelector("#editClientNumber").value = tds[2].innerText.trim();
             document.querySelector("#editEventDate").value = formatDateForInput(tds[3].innerText.trim());
-            document.querySelector("#editEvent").value = tds[4].innerText.trim();
-            document.querySelector("#editBookerName").value = tds[5].innerText.trim();
-            document.querySelector("#editDecorator").value = tds[6].innerText.trim();
-            document.querySelector("#editBookingStatus").value = tds[7].innerText.trim();
+            setFieldValue(
+                "editEvent",
+                "manualEvent",
+                tds[4].innerText.trim()
+            );
+
+            setFieldValue(
+                "editBookerName",
+                "manualBooker",
+                tds[5].innerText.trim()
+            );
+
+            setFieldValue(
+                "editDecorator",
+                "manualDecorator",
+                tds[6].innerText.trim()
+            );
+
+            setFieldValue(
+                "editBookingStatus",
+                "manualBookingStatus",
+                tds[7].innerText.trim()
+            );
 
             document.getElementById("editModal").style.display = "flex";
         }
@@ -873,36 +998,95 @@
         let pendingId = null;
 
         async function saveEdit() {
-            const id = document.querySelector("#editBookingId").value;
-            const current = {
-                client_name: document.querySelector("#editClientName").value.trim(),
-                client_number: document.querySelector("#editClientNumber").value.trim(),
-                event_date: document.querySelector("#editEventDate").value,
-                event_type: document.querySelector("#editEvent").value,
-                booker_name: document.querySelector("#editBookerName").value,
-                decorator: document.querySelector("#editDecorator").value,
-                booking_status: document.querySelector("#editBookingStatus").value
-            };
+
+            const id =
+                document.querySelector("#editBookingId").value;
+
+            let current = {}; // ✅ Declare outside try
+
+            try {
+
+                let eventValue =
+                    getFinalValue(
+                        "editEvent",
+                        "manualEvent",
+                        "Event"
+                    );
+
+                let bookerValue =
+                    getFinalValue(
+                        "editBookerName",
+                        "manualBooker",
+                        "Booker Name"
+                    );
+
+                let decoratorValue =
+                    getFinalValue(
+                        "editDecorator",
+                        "manualDecorator",
+                        "Decorator"
+                    );
+
+                let statusValue =
+                    getFinalValue(
+                        "editBookingStatus",
+                        "manualBookingStatus",
+                        "Booking Status"
+                    );
+
+                current = {
+
+                    client_name:
+                        document.querySelector("#editClientName").value.trim(),
+
+                    client_number:
+                        document.querySelector("#editClientNumber").value.trim(),
+
+                    event_date:
+                        document.querySelector("#editEventDate").value,
+
+                    event_type:
+                        eventValue,
+
+                    booker_name:
+                        bookerValue,
+
+                    decorator:
+                        decoratorValue,
+
+                    booking_status:
+                        statusValue
+
+                };
+
+            }
+            catch (err) {
+
+                return; // stop if manual missing
+
+            }
 
             console.log("Original Data:", originalData);
             console.log("Current Data:", current);
+
             let changes = {};
+
             for (const key in current) {
+
                 if (current[key] !== originalData[key]) {
+
                     changes[key] = current[key];
+
                 }
+
             }
 
-            // if (Object.keys(changes).length === 0) {
-            //     alert("No changes detected!");
-            //     return;
-            // }
             console.log("Changes detected for ID:", id, changes);
-            // Open password modal instead of prompt
-            askPassword(id, changes);
-        }
 
-        // --- Password Modal Logic ---
+            // Open password modal
+            askPassword(id, changes);
+
+        }        // --- Password Modal Logic ---
         function askPassword(id, changes) {
             pendingId = id;
             pendingChanges = changes;
@@ -1009,6 +1193,18 @@
                 closeModal();
             }
         };
+
+        document.querySelectorAll("textarea").forEach(t => {
+
+            t.addEventListener("input", function () {
+
+                this.style.height = "auto";
+                this.style.height =
+                    this.scrollHeight + "px";
+
+            });
+
+        });
     </script>
 
 </body>
