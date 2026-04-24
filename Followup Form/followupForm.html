@@ -92,7 +92,7 @@
 
             <select name="eventType" onchange="toggleManualInput(this, 'eventManual')" required>
 
-                <option value="" disabled selected hidden>
+                <option value="" disabled hidden>
                     Select Event
                 </option>
 
@@ -119,7 +119,7 @@
 
             <select name="bookerName" onchange="toggleManualInput(this, 'bookerManual')" required>
 
-                <option value="" disabled selected hidden>
+                <option value="" disabled hidden>
                     Select Booker Name
                 </option>
 
@@ -142,7 +142,7 @@
 
             <select name="decorator" onchange="toggleManualInput(this, 'decoratorManual')" required>
 
-                <option value="" disabled selected hidden>
+                <option value="" disabled hidden>
                     Select Decorator
                 </option>
 
@@ -167,7 +167,7 @@
 
             <select name="bookingStatus" onchange="toggleManualInput(this, 'bookingStatusManual')" required>
 
-                <option value="" disabled selected hidden>
+                <option value="" disabled hidden>
                     Select Booking Status
                 </option>
 
@@ -175,7 +175,7 @@
                 <option>Pending</option>
                 <option>Cancelled</option>
                 <option>In Line [Following]</option>
-                <option selected>In Dicussuion</option>
+                <option selected>In Discussion</option>
                 <option>Azad Sandhu Is Following</option>
                 <option>Uday Is Following</option>
                 <option>Palki Is Following</option>
@@ -196,7 +196,7 @@
             <input type="file" name="pdfUpload" accept=".pdf" onchange="previewFile(this, 'quotationPreview')">
             <small id="quotationPreview"></small>
 
-            <button type="submit">Submit</button>
+            <button type="submit" id="submitBtn">Submit</button>
         </form>
     </div>
 
@@ -257,12 +257,11 @@
 
         document.addEventListener("DOMContentLoaded", function () {
 
-            const dateInput = document.getElementById("eventDate");
+            setDefaultValues();
 
-            if (dateInput) {
-                dateInput.value =
-                    new Date().toISOString().split("T")[0];
-            }
+            document
+                .querySelector('input[name="clientname"]')
+                .focus();
 
         });
 
@@ -322,11 +321,22 @@
         }
 
         async function confirmPassword() {
+
+            const submitBtn =
+                document.getElementById("submitBtn");
+
+            if (submitBtn.disabled) return;
+
             const password = document.getElementById("submitPassword").value;
             if (!password) {
                 alert("Password is required!");
                 return;
             }
+
+            if (submitBtn.disabled) return;
+
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Submitting...";
 
             const form = formPendingSubmit;
             closePasswordModal();
@@ -343,6 +353,7 @@
                 if (!manualValue.trim()) {
 
                     alert("Please enter Event manually.");
+                    enableSubmitButton();
                     return;
 
                 }
@@ -357,7 +368,8 @@
 
                 if (!manualValue.trim()) {
 
-                    alert("Please enter Event manually.");
+                    alert("Please enter Booker Name manually.");
+                    enableSubmitButton();
                     return;
 
                 }
@@ -373,7 +385,8 @@
 
                 if (!manualValue.trim()) {
 
-                    alert("Please enter Event manually.");
+                    alert("Please enter Decorator manually.");
+                    enableSubmitButton();
                     return;
 
                 }
@@ -388,7 +401,8 @@
 
                 if (!manualValue.trim()) {
 
-                    alert("Please enter Event manually.");
+                    alert("Please enter Booking Status manually.");
+                    enableSubmitButton();
                     return;
 
                 }
@@ -417,6 +431,8 @@
 
                 if (result.message === "Success") {
                     form.reset();
+                    // Restore default values
+                    setDefaultValues();
                     // alert("Followup submitted successfully!");
                     setTimeout(() => {
 
@@ -428,12 +444,16 @@
 
                     // Hide uploading message
                     document.getElementById("uploadingMessage").style.display = "none";
+                    enableSubmitButton();
+
                     alert("Followup failed: " + (result.message || "Unknown error"));
                 }
             } catch (err) {
 
                 // Hide uploading message
                 document.getElementById("uploadingMessage").style.display = "none";
+                enableSubmitButton();
+
                 alert("Followup failed: " + err.message);
             }
         }
@@ -450,6 +470,63 @@
                 closePasswordModal();
             }
         };
+
+
+        function setDefaultValues() {
+
+            // Default Client Name
+            document.querySelector('input[name="clientname"]').value = "Sample";
+
+            // Default Client Number
+            document.querySelector('input[name="clientNumber"]').value = "9729035555";
+
+            const todayDate = new Date();
+
+            todayDate.setMinutes(
+                todayDate.getMinutes() - todayDate.getTimezoneOffset()
+            );
+
+            const today =
+                todayDate.toISOString().split("T")[0];
+
+            const dateInput =
+                document.getElementById("eventDate");
+
+            if (dateInput) {
+                dateInput.value = today;
+                dateInput.min = today;
+            }
+
+            // Restore dropdown defaults
+            document.querySelector('select[name="eventType"]').value = "Wedding";
+
+            document.querySelector('select[name="bookerName"]').value = "Not Shared Yet";
+
+            document.querySelector('select[name="decorator"]').value = "Namarta";
+
+            document.querySelector('select[name="bookingStatus"]').value = "In Discussion";
+
+        }
+
+        document
+            .getElementById("submitPassword")
+            .addEventListener("keypress", function (e) {
+
+                if (e.key === "Enter") {
+                    confirmPassword();
+                }
+
+            });
+
+        function enableSubmitButton() {
+
+            const submitBtn =
+                document.getElementById("submitBtn");
+
+            submitBtn.disabled = false;
+            submitBtn.innerText = "Submit";
+
+        }
 
     </script>
 </body>
