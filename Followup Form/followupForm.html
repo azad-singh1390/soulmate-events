@@ -79,13 +79,14 @@
         <h2>FollowUp Form</h2>
         <form id="followupForm" enctype="multipart/form-data">
             <label>Client Name</label>
-            <input type="text" name="clientname" placeholder="Enter Client Name" required>
+            <input type="text" name="clientname" placeholder="Enter Client Name" value="Sample" required>
 
             <label>Client Number</label>
-            <input type="tel" name="clientNumber" placeholder="Enter Client Number" pattern="[0-9]{10}" required>
+            <input type="tel" name="clientNumber" placeholder="Enter Client Number" pattern="[0-9]{10}"
+                value="9729035555" required>
 
             <label>Event Date</label>
-            <input type="date" name="eventDate" required>
+            <input type="date" name="eventDate" id="eventDate" required>
 
             <label>Event</label>
 
@@ -101,7 +102,7 @@
                 <option>Sangeet</option>
                 <option>Ring Ceremony</option>
                 <option>Roka Ceremony</option>
-                <option>Wedding</option>
+                <option selected>Wedding</option>
                 <option>Destination Wedding</option>
                 <option>Corporate</option>
                 <option>Get Together</option>
@@ -126,6 +127,7 @@
                 <option>Madhu</option>
                 <option>sachin</option>
                 <option>kapil</option>
+                <option selected>Not Shared Yet</option>
 
                 <option value="manual">
                     Enter Manually
@@ -146,7 +148,7 @@
 
                 <option>Anshul</option>
                 <option>Ashima</option>
-                <option>Namarta</option>
+                <option selected>Namarta</option>
                 <option>Jedi</option>
                 <option>Not Booked Yet</option>
                 <option>No Details Shared</option>
@@ -173,7 +175,7 @@
                 <option>Pending</option>
                 <option>Cancelled</option>
                 <option>In Line [Following]</option>
-                <option>In Dicussuion</option>
+                <option selected>In Dicussuion</option>
                 <option>Azad Sandhu Is Following</option>
                 <option>Uday Is Following</option>
                 <option>Palki Is Following</option>
@@ -251,6 +253,18 @@
         </div>
     </div>
     <script>
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const dateInput = document.getElementById("eventDate");
+
+            if (dateInput) {
+                dateInput.value =
+                    new Date().toISOString().split("T")[0];
+            }
+
+        });
 
         function toggleManualInput(select, manualId) {
 
