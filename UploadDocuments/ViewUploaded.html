@@ -405,8 +405,7 @@
           <th>S.No.</th>
           <th>File Name</th>
           <th>File Date</th>
-          <th>Image File</th>
-          <th>Pdf File</th>
+          <th>File Data</th>
           <th>Planning Text</th>
           <th>Action</th>
         </tr>
@@ -428,12 +427,13 @@
         <label>File Date</label>
         <input type="date" id="editFileDate" required>
 
-        <label>Upload Image File </label>
-        <input type="file" id="editQuotationPdf" name="imageUpload" accept=".jpg, .jpeg, .png">
-
-        <label>Upload PDF File </label>
+        <label>Upload File </label>
         <input type="file" id="editPlanningPdf" name="pdfUpload" accept=".pdf">
         <br>
+
+        <label>Update File Text</label>
+        <textarea id="editPlanningText" rows="4" cols="50"></textarea>
+
         <div style="margin-top:15px; text-align:right;">
           <button type="button" class="save-btn" onclick="saveEdit()">Save</button>
           <button type="button" class="cancel-btn" onclick="closeModal()">Cancel</button>
@@ -536,7 +536,7 @@
         tbody.innerHTML = "";
 
         if (!data || data.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="6">No documents found</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="5">No documents found</td></tr>`;
           return;
         }
 
@@ -546,16 +546,12 @@
 
           const fileDate = formatDate(row.file_date);
 
-          const imageLink = row.image_path
-            ? `<a href="https://soulmate-backend-production.up.railway.app/documents/${row.id}/image" target="_blank">View</a>`
-            : "No Image";
-
           const pdfLink = row.pdf_path
-            ? `<a href="https://soulmate-backend-production.up.railway.app/documents/${row.id}/pdf" target="_blank">View</a>`
+            ? `<a href="https://soulmate-backend-production.up.railway.app/documents/${row.id}/data" target="_blank">View</a>`
             : "No PDF";
 
           const docDataLink = row.document_data
-            ? `<a href="https://soulmate-backend-production.up.railway.app/documents/${row.id}/data" target="_blank">View</a>`
+            ? `<a href="https://soulmate-backend-production.up.railway.app/documents/${row.id}/text" target="_blank">View</a>`
             : `<span style="color:red;">No Data</span>`;
 
           const tr = document.createElement("tr");
@@ -564,7 +560,6 @@
         <td>${serial++}</td>
         <td>${row.file_name}</td>
         <td>${fileDate}</td>
-        <td>${imageLink}</td>
         <td>${pdfLink}</td>
         <td>${docDataLink}</td>
         <td>
@@ -582,6 +577,7 @@
         loader.style.display = "none";
       }
     }
+
     function formatDateForInput(dateString) {
       if (!dateString) return "";
       const date = new Date(dateString);
@@ -617,24 +613,13 @@
       const tds = tr.querySelectorAll("td");
 
       originalData = {
-        client_name: tds[1].innerText.trim(),
-        client_number: tds[2].innerText.trim(),
-        event_start_date: formatDateForInput(tds[3].innerText.trim()),
-        event_end_date: formatDateForInput(tds[4].innerText.trim()),
-        event_type: tds[5].innerText.trim(),
-        venue: tds[6].innerText.trim(),
-        event_time: formatTimeForInput(tds[7].innerText.trim())
+        file_name: tds[1].innerText.trim(),
+        file_date: formatDateForInput(tds[2].innerText.trim())
       };
 
       document.querySelector("#editBookingId").value = id;
-      document.querySelector("#editClientName").value = tds[1].innerText.trim();
-      document.querySelector("#editClientNumber").value = tds[2].innerText.trim();
-      document.querySelector("#editStartDate").value = formatDateForInput(tds[3].innerText.trim());
-      document.querySelector("#editEndDate").value = formatDateForInput(tds[4].innerText.trim());
-      document.querySelector("#editEventTime").value = formatTimeForInput(tds[7].innerText.trim());
-      document.querySelector("#editEventType").value = tds[5].innerText.trim();
-      document.querySelector("#editVenue").value = tds[6].innerText.trim();
-
+      document.querySelector("#editFileName").value = tds[1].innerText.trim();
+      document.querySelector("#editFileDate").value = formatDateForInput(tds[2].innerText.trim());
       document.getElementById("editModal").style.display = "flex";
     }
 
@@ -651,13 +636,8 @@
     async function saveEdit() {
       const id = document.querySelector("#editBookingId").value;
       const current = {
-        client_name: document.querySelector("#editClientName").value.trim(),
-        client_number: document.querySelector("#editClientNumber").value.trim(),
-        event_start_date: document.querySelector("#editStartDate").value,
-        event_end_date: document.querySelector("#editEndDate").value,
-        event_type: document.querySelector("#editEventType").value,
-        venue: document.querySelector("#editVenue").value,
-        event_time: document.querySelector("#editEventTime").value
+        file_name: document.querySelector("#editFileName").value.trim(),
+        file_date: document.querySelector("#editFileDate").value.trim()
       };
 
       console.log("Original Data:", originalData);
