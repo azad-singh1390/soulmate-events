@@ -501,6 +501,10 @@
     // LOAD DATA
     async function loadBookings() {
       const tbody = document.querySelector("#bookingsTable tbody");
+      const loader = document.getElementById("loader");
+
+      // ✅ SHOW loader
+      loader.style.display = "flex";
       tbody.innerHTML = "";
 
       try {
@@ -512,6 +516,9 @@
 
         const result = await res.json();
         const data = result.rows || [];
+
+        // ✅ HIDE loader after response
+        loader.style.display = "none";
 
         if (data.length === 0) {
           tbody.innerHTML = `
@@ -535,22 +542,20 @@
         <td>${formatDate(row.file_date)}</td>
 
         <td>
-  ${row.has_file_data
+          ${row.has_file_data
               ? `
-      <a href="https://soulmate-backend-production.up.railway.app/documents/${row.id}/data-pdf" target="_blank">
-        View
-      </a>
-
-      &nbsp;|&nbsp;
-
-      <a href="https://soulmate-backend-production.up.railway.app/documents/${row.id}/data-pdf"
-         download="${row.file_name}.pdf">
-        Download
-      </a>
-    `
+              <a href="https://soulmate-backend-production.up.railway.app/documents/${row.id}/data-pdf" target="_blank">
+                View
+              </a>
+              &nbsp;|&nbsp;
+              <a href="https://soulmate-backend-production.up.railway.app/documents/${row.id}/data-pdf"
+                 download="${row.file_name}.pdf">
+                Download
+              </a>
+            `
               : `<span style="color:red;">No PDF</span>`
             }
-</td>
+        </td>
 
         <td>
           <button class="edit-btn" onclick="editRow(this, ${row.id})">Edit</button>
@@ -563,6 +568,9 @@
       } catch (err) {
         console.error(err);
 
+        // ❌ HIDE loader on error too
+        loader.style.display = "none";
+
         tbody.innerHTML = `
       <tr>
         <td colspan="5" style="color:red; font-weight:bold;">
@@ -571,8 +579,7 @@
       </tr>
     `;
       }
-    }
-    // EDIT OPEN
+    }// EDIT OPEN
     function editRow(btn, id) {
       const tr = btn.closest("tr");
       const tds = tr.querySelectorAll("td");
@@ -646,7 +653,7 @@
 
       if (res.ok) {
         alert("Updated");
-         document.getElementById("updatePassword").value = ""; // ✅ extra safety
+        document.getElementById("updatePassword").value = ""; // ✅ extra safety
         closePassword();
         closeModal();
         loadBookings();
@@ -657,7 +664,7 @@
 
     function closePassword() {
       document.getElementById("passwordModal").style.display = "none";
-       document.getElementById("updatePassword").value = ""; // ✅ clear
+      document.getElementById("updatePassword").value = ""; // ✅ clear
     }
 
     // DELETE
@@ -677,7 +684,7 @@
 
       if (res.ok) {
         alert("Deleted");
-         document.getElementById("updatePassword").value = ""; // ✅ extra safety
+        document.getElementById("updatePassword").value = ""; // ✅ extra safety
         closeDelete();
         closeModal();
         loadBookings();
