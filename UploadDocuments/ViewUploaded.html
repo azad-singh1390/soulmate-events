@@ -491,411 +491,177 @@
 
   <script>
 
+    let originalData = {};
+    let pendingId = null;
+    let pendingChanges = {};
+    let deleteId = null;
 
-    function formatDate(dateStr) {
-      if (!dateStr) return "N/A";
-      const date = new Date(dateStr);
-      if (isNaN(date)) return "N/A";
-      return date.toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "long",
-        year: "numeric"
-      }).replace(/\s/g, "-");
+    // FORMAT DATE DISPLAY
+    function formatDate(d) {
+      const date = new Date(d);
+      return date.toLocaleDateString("en-GB");
     }
 
-
-    function downloadPDF(url, filename) {
-      fetch(url)
-        .then(resp => resp.blob())
-        .then(blob => {
-          const link = document.createElement('a');
-          link.href = URL.createObjectURL(blob);
-          link.download = filename;
-          link.click();
-          URL.revokeObjectURL(link.href);
-        })
-        .catch(err => console.error("Download failed", err));
-    }
-
-    // Helper to sanitize filename
-    function sanitizeFilename(name) {
-      return name.replace(/\s+/g, '_').replace(/[^\w\-]/g, '');
-    }
-
+    // LOAD DATA
     async function loadBookings() {
       const tbody = document.querySelector("#bookingsTable tbody");
-      const loader = document.getElementById("loader");
+      tbody.innerHTML = "";
 
-      loader.style.display = "flex";
+      const res = await fetch("https://soulmate-backend-production.up.railway.app/uploadeddocuments");
+      const data = (await res.json()).rows;
 
-      try {
-        const res = await fetch("https://soulmate-backend-production.up.railway.app/uploadeddocuments");
-        const result = await res.json();
-        const data = result.rows;
+      let i = 1;
 
-        tbody.innerHTML = "";
+      data.forEach(row => {
+        const tr = document.createElement("tr");
 
-        if (!data || data.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="5">No documents found</td></tr>`;
-          return;
-        }
+        tr.innerHTML = `
+  <td>${i++}</td>
+  <td>${row.file_name}</td>
+  <td>${formatDate(row.file_date)}</td>
 
-        let serial = 1;
+  <td>
+    ${row.has_file_data
+      ? `<a href="https://soulmate-backend-production.up.railway.app/documents/${row.id}/data-pdf" target="_blank">
+          View PDF
+        </a>`
+      : `<span style="color:red;">No PDF</span>`
+    }
+  </td>
 
-        data.forEach(row => {
+  <td>
+    ${row.has_text_data
+      ? `<a href="https://soulmate-backend-production.up.railway.app/documents/${row.id}/text" target="_blank">
+          View Text
+        </a>`
+      : `<span style="color:red;">No Text</span>`
+    }
+  </td>
 
-          const fileDate = formatDate(row.file_date);
+  <td>
+    <button class="edit-btn" onclick="editRow(this, ${row.id})">Edit</button>
+  </td>
+`;
 
-          const pdfLink = row.pdf_path
-            ? `<a href="https://soulmate-backend-production.up.railway.app/documents/${row.id}/data" target="_blank">View</a>`
-            : "No PDF";
-
-          const docDataLink = row.document_data
-            ? `<a href="https://soulmate-backend-production.up.railway.app/documents/${row.id}/text" target="_blank">View</a>`
-            : `<span style="color:red;">No Data</span>`;
-
-          const tr = document.createElement("tr");
-
-          tr.innerHTML = `
-        <td>${serial++}</td>
-        <td>${row.file_name}</td>
-        <td>${fileDate}</td>
-        <td>${pdfLink}</td>
-        <td>${docDataLink}</td>
-        <td>
-          <button class="edit-btn" onclick="editRow(this, ${row.id})">Edit</button>
-        </td>
-      `;
-
-          tbody.appendChild(tr);
-        });
-
-      } catch (err) {
-        console.error("Error fetching documents:", err);
-        tbody.innerHTML = `<tr><td colspan="7">❌ Error fetching documents</td></tr>`;
-      } finally {
-        loader.style.display = "none";
-      }
+        tbody.appendChild(tr);
+      });
     }
 
-    function formatDateForInput(dateString) {
-      if (!dateString) return "";
-      const date = new Date(dateString);
-      if (isNaN(date)) return "";
-      const yyyy = date.getFullYear();
-      const mm = String(date.getMonth() + 1).padStart(2, "0");
-      const dd = String(date.getDate()).padStart(2, "0");
-      return `${yyyy}-${mm}-${dd}`;
-    }
-
-    function formatTimeForInput(timeString) {
-      if (!timeString) return "";
-      let t = timeString.trim();
-      const ampmMatch = t.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
-      if (ampmMatch) {
-        let hh = parseInt(ampmMatch[1], 10);
-        const mm = ampmMatch[2];
-        const ampm = ampmMatch[3].toUpperCase();
-        if (ampm === "PM" && hh !== 12) hh += 12;
-        if (ampm === "AM" && hh === 12) hh = 0;
-        return `${String(hh).padStart(2, "0")}:${mm}`;
-      }
-      const parts = t.split(":");
-      if (parts.length >= 2) {
-        return `${parts[0].padStart(2, "0")}:${parts[1].padStart(2, "0")}`;
-      }
-      return "";
-    }
-
-    let originalData = {};
+    // EDIT OPEN
     function editRow(btn, id) {
       const tr = btn.closest("tr");
       const tds = tr.querySelectorAll("td");
 
       originalData = {
-        file_name: tds[1].innerText.trim(),
-        file_date: formatDateForInput(tds[2].innerText.trim())
+        file_name: tds[1].innerText,
+        file_date: new Date(tds[2].innerText).toISOString().split("T")[0]
       };
 
-      document.querySelector("#editBookingId").value = id;
-      document.querySelector("#editFileName").value = tds[1].innerText.trim();
-      document.querySelector("#editFileDate").value = formatDateForInput(tds[2].innerText.trim());
+      document.getElementById("editBookingId").value = id;
+      document.getElementById("editFileName").value = originalData.file_name;
+      document.getElementById("editFileDate").value = originalData.file_date;
+
       document.getElementById("editModal").style.display = "flex";
     }
 
+    // CLOSE MODAL
     function closeModal() {
       document.getElementById("editModal").style.display = "none";
-      document.getElementById("editQuotationPdf").value = "";
       document.getElementById("editPlanningPdf").value = "";
+      document.getElementById("editPlanningText").value = "";
     }
 
-    // Store pending changes + id until password entered
-    let pendingChanges = {};
-    let pendingId = null;
+    // SAVE
+    function saveEdit() {
+      const id = document.getElementById("editId").value;
 
-    async function saveEdit() {
-      const id = document.querySelector("#editBookingId").value;
       const current = {
-        file_name: document.querySelector("#editFileName").value.trim(),
-        file_date: document.querySelector("#editFileDate").value.trim()
+        file_name: document.getElementById("editFileName").value,
+        file_date: document.getElementById("editFileDate").value
       };
 
-      console.log("Original Data:", originalData);
-      console.log("Current Data:", current);
       let changes = {};
-      for (const key in current) {
+      for (let key in current) {
         if (current[key] !== originalData[key]) {
           changes[key] = current[key];
         }
       }
 
-      // if (Object.keys(changes).length === 0) {
-      //     alert("No changes detected!");
-      //     return;
-      // }
-      console.log("Changes detected for ID:", id, changes);
-      // Open password modal instead of prompt
-      askPassword(id, changes);
-    }
-
-    // --- Password Modal Logic ---
-    function askPassword(id, changes) {
       pendingId = id;
       pendingChanges = changes;
-      document.getElementById("updatePassword").value = "";
+
       document.getElementById("passwordModal").style.display = "flex";
     }
 
-    function closePasswordModal() {
-      document.getElementById("passwordModal").style.display = "none";
-      pendingChanges = {};
-      pendingId = null;
-    }
-
+    // SUBMIT PASSWORD
     async function submitPassword() {
-      const password = document.getElementById("updatePassword").value.trim();
-      if (!password) {
-        alert("❌ Please enter password");
-        return;
+      const password = document.getElementById("password").value;
+
+      const formData = new FormData();
+      formData.append("password", password);
+
+      for (let key in pendingChanges) {
+        formData.append(key, pendingChanges[key]);
       }
 
-      try {
-        const formData = new FormData();
-        formData.append("password", password);
+      const file = document.getElementById("editPlanningPdf").files[0];
+      if (file) {
+        formData.append("pdfUpload", file);
+      }
 
-        // Add only changed fields (text values)
-        for (let key in pendingChanges) {
-          formData.append(key, pendingChanges[key]);
-        }
+      const res = await fetch(`https://soulmate-backend-production.up.railway.app/documents/${pendingId}`, {
+        method: "PUT",
+        body: formData
+      });
 
-        // Add files if selected
-        const quotationFile = document.getElementById("editQuotationPdf").files[0];
-        const planningFile = document.getElementById("editPlanningPdf").files[0];
-        if (quotationFile) formData.append("pdfUpload", quotationFile);
-        if (planningFile) formData.append("planingpdfUpload", planningFile);
-
-        const res = await fetch(`https://soulmate-backend-production.up.railway.app/bookings/${pendingId}`, {
-          method: "PUT",
-          body: formData
-        });
-
-        if (!res.ok) throw new Error("Update failed");
-
-        alert("✅ Booking updated!");
-        closePasswordModal();
+      if (res.ok) {
+        alert("Updated");
+        closePassword();
         closeModal();
         loadBookings();
-      } catch (err) {
-        alert("❌ Failed to update booking");
-        console.error(err);
+      } else {
+        alert("Failed");
       }
-
-      document.getElementById("editQuotationPdf").value = "";
-      document.getElementById("editPlanningPdf").value = "";
-
     }
 
+    function closePassword() {
+      document.getElementById("passwordModal").style.display = "none";
+    }
 
-    window.onload = loadBookings;
-
-
-    let pendingDeleteId = null;
-
-    function deleteEdit(id) {
-      pendingDeleteId = id;
-      document.getElementById("deletePassword").value = "";
+    // DELETE
+    function deleteEdit() {
+      deleteId = document.getElementById("editId").value;
       document.getElementById("deletePasswordModal").style.display = "flex";
     }
 
-    function closeDeletePasswordModal() {
-      document.getElementById("deletePasswordModal").style.display = "none";
-      pendingDeleteId = null;
-    }
+    async function submitDelete() {
+      const password = document.getElementById("deletePassword").value;
 
+      const res = await fetch(`https://soulmate-backend-production.up.railway.app/documents/${deleteId}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password })
+      });
 
-    function downloadFileSequentially(url, filename) {
-      return fetch(url)
-        .then(resp => resp.blob())
-        .then(blob => {
-          const link = document.createElement('a');
-          link.href = URL.createObjectURL(blob);
-          link.download = filename;
-          link.click();
-          URL.revokeObjectURL(link.href);
-
-          return new Promise(resolve => setTimeout(resolve, 500)); // small delay
-        });
-    }
-
-    async function downloadAllPlannings() {
-
-      const loader = document.getElementById("loader");
-      loader.style.display = "flex";
-
-      try {
-
-        const res = await fetch("https://soulmate-backend-production.up.railway.app/upcomingbookings");
-        const result = await res.json();
-        const data = Array.isArray(result.rows) ? result.rows : [];
-
-        const plannings = data.filter(row => row.has_planning_pdf);
-
-        if (plannings.length === 0) {
-          alert("No planning PDFs found.");
-          return;
-        }
-
-        for (let row of plannings) {
-
-          const eventStartDate = formatDate(row.event_start_date);
-
-          const url = `https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-text`;
-          const filename = sanitizeFilename(row.client_name + "-" + eventStartDate) + "-planning.pdf";
-
-          const textRes = await fetch(url);
-
-          if (!textRes.ok) continue;
-
-          const text = await textRes.text();
-
-          const { jsPDF } = window.jspdf;
-          const pdf = new jsPDF();
-
-          const pageHeight = pdf.internal.pageSize.height;
-          const margin = 10;
-          const lineHeight = 7;
-
-          const lines = pdf.splitTextToSize(text, 180);
-
-          let y = margin;
-
-          lines.forEach((line) => {
-
-            if (y + lineHeight > pageHeight - margin) {
-              pdf.addPage();
-              y = margin;
-            }
-
-            pdf.text(line, margin, y);
-            y += lineHeight;
-
-          });
-
-          pdf.save(filename);
-
-          // small delay so browser doesn't block multiple downloads
-          await new Promise(r => setTimeout(r, 800));
-
-        }
-
-        alert("✅ All planning PDFs downloaded!");
-
-      } catch (err) {
-
-        console.error(err);
-        alert("❌ Error downloading plannings");
-
-      } finally {
-
-        loader.style.display = "none";
-
-      }
-    }
-
-
-    async function downloadAllQuotations() {
-      const loader = document.getElementById("loader");
-      loader.style.display = "flex";
-
-      try {
-        const res = await fetch("https://soulmate-backend-production.up.railway.app/todaybookings");
-        const result = await res.json();
-        const data = Array.isArray(result.rows) ? result.rows : [];
-
-        const quotations = data.filter(row => row.has_quotation_pdf);
-
-        if (quotations.length === 0) {
-          alert("No quotation PDFs found.");
-          return;
-        }
-
-        for (let row of quotations) {
-          const eventStartDate = formatDate(row.event_start_date);
-
-          const url = `https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf`;
-          const filename = sanitizeFilename(row.client_name + "-" + eventStartDate) + "-quotation.pdf";
-
-          await downloadFileSequentially(url, filename);
-        }
-
-        alert("✅ All quotation PDFs downloaded!");
-
-      } catch (err) {
-        console.error(err);
-        alert("❌ Error downloading quotations");
-      } finally {
-        loader.style.display = "none";
-      }
-    }
-
-
-    async function submitDeletePassword() {
-      const password = document.getElementById("deletePassword").value.trim();
-      if (!password) {
-        alert("❌ Please enter password");
-        return;
-      }
-
-      try {
-        const res = await fetch(`https://soulmate-backend-production.up.railway.app/bookings/${pendingDeleteId}`, {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ password })
-        });
-
-        const result = await res.json();
-        if (res.ok && result.success) {
-          alert("✅ Booking deleted successfully");
-          closeDeletePasswordModal();
-          closeModal();
-          loadBookings();
-        } else {
-          alert("❌ " + (result.message || "Failed to delete booking"));
-        }
-      } catch (err) {
-        console.error("Error deleting booking:", err);
-        alert("❌ Error deleting booking");
-      }
-    }
-
-
-    window.onclick = function (e) {
-      const modal = document.getElementById("editModal");
-      if (e.target === modal) {
+      if (res.ok) {
+        alert("Deleted");
+        closeDelete();
         closeModal();
+        loadBookings();
+      } else {
+        alert("Delete failed");
       }
-    };
+    }
+
+    function closeDelete() {
+      document.getElementById("deletePasswordModal").style.display = "none";
+    }
+
+    // INIT
+    window.onload = loadBookings;
+
   </script>
+
 </body>
 
 </html>
