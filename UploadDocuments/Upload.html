@@ -84,23 +84,16 @@
             <label>Date </label>
             <input type="date" name="startDate" id="startDate" required>
 
-            <label>Upload Image</label>
-            <input type="file" name="uploadImage" accept=".jpg, .jpeg, .png"
-                onchange="previewFile(this, 'uploadImagePreview')">
-            <small id="uploadImagePreview">Default: default.jpeg</small>
 
-            <label>Upload PDF</label>
-            <input type="file" name="uploadPDF" accept=".pdf" onchange="previewFile(this, 'uploadPDFPreview')">
+            <label>Upload Data File</label>
+            <input type="file" name="uploadPDF" accept=".pdf, .jpg, .jpeg, .png"
+                onchange="previewFile(this, 'uploadPDFPreview')">
             <small id="uploadPDFPreview">Default: default.pdf</small>
 
             <label>Upload Document Information</label>
             <input type="file" name="planningText" accept=".txt" onchange="previewFile(this, 'documentInfoPreview')">
             <small id="documentInfoPreview">Default: default.txt</small>
 
-            <!-- hidden flags to tell backend to use default -->
-            <input type="hidden" name="useDefaultImage" value="true">
-            <input type="hidden" name="useDefaultPDF" value="true">
-            <input type="hidden" name="useDefaultDocumentInfo" value="true">
             <button type="submit">Submit</button>
         </form>
     </div>
@@ -168,19 +161,8 @@
 
         if (input.files && input.files.length > 0) {
             preview.innerText = "Selected: " + input.files[0].name;
-
-            if (previewId === "uploadImagePreview") {
-                document.querySelector('input[name="useDefaultImage"]').value = "false";
-            }
-            if (previewId === "uploadPDFPreview") {
-                document.querySelector('input[name="useDefaultPDF"]').value = "false";
-            }
-            if (previewId === "documentInfoPreview") {
-                document.querySelector('input[name="useDefaultDocumentInfo"]').value = "false";
-            }
-
         } else {
-            preview.innerText = "Using default file";
+            preview.innerText = "Default file will be used";
         }
     }
 
@@ -198,7 +180,6 @@
         formPendingSubmit = null;
     }
 
-    // ✅ Submit after password
     async function confirmPassword() {
         const password = document.getElementById("submitPassword").value;
 
@@ -208,35 +189,72 @@
         }
 
         const form = formPendingSubmit;
+        if (!form) return;
+
+        const submitBtn = form.querySelector("button[type='submit']");
+
+        // 🔒 Disable button to prevent multiple clicks
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Uploading...";
+
         closePasswordModal();
 
         const formData = new FormData(form);
+
+        // 🔍 Check actual selected files
+        const pdfFile = form.querySelector('input[name="uploadPDF"]').files[0];
+        const docFile = form.querySelector('input[name="planningText"]').files[0];
+
+        // ✅ Always send correct flags
+        formData.set("useDefaultPDF", pdfFile ? "false" : "true");
+        formData.set("useDefaultDocumentInfo", docFile ? "false" : "true");
+
         formData.append("password", password);
 
+        // ⏳ Show uploading overlay
         document.getElementById("uploadingMessage").style.display = "flex";
 
         try {
             const response = await fetch(
-                'https://soulmate-backend-production.up.railway.app/uploaddocuments',
+                "https://soulmate-backend-production.up.railway.app/uploaddocuments",
                 {
-                    method: 'POST',
+                    method: "POST",
                     body: formData
                 }
             );
 
             const result = await response.json();
 
+            // ❌ Hide loader
             document.getElementById("uploadingMessage").style.display = "none";
 
             if (result.message === "Success") {
+                // ✅ Reset form
                 form.reset();
+
+                // 🔄 Reset preview labels
+                document.getElementById("uploadPDFPreview").innerText = "Default: default.pdf";
+                document.getElementById("documentInfoPreview").innerText = "Default: default.txt";
+
+                // 🔓 Re-enable button
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Submit";
+
+                // 🚀 Redirect
                 window.location.href = "../thankyou.html";
+
             } else {
-                alert("Upload failed: " + (result.message || "Unknown error"));
+                throw new Error(result.message || "Unknown error");
             }
 
         } catch (err) {
+            // ❌ Hide loader
             document.getElementById("uploadingMessage").style.display = "none";
+
+            // 🔓 Re-enable button
+            submitBtn.disabled = false;
+            submitBtn.innerText = "Submit";
+
             alert("Upload failed: " + err.message);
         }
     }
@@ -257,8 +275,14 @@
 
     // ✅ Set today’s date
     document.addEventListener("DOMContentLoaded", () => {
-        const today = new Date().toISOString().split('T')[0];
-        document.querySelector('input[name="startDate"]').value = today;
+        const today = new Date();
+
+        const localDate =
+            today.getFullYear() + "-" +
+            String(today.getMonth() + 1).padStart(2, '0') + "-" +
+            String(today.getDate()).padStart(2, '0');
+
+        document.querySelector('input[name="startDate"]').value = localDate;
     });
 </script>
 
