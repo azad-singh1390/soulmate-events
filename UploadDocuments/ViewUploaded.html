@@ -403,10 +403,9 @@
       <thead>
         <tr>
           <th>S.No.</th>
-          <th>File Name</th>
+          <th>File Information</th>
           <th>File Date</th>
           <th>File Data</th>
-          <th>Planning Text</th>
           <th>Action</th>
         </tr>
       </thead>
@@ -421,7 +420,7 @@
       <form id="editBookingForm">
         <input type="hidden" id="editBookingId">
 
-        <label>File Name</label>
+        <label>File Information</label>
         <input type="text" id="editFileName" required>
 
         <label>File Date</label>
@@ -430,9 +429,6 @@
         <label>Upload File </label>
         <input type="file" id="editPlanningPdf" name="pdfUpload" accept=".pdf">
         <br>
-
-        <label>Update File Text</label>
-        <textarea id="editPlanningText" rows="4" cols="50"></textarea>
 
         <div style="margin-top:15px; text-align:right;">
           <button type="button" class="save-btn" onclick="saveEdit()">Save</button>
@@ -460,7 +456,7 @@
       <div>
         <button onclick="submitPassword()"
           style="background:#007bff; color:#fff; padding:8px 14px; border:none; border-radius:6px; margin-right:8px; cursor:pointer;">Submit</button>
-        <button onclick="closePasswordModal()"
+        <button onclick="closePassword()"
           style="background:#dc3545; color:#fff; padding:8px 14px; border:none; border-radius:6px; cursor:pointer;">Cancel</button>
       </div>
     </div>
@@ -477,11 +473,11 @@
         style="width:100%; padding:8px; margin:15px 0; border:1px solid #ccc; border-radius:6px;"
         placeholder="Password">
       <div>
-        <button onclick="submitDeletePassword()"
+        <button onclick="submitDelete()"
           style="background:black; color:#fff; padding:8px 14px; border:none; border-radius:6px; margin-right:8px; cursor:pointer;">
           Confirm Delete
         </button>
-        <button onclick="closeDeletePasswordModal()"
+        <button onclick="closeDelete()"
           style="background:#dc3545; color:#fff; padding:8px 14px; border:none; border-radius:6px; cursor:pointer;">
           Cancel
         </button>
@@ -507,46 +503,75 @@
       const tbody = document.querySelector("#bookingsTable tbody");
       tbody.innerHTML = "";
 
-      const res = await fetch("https://soulmate-backend-production.up.railway.app/uploadeddocuments");
-      const data = (await res.json()).rows;
+      try {
+        const res = await fetch("https://soulmate-backend-production.up.railway.app/uploadeddocuments");
 
-      let i = 1;
+        if (!res.ok) {
+          throw new Error("API failed");
+        }
 
-      data.forEach(row => {
-        const tr = document.createElement("tr");
+        const result = await res.json();
+        const data = result.rows || [];
 
-        tr.innerHTML = `
-  <td>${i++}</td>
-  <td>${row.file_name}</td>
-  <td>${formatDate(row.file_date)}</td>
+        if (data.length === 0) {
+          tbody.innerHTML = `
+        <tr>
+          <td colspan="5" style="color:red; font-weight:bold;">
+            No Data Found
+          </td>
+        </tr>
+      `;
+          return;
+        }
 
-  <td>
-    ${row.has_file_data
-      ? `<a href="https://soulmate-backend-production.up.railway.app/documents/${row.id}/data-pdf" target="_blank">
-          View PDF
-        </a>`
-      : `<span style="color:red;">No PDF</span>`
+        let i = 1;
+
+        data.forEach(row => {
+          const tr = document.createElement("tr");
+
+          tr.innerHTML = `
+        <td>${i++}</td>
+        <td>${row.file_name}</td>
+        <td>${formatDate(row.file_date)}</td>
+
+        <td>
+  ${row.has_file_data
+              ? `
+      <a href="https://soulmate-backend-production.up.railway.app/documents/${row.id}/data-pdf" target="_blank">
+        View
+      </a>
+
+      &nbsp;|&nbsp;
+
+      <a href="https://soulmate-backend-production.up.railway.app/documents/${row.id}/data-pdf"
+         download="${row.file_name}.pdf">
+        Download
+      </a>
+    `
+              : `<span style="color:red;">No PDF</span>`
+            }
+</td>
+
+        <td>
+          <button class="edit-btn" onclick="editRow(this, ${row.id})">Edit</button>
+        </td>
+      `;
+
+          tbody.appendChild(tr);
+        });
+
+      } catch (err) {
+        console.error(err);
+
+        tbody.innerHTML = `
+      <tr>
+        <td colspan="5" style="color:red; font-weight:bold;">
+          Failed to load data
+        </td>
+      </tr>
+    `;
+      }
     }
-  </td>
-
-  <td>
-    ${row.has_text_data
-      ? `<a href="https://soulmate-backend-production.up.railway.app/documents/${row.id}/text" target="_blank">
-          View Text
-        </a>`
-      : `<span style="color:red;">No Text</span>`
-    }
-  </td>
-
-  <td>
-    <button class="edit-btn" onclick="editRow(this, ${row.id})">Edit</button>
-  </td>
-`;
-
-        tbody.appendChild(tr);
-      });
-    }
-
     // EDIT OPEN
     function editRow(btn, id) {
       const tr = btn.closest("tr");
@@ -568,12 +593,11 @@
     function closeModal() {
       document.getElementById("editModal").style.display = "none";
       document.getElementById("editPlanningPdf").value = "";
-      document.getElementById("editPlanningText").value = "";
     }
 
     // SAVE
     function saveEdit() {
-      const id = document.getElementById("editId").value;
+      const id = document.getElementById("editBookingId").value;
 
       const current = {
         file_name: document.getElementById("editFileName").value,
@@ -595,7 +619,13 @@
 
     // SUBMIT PASSWORD
     async function submitPassword() {
-      const password = document.getElementById("password").value;
+      const password = document.getElementById("updatePassword").value;
+
+      if (!password) {
+        alert("Please enter password");
+        return;
+      }
+
 
       const formData = new FormData();
       formData.append("password", password);
@@ -616,6 +646,7 @@
 
       if (res.ok) {
         alert("Updated");
+         document.getElementById("updatePassword").value = ""; // ✅ extra safety
         closePassword();
         closeModal();
         loadBookings();
@@ -626,11 +657,12 @@
 
     function closePassword() {
       document.getElementById("passwordModal").style.display = "none";
+       document.getElementById("updatePassword").value = ""; // ✅ clear
     }
 
     // DELETE
     function deleteEdit() {
-      deleteId = document.getElementById("editId").value;
+      deleteId = document.getElementById("editBookingId").value;
       document.getElementById("deletePasswordModal").style.display = "flex";
     }
 
@@ -645,6 +677,7 @@
 
       if (res.ok) {
         alert("Deleted");
+         document.getElementById("updatePassword").value = ""; // ✅ extra safety
         closeDelete();
         closeModal();
         loadBookings();
@@ -655,6 +688,7 @@
 
     function closeDelete() {
       document.getElementById("deletePasswordModal").style.display = "none";
+      document.getElementById("deletePassword").value = ""; // ✅ clear
     }
 
     // INIT

@@ -89,11 +89,7 @@
             <input type="file" name="uploadPDF" accept=".pdf"
                 onchange="previewFile(this, 'uploadPDFPreview')">
             <small id="uploadPDFPreview">Default: default.pdf</small>
-
-            <label>Upload Document Information</label>
-            <input type="file" name="planningText" accept=".txt" onchange="previewFile(this, 'documentInfoPreview')">
-            <small id="documentInfoPreview">Default: default.txt</small>
-
+            <br><br>
             <button type="submit">Submit</button>
         </form>
     </div>
@@ -203,11 +199,9 @@
 
         // 🔍 Check actual selected files
         const pdfFile = form.querySelector('input[name="uploadPDF"]').files[0];
-        const docFile = form.querySelector('input[name="planningText"]').files[0];
 
         // ✅ Always send correct flags
         formData.set("useDefaultPDF", pdfFile ? "false" : "true");
-        formData.set("useDefaultDocumentInfo", docFile ? "false" : "true");
 
         formData.append("password", password);
 
@@ -234,7 +228,6 @@
 
                 // 🔄 Reset preview labels
                 document.getElementById("uploadPDFPreview").innerText = "Default: default.pdf";
-                document.getElementById("documentInfoPreview").innerText = "Default: default.txt";
 
                 // 🔓 Re-enable button
                 submitBtn.disabled = false;
