@@ -424,7 +424,7 @@
           <th>Time</th>
           <th>Quotation PDF</th>
           <th>Planning PDF</th>
-          <th>Planning Text</th>
+          <th>Additional Info</th>
           <th>Action</th>
         </tr>
       </thead>
@@ -783,7 +783,7 @@
 <a href="../Quotations/CreateQuotation/ViewPlanning.html?url=https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-text&client=${encodeURIComponent(row.client_name)}&date=${encodeURIComponent(eventStartDate)}"
 target="_blank"
 style="${row.has_planning_text ? "" : "color:red;"}">
-${row.has_planning_text ? "View" : "Add Text"}
+${row.has_planning_text ? "Additional Info" : "Add Additional Text"}
 </a>`;
 
           const tr = document.createElement("tr");
