@@ -17,21 +17,31 @@ def generate_html():
     subdirs_sorted = sorted(subdirs, key=lambda d: d.stat().st_mtime, reverse=True)
 
     for subdir in subdirs_sorted:
-        # Find PDF (first one)
-        pdf_files = [f for f in subdir.iterdir() if f.suffix.lower() == ".pdf"]
-        print(pdf_files) 
-        # Find Word (first one)
-        word_files = [f for f in subdir.iterdir() if f.suffix.lower() in (".doc", ".docx")]
+        pdf_files = sorted([f for f in subdir.iterdir() if f.suffix.lower() == ".pdf"], key=lambda f: f.name.lower())
+        html_files = sorted([f for f in subdir.iterdir() if f.suffix.lower() in (".html", ".htm")], key=lambda f: f.name.lower())
+        word_files = sorted([f for f in subdir.iterdir() if f.suffix.lower() in (".docx", ".doc")], key=lambda f: f.name.lower())
 
         pdf_link = (
-            f'<a class="pdf-link" href="{subdir.name}/{pdf_files[0].name}" target="_blank">{pdf_files[0].name}</a>'
+            "<br>".join(
+                f'<a class="pdf-link" href="{subdir.name}/{f.name}" target="_blank">{f.name}</a>'
+                for f in pdf_files
+            )
             if pdf_files else "No PDF"
         )
 
-        word_link = (
-            f'<a class="pdf-link" href="{subdir.name}/{word_files[0].name}" target="_blank">{word_files[0].name}</a>'
-            if word_files else "No Word"
-        )
+        document_links = []
+        if html_files:
+            document_links.append("HTML: " + "<br>".join(
+                f'<a class="pdf-link" href="{subdir.name}/{f.name}" target="_blank">{f.name}</a>'
+                for f in html_files
+            ))
+        if word_files:
+            document_links.append("Word: " + "<br>".join(
+                f'<a class="pdf-link" href="{subdir.name}/{f.name}" target="_blank">{f.name}</a>'
+                for f in word_files
+            ))
+
+        document_link = "<br><br>".join(document_links) if document_links else "No Document"
 
         # Folder last updated time
         last_updated = datetime.fromtimestamp(subdir.stat().st_mtime).strftime("%Y-%m-%d %H:%M:%S")
@@ -41,7 +51,7 @@ def generate_html():
                 <td>{s_no}</td>
                 <td>{subdir.name}</td>
                 <td>{pdf_link}</td>
-                <td>{word_link}</td>
+                <td>{document_link}</td>
             </tr>
         """)
 
@@ -172,7 +182,7 @@ a.pdf-link:hover {{
                 <th>S.NO</th>
                 <th>Name</th>
                 <th>PDF</th>
-                <th>Word</th>
+                <th>Documents</th>
             </tr>
         </thead>
         <tbody>
