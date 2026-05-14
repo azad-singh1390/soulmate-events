@@ -806,6 +806,34 @@
             }); // e.g. January 2026
         }
 
+        async function downloadQuotationPDF(id, clientName) {
+            try {
+                const response = await fetch(
+                    `https://soulmate-backend-production.up.railway.app/bookings/${id}/followup-quotation-pdf`
+                );
+
+                const blob = await response.blob();
+
+                const url = window.URL.createObjectURL(blob);
+
+                const a = document.createElement("a");
+                a.href = url;
+                const cleanName = clientName.trim().replace(/\s+/g, " ");
+
+                a.download = `SoulmateEvents-${cleanName}.pdf`;
+
+                document.body.appendChild(a);
+                a.click();
+
+                a.remove();
+                window.URL.revokeObjectURL(url);
+
+            } catch (error) {
+                console.error("Download failed:", error);
+                alert("Failed to download PDF");
+            }
+        }
+
         async function loadBookings() {
             const tbody = document.querySelector("#bookingsTable tbody");
             const loader = document.getElementById("loader");
@@ -865,10 +893,57 @@
                     const tr = document.createElement("tr");
 
                     // PDF Column
+                    // PDF Column
                     const pdfLink = row.has_quotation_pdf
-                        ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/followup-quotation-pdf" target="_blank">View</a>`
-                        : "No PDF";
+                        ? `
+        <div style="display:flex; gap:8px; align-items:center;">
 
+            <a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/followup-quotation-pdf"
+               target="_blank"
+               style="
+                    text-decoration:none;
+                    background:#2563eb;
+                    color:white;
+                    padding:7px 14px;
+                    border-radius:8px;
+                    font-size:13px;
+                    font-weight:600;
+                    box-shadow:0 2px 6px rgba(37,99,235,0.25);
+                    transition:0.3s;
+               "
+               onmouseover="this.style.background='#1d4ed8'"
+               onmouseout="this.style.background='#2563eb'">
+               View
+            </a>
+
+            <button
+                onclick="downloadQuotationPDF(${row.id}, '${(row.client_name || 'Client').replace(/'/g, "\\'")}')"
+                style="
+                    background:linear-gradient(135deg,#16a34a,#22c55e);
+                    color:white;
+                    border:none;
+                    padding:10px 8px;
+                    border-radius:8px;
+                    cursor:pointer;
+                    font-size:8px;
+                    font-weight:700;
+                    box-shadow:0 3px 8px rgba(34,197,94,0.3);
+                    transition:all 0.3s ease;
+                "
+                onmouseover="
+                    this.style.transform='translateY(-2px)';
+                    this.style.boxShadow='0 6px 12px rgba(34,197,94,0.4)';
+                "
+                onmouseout="
+                    this.style.transform='translateY(0px)';
+                    this.style.boxShadow='0 3px 8px rgba(34,197,94,0.3)';
+                ">
+                ⬇ Download
+            </button>
+
+        </div>
+      `
+                        : "No PDF";
                     // Status Styling
                     const statusClass =
                         row.booking_status?.toLowerCase() === "confirmed"
