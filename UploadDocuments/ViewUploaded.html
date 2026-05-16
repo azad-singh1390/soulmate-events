@@ -11,6 +11,60 @@
   <script src="https://cdn.jsdelivr.net/npm/xlsx-populate/browser/xlsx-populate.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
+    /* View + Download Buttons */
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .view-btn,
+    .download-btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* View Button */
+    .view-btn {
+      background: #007bff;
+      color: white;
+    }
+
+    .view-btn:hover {
+      background: #0056b3;
+      transform: translateY(-2px);
+    }
+
+    /* Download Button */
+    .download-btn {
+      background: #28a745;
+      color: white;
+    }
+
+    .download-btn:hover {
+      background: #1e7e34;
+      transform: translateY(-2px);
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+
+      .view-btn,
+      .download-btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
     body {
       font-family: Arial, sans-serif;
       background: #f4f6f9;
@@ -541,21 +595,32 @@
         <td>${row.file_name}</td>
         <td>${formatDate(row.file_date)}</td>
 
-        <td>
-          ${row.has_file_data
+<td>
+  ${row.has_file_data
               ? `
-              <a href="https://soulmate-backend-production.up.railway.app/documents/${row.id}/data-pdf" target="_blank">
-                View
-              </a>
-              &nbsp;|&nbsp;
-              <a href="https://soulmate-backend-production.up.railway.app/documents/${row.id}/data-pdf"
-                 download="${row.file_name}.pdf">
-                Download
-              </a>
-            `
+      <div class="action-buttons">
+        
+        <a 
+          href="https://soulmate-backend-production.up.railway.app/documents/${row.id}/data-pdf"
+          target="_blank"
+          class="view-btn"
+        >
+          👁 View
+        </a>
+
+<a 
+  href="#"
+  class="download-btn"
+  onclick="downloadPDF(${row.id}, '${row.file_name}')"
+>
+  ⬇ Download
+</a>
+
+      </div>
+    `
               : `<span style="color:red;">No PDF</span>`
             }
-        </td>
+</td>
 
         <td>
           <button class="edit-btn" onclick="editRow(this, ${row.id})">Edit</button>
@@ -753,6 +818,44 @@
     function closeDelete() {
       document.getElementById("deletePasswordModal").style.display = "none";
       document.getElementById("deletePassword").value = ""; // ✅ clear
+    }
+
+    async function downloadPDF(id, fileName) {
+
+      try {
+
+        const response = await fetch(
+          `https://soulmate-backend-production.up.railway.app/documents/${id}/data-pdf`
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to download PDF");
+        }
+
+        const blob = await response.blob();
+
+        const url = window.URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = url;
+
+        // Remove extra spaces from filename
+        const cleanName = fileName.trim().replace(/\s+/g, "_");
+
+        a.download = `${cleanName}.pdf`;
+
+        document.body.appendChild(a);
+        a.click();
+
+        a.remove();
+        window.URL.revokeObjectURL(url);
+
+      } catch (err) {
+
+        console.error(err);
+        alert("Download failed");
+
+      }
     }
 
     // INIT
