@@ -163,29 +163,88 @@
             color: #333;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            background: #fff;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
+        /* =========================
+   TABLE STYLING
+========================= */
 
-        th,
-        td {
-            padding: 10px;
-            border: 2px solid black;
-            text-align: center;
-        }
+/* =========================
+   TABLE STYLING
+========================= */
 
-        th {
-            background: orange;
-            color: black;
-        }
+.table-container {
+    overflow-x: auto;
+    margin-top: 20px;
+    border-radius: 14px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
 
-        tr:nth-child(even) {
-            background: #f9f9f9;
-        }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+/* Header */
+th {
+    background: #111;
+    color: #fff;
+    padding: 14px 12px;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1px solid #2b2b2b;
+    text-align: center;
+}
+
+/* Cells */
+td {
+    padding: 14px 12px;
+    border: 1px solid #e5e7eb;
+    font-size: 14px;
+    color: #222;
+    text-align: center;
+}
+
+/* Alternate rows */
+tbody tr:nth-child(even):not(.month-header-row) {
+    background: #fafafa;
+}
+
+/* =========================
+   MONTH HEADER
+========================= */
+
+.month-header-row td {
+    background: linear-gradient(135deg, #f97316, white);
+    color: #fff !important;
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center !important;
+    padding: 16px;
+    letter-spacing: 1px;
+    border: 1px solid #000;
+}
+
+/* =========================
+   MOBILE RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+
+    th,
+    td {
+        padding: 10px 8px;
+        font-size: 12px;
+    }
+
+    .month-header-row td {
+        font-size: 18px;
+        padding: 14px;
+    }
+}
 
         /* Loader Overlay */
         .loader-overlay {
@@ -1055,11 +1114,9 @@
                 <td>${row.booker_name || ""}</td>
                 <td>${row.decorator || ""}</td>
 
-<td class="status-cell">
-    <span class="status-badge ${statusClass}">
-        ${row.booking_status || ""}
-    </span>
-</td>
+                <td class="status-cell ${statusClass}">
+                    ${row.booking_status || ""}
+                </td>
 
                 <td>${pdfLink}</td>
 
