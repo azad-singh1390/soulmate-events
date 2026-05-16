@@ -756,19 +756,80 @@
           const eventEndDate = formatDate(row.event_end_date);
 
           const pdfLink = row.has_quotation_pdf
-            ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf" target="_blank">View</a> | 
-           <a href="#" onclick="downloadPDF(
-             'https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf',
-             '${sanitizeFilename(row.client_name + "-" + eventStartDate)}-quotation.pdf'
-           )">Download</a>`
-            : "No PDF";
+            ? `
+    <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
+      
+      <a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf"
+         target="_blank"
+         style="
+           background:#007bff;
+           color:white;
+           padding:6px 12px;
+           border-radius:6px;
+           text-decoration:none;
+           font-size:13px;
+           font-weight:600;
+         ">
+         👁 View
+      </a>
 
+      <button onclick="downloadPDF(
+        'https://soulmate-backend-production.up.railway.app/bookings/${row.id}/quotation-pdf',
+        'SoulmateEvents-${sanitizeFilename(row.client_name)}.pdf'
+      )"
+      style="
+        background:#28a745;
+        color:white;
+        border:none;
+        padding:6px 12px;
+        border-radius:6px;
+        cursor:pointer;
+        font-size:13px;
+        font-weight:600;
+      ">
+        ⬇ Download
+      </button>
+
+    </div>
+  `
+            : "No PDF";
           const planningpdfLink = row.has_planning_pdf
-            ? `<a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf" target="_blank">View</a> | 
-           <a href="#" onclick="downloadPDF(
-             'https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf',
-             '${sanitizeFilename(row.client_name + "-" + eventStartDate)}-planning.pdf'
-           )">Download</a>`
+            ? `
+    <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
+      
+      <a href="https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf"
+         target="_blank"
+         style="
+           background:#007bff;
+           color:white;
+           padding:6px 12px;
+           border-radius:6px;
+           text-decoration:none;
+           font-size:13px;
+           font-weight:600;
+         ">
+         👁 View
+      </a>
+
+      <button onclick="downloadPDF(
+        'https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-pdf',
+        'SoulmateEvents-${sanitizeFilename(row.client_name)}.pdf'
+      )"
+      style="
+        background:#28a745;
+        color:white;
+        border:none;
+        padding:6px 12px;
+        border-radius:6px;
+        cursor:pointer;
+        font-size:13px;
+        font-weight:600;
+      ">
+        ⬇ Download
+      </button>
+
+    </div>
+  `
             : "No PDF";
 
 
