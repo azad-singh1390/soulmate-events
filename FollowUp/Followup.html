@@ -18,30 +18,84 @@
             padding-top: 60px;
         }
 
+        /* =========================
+   BOOKING STATUS BADGES
+========================= */
+
         .status-cell {
-            font-weight: 600;
-            text-transform: capitalize;
             text-align: center;
+            padding: 14px !important;
         }
 
-        .status-confirmed {
-            background-color: #86efac;
-            /* medium green */
-            color: #052e16;
-            /* very dark green */
+        .status-badge {
+            display: inline-block;
+            padding: 8px 14px;
+            border-radius: 30px;
+            font-size: 13px;
             font-weight: 700;
-            /* stronger bold */
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            min-width: 170px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
         }
 
-        .status-other {
-            background-color: #ef4444;
-            /* strong red */
-            color: black;
-            /* white text for max contrast */
-            font-weight: 800;
-            /* extra bold */
+        /* Confirmed */
+        .status-confirmed {
+            background: linear-gradient(135deg, #22c55e, #15803d);
+            color: white;
+            border-color: #bbf7d0;
         }
 
+        /* Pending */
+        .status-pending {
+            background: linear-gradient(135deg, #facc15, #eab308);
+            color: #111827;
+            border-color: #fde68a;
+        }
+
+        /* In Discussion */
+        .status-discussion {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            border-color: #bfdbfe;
+        }
+
+        /* Following */
+        .status-following {
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            color: white;
+            border-color: #ddd6fe;
+        }
+
+        /* Quotation Shared */
+        .status-quotation {
+            background: linear-gradient(135deg, #06b6d4, #0e7490);
+            color: white;
+            border-color: #a5f3fc;
+        }
+
+        /* Not Responding */
+        .status-noresponse {
+            background: linear-gradient(135deg, #f97316, #c2410c);
+            color: white;
+            border-color: #fdba74;
+        }
+
+        /* Cancelled / Booked By Other */
+        .status-cancelled {
+            background: linear-gradient(135deg, #ef4444, #991b1b);
+            color: white;
+            border-color: #fecaca;
+        }
+
+        /* Default */
+        .status-default {
+            background: linear-gradient(135deg, #6b7280, #374151);
+            color: white;
+            border-color: #d1d5db;
+        }
 
         .month-header {
             background: white;
@@ -106,31 +160,139 @@
 
         h1 {
             text-align: center;
-            color: #333;
+            font-size: 34px;
+            font-weight: 800;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, #111827, #4b5563);
+
+            /* Standard property */
+            background-clip: text;
+
+            /* Webkit support */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+
+            color: transparent;
+            letter-spacing: 1px;
         }
+
+        /* =========================
+   PREMIUM TABLE DESIGN
+========================= */
 
         table {
             width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            background: #fff;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 25px;
+            background: #ffffff;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow:
+                0 10px 30px rgba(0, 0, 0, 0.08),
+                0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
-        th,
-        td {
-            padding: 10px;
-            border: 2px solid black;
-            text-align: center;
-        }
-
+        /* Header */
         th {
-            background: orange;
-            color: black;
+            background: linear-gradient(135deg, #111827, #1f2937);
+            color: white;
+            padding: 18px 14px;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            border: none;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            white-space: nowrap;
         }
 
-        tr:nth-child(even) {
-            background: #f9f9f9;
+        /* Table Cells */
+        td {
+            padding: 16px 14px;
+            border: none;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: center;
+            font-size: 14px;
+            color: #374151;
+            vertical-align: middle;
+            transition: all 0.25s ease;
+        }
+
+        /* Zebra Striping */
+        tbody tr:nth-child(even) {
+            background: #f9fafb;
+        }
+
+        /* Hover Effect */
+        tbody tr:hover {
+            background: #f3f4f6;
+            transform: scale(1.002);
+            box-shadow: inset 0 0 0 9999px rgba(255, 255, 255, 0.15);
+        }
+
+        /* Rounded Header Corners */
+        th:first-child {
+            border-top-left-radius: 18px;
+        }
+
+        th:last-child {
+            border-top-right-radius: 18px;
+        }
+
+        /* Smooth transitions */
+        tbody tr {
+            transition: all 0.25s ease;
+        }
+
+        /* Better spacing on mobile */
+        @media (max-width: 768px) {
+
+            table {
+                border-radius: 14px;
+            }
+
+            th {
+                font-size: 12px;
+                padding: 14px 10px;
+            }
+
+            td {
+                padding: 14px 10px;
+                font-size: 13px;
+            }
+        }
+
+        /* =========================
+   TABLE CONTAINER PREMIUM
+========================= */
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            border-radius: 20px;
+        }
+
+        /* Smooth scrollbar */
+        .table-container::-webkit-scrollbar {
+            height: 10px;
+        }
+
+        .table-container::-webkit-scrollbar-track {
+            background: #e5e7eb;
+            border-radius: 20px;
+        }
+
+        .table-container::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #6b7280, #374151);
+            border-radius: 20px;
+        }
+
+        .table-container::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #374151, #111827);
         }
 
         /* Loader Overlay */
@@ -943,25 +1105,174 @@
 
         </div>
       `
-                        : "No PDF";
+                        : `
+<div style="
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 14px;
+    border-radius:12px;
+    background:linear-gradient(135deg,#ef4444,#991b1b);
+    color:white;
+    font-size:12px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    box-shadow:0 3px 10px rgba(239,68,68,0.25);
+    border:2px solid #fecaca;
+">
+    ❌ No PDF
+</div>
+`;
                     // Status Styling
-                    const statusClass =
-                        row.booking_status?.toLowerCase() === "confirmed"
-                            ? "status-confirmed"
-                            : "status-other";
+                    let statusClass = "status-default";
+
+                    const status = (row.booking_status || "").toLowerCase();
+
+                    if (status.includes("confirmed")) {
+                        statusClass = "status-confirmed";
+
+                    } else if (status.includes("pending")) {
+                        statusClass = "status-pending";
+
+                    } else if (
+                        status.includes("following")
+                    ) {
+                        statusClass = "status-following";
+
+                    } else if (
+                        status.includes("discussion")
+                    ) {
+                        statusClass = "status-discussion";
+
+                    } else if (
+                        status.includes("quotation")
+                    ) {
+                        statusClass = "status-quotation";
+
+                    } else if (
+                        status.includes("not responding")
+                    ) {
+                        statusClass = "status-noresponse";
+
+                    } else if (
+                        status.includes("cancelled") ||
+                        status.includes("booked by other")
+                    ) {
+                        statusClass = "status-cancelled";
+                    }
 
                     tr.innerHTML = `
-                <td>${serial++}</td>
-                <td>${row.client_name || ""}</td>
-                <td>${row.client_number || ""}</td>
-                <td>${eventDate}</td>
-                <td>${row.event_type || ""}</td>
-                <td>${row.booker_name || ""}</td>
-                <td>${row.decorator || ""}</td>
+<td>
+    <div style="
+        font-weight:700;
+        color:#111827;
+        background:#f3f4f6;
+        width:36px;
+        height:36px;
+        border-radius:50%;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        margin:auto;
+        box-shadow:0 2px 8px rgba(0,0,0,0.08);
+    ">
+        ${serial++}
+    </div>
+</td>
 
-                <td class="status-cell ${statusClass}">
-                    ${row.booking_status || ""}
-                </td>
+<td>
+    <div style="
+        font-weight:700;
+        color:#111827;
+        font-size:14px;
+    ">
+        👤 ${row.client_name || "N/A"}
+    </div>
+</td>
+
+<td>
+    <a href="tel:${row.client_number || ""}"
+       style="
+        text-decoration:none;
+        background:linear-gradient(135deg,#2563eb,#1d4ed8);
+        color:white;
+        padding:8px 14px;
+        border-radius:30px;
+        font-size:13px;
+        font-weight:700;
+        display:inline-block;
+        box-shadow:0 3px 10px rgba(37,99,235,0.25);
+       ">
+       📞 ${row.client_number || "N/A"}
+    </a>
+</td>
+
+<td>
+    <div style="
+        background:linear-gradient(135deg,#f59e0b,#d97706);
+        color:white;
+        padding:8px 14px;
+        border-radius:12px;
+        font-size:13px;
+        font-weight:700;
+        display:inline-block;
+        box-shadow:0 3px 10px rgba(245,158,11,0.25);
+    ">
+        📅 ${eventDate}
+    </div>
+</td>
+
+<td>
+    <div style="
+        background:#eef2ff;
+        color:#4338ca;
+        padding:8px 14px;
+        border-radius:12px;
+        font-size:13px;
+        font-weight:700;
+        display:inline-block;
+        border:1px solid #c7d2fe;
+    ">
+        🎉 ${row.event_type || "N/A"}
+    </div>
+</td>
+
+<td>
+    <div style="
+        background:#ecfeff;
+        color:#0f766e;
+        padding:8px 14px;
+        border-radius:12px;
+        font-size:13px;
+        font-weight:700;
+        display:inline-block;
+        border:1px solid #a5f3fc;
+    ">
+        🤝 ${row.booker_name || "N/A"}
+    </div>
+</td>
+
+<td>
+    <div style="
+        background:#fdf4ff;
+        color:#9333ea;
+        padding:8px 14px;
+        border-radius:12px;
+        font-size:13px;
+        font-weight:700;
+        display:inline-block;
+        border:1px solid #e9d5ff;
+    ">
+        🎨 ${row.decorator || "N/A"}
+    </div>
+</td>
+
+<td class="status-cell">
+    <span class="status-badge ${statusClass}">
+        ${row.booking_status || ""}
+    </span>
+</td>
 
                 <td>${pdfLink}</td>
 

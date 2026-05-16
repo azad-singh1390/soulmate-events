@@ -7,6 +7,7 @@
   <title>Upcoming Season Events</title>
 
   <!-- Add this inside <head> OR just before your script -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx-populate/browser/xlsx-populate.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -888,7 +889,27 @@
           const planningTextLink = `
 <a href="../Quotations/CreateQuotation/ViewPlanning.html?url=https://soulmate-backend-production.up.railway.app/bookings/${row.id}/planning-text&client=${encodeURIComponent(row.client_name)}&date=${encodeURIComponent(eventStartDate)}"
 target="_blank"
-style="${row.has_planning_text ? "" : "color:red;"}">
+style="
+display:inline-flex;
+align-items:center;
+gap:2px;
+padding:8px 10px;
+border-radius:12px;
+font-size:14px;
+font-weight:600;
+text-decoration:none;
+transition:all 0.3s ease;
+box-shadow:0 4px 5px rgba(0,0,0,0.12);
+background:${row.has_planning_text
+              ? "linear-gradient(135deg,#4CAF50,#2E7D32)"
+              : "linear-gradient(135deg,#FF7043,#D84315)"};
+color:white;
+border:none;
+"
+onmouseover="this.style.transform='translateY(-2px) scale(1.02)'; this.style.boxShadow='0 6px 14px rgba(0,0,0,0.18)'"
+onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 4px 10px rgba(0,0,0,0.12)'"
+>
+<i class="fa-solid ${row.has_planning_text ? "fa-file-lines" : "fa-plus"}"></i>
 ${row.has_planning_text ? "Additional Info" : "Add Additional Text"}
 </a>`;
           const tr = document.createElement("tr");
