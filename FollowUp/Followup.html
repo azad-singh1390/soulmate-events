@@ -336,25 +336,50 @@
    MOBILE
 ========================= */
 
-        /* Booking Status Column Mobile Fix */
+        /* =========================
+   MOBILE FIX FOR BOOKING STATUS
+========================= */
+
         @media (max-width: 768px) {
 
-            td:nth-child(8) {
-                min-width: 140px;
-                max-width: 140px;
-                white-space: normal;
-                word-break: break-word;
-                overflow-wrap: break-word;
+            table {
+                table-layout: auto;
             }
 
-            td:nth-child(8) span,
-            td:nth-child(8) div,
-            td:nth-child(8) button {
-                font-size: 10px !important;
-                padding: 6px 8px !important;
-                line-height: 1.3;
-                display: inline-block;
+            /* Booking Status Column */
+            th:nth-child(8),
+            td:nth-child(8) {
+                min-width: 180px;
+                width: 180px;
+                max-width: 220px;
+
+                white-space: normal !important;
+                word-break: break-word;
+                overflow-wrap: break-word;
+
+                padding: 8px 4px !important;
+            }
+
+            /* Badge */
+            .status-badge {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+
+                width: 100%;
+                min-width: unset;
                 max-width: 100%;
+
+                white-space: normal !important;
+                word-break: break-word;
+                overflow-wrap: break-word;
+
+                text-align: center;
+                line-height: 1.4;
+
+                padding: 8px 10px !important;
+                font-size: 10px !important;
+
                 box-sizing: border-box;
             }
 
