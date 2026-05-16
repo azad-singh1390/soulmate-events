@@ -581,12 +581,30 @@
       }
     }// EDIT OPEN
     function editRow(btn, id) {
+
       const tr = btn.closest("tr");
       const tds = tr.querySelectorAll("td");
 
+      const rawDate = tds[2].innerText.trim();
+
+      // Convert DD/MM/YYYY -> YYYY-MM-DD
+      let formattedDate = "";
+
+      if (rawDate) {
+        const parts = rawDate.split("/");
+
+        if (parts.length === 3) {
+          const day = parts[0];
+          const month = parts[1];
+          const year = parts[2];
+
+          formattedDate = `${year}-${month}-${day}`;
+        }
+      }
+
       originalData = {
-        file_name: tds[1].innerText,
-        file_date: new Date(tds[2].innerText).toISOString().split("T")[0]
+        file_name: tds[1].innerText.trim(),
+        file_date: formattedDate
       };
 
       document.getElementById("editBookingId").value = id;
@@ -595,8 +613,6 @@
 
       document.getElementById("editModal").style.display = "flex";
     }
-
-    // CLOSE MODAL
     function closeModal() {
       document.getElementById("editModal").style.display = "none";
       document.getElementById("editPlanningPdf").value = "";
@@ -626,6 +642,7 @@
 
     // SUBMIT PASSWORD
     async function submitPassword() {
+
       const password = document.getElementById("updatePassword").value;
 
       if (!password) {
@@ -633,36 +650,55 @@
         return;
       }
 
+      // SHOW LOADER
+      document.getElementById("actionLoader").style.display = "flex";
+      document.getElementById("actionLoaderText").innerText =
+        "⏳ Updating data, please wait...";
 
-      const formData = new FormData();
-      formData.append("password", password);
+      try {
 
-      for (let key in pendingChanges) {
-        formData.append(key, pendingChanges[key]);
+        const formData = new FormData();
+        formData.append("password", password);
+
+        for (let key in pendingChanges) {
+          formData.append(key, pendingChanges[key]);
+        }
+
+        const file = document.getElementById("editPlanningPdf").files[0];
+
+        if (file) {
+          formData.append("pdfUpload", file);
+        }
+
+        const res = await fetch(
+          `https://soulmate-backend-production.up.railway.app/documents/${pendingId}`,
+          {
+            method: "PUT",
+            body: formData
+          }
+        );
+
+        // HIDE LOADER
+        document.getElementById("actionLoader").style.display = "none";
+
+        if (res.ok) {
+          // alert("Updated Successfully");
+          document.getElementById("updatePassword").value = "";
+          closePassword();
+          closeModal();
+          loadBookings();
+        } else {
+          alert("Failed");
+        }
+
+      } catch (err) {
+
+        document.getElementById("actionLoader").style.display = "none";
+
+        console.error(err);
+        alert("Error updating data");
       }
-
-      const file = document.getElementById("editPlanningPdf").files[0];
-      if (file) {
-        formData.append("pdfUpload", file);
-      }
-
-      const res = await fetch(`https://soulmate-backend-production.up.railway.app/documents/${pendingId}`, {
-        method: "PUT",
-        body: formData
-      });
-
-      if (res.ok) {
-        alert("Updated");
-        document.getElementById("updatePassword").value = ""; // ✅ extra safety
-        closePassword();
-        closeModal();
-        loadBookings();
-      } else {
-        alert("Failed");
-      }
-    }
-
-    function closePassword() {
+    } function closePassword() {
       document.getElementById("passwordModal").style.display = "none";
       document.getElementById("updatePassword").value = ""; // ✅ clear
     }
@@ -674,25 +710,46 @@
     }
 
     async function submitDelete() {
+
       const password = document.getElementById("deletePassword").value;
 
-      const res = await fetch(`https://soulmate-backend-production.up.railway.app/documents/${deleteId}`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password })
-      });
+      // SHOW LOADER
+      document.getElementById("actionLoader").style.display = "flex";
+      document.getElementById("actionLoaderText").innerText =
+        "⏳ Deleting data, please wait...";
 
-      if (res.ok) {
-        alert("Deleted");
-        document.getElementById("updatePassword").value = ""; // ✅ extra safety
-        closeDelete();
-        closeModal();
-        loadBookings();
-      } else {
-        alert("Delete failed");
+      try {
+
+        const res = await fetch(
+          `https://soulmate-backend-production.up.railway.app/documents/${deleteId}`,
+          {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ password })
+          }
+        );
+
+        // HIDE LOADER
+        document.getElementById("actionLoader").style.display = "none";
+
+        if (res.ok) {
+          // alert("Deleted Successfully");
+          document.getElementById("updatePassword").value = "";
+          closeDelete();
+          closeModal();
+          loadBookings();
+        } else {
+          alert("Delete failed");
+        }
+
+      } catch (err) {
+
+        document.getElementById("actionLoader").style.display = "none";
+
+        console.error(err);
+        alert("Error deleting data");
       }
     }
-
     function closeDelete() {
       document.getElementById("deletePasswordModal").style.display = "none";
       document.getElementById("deletePassword").value = ""; // ✅ clear
@@ -703,6 +760,12 @@
 
   </script>
 
+  <!-- Action Loader -->
+  <div id="actionLoader" class="loader-overlay" style="display:none;">
+    <div class="loader-box" id="actionLoaderText">
+      ⏳ Please wait...
+    </div>
+  </div>
 </body>
 
 </html>
