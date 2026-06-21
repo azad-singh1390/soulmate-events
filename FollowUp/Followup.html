@@ -999,6 +999,8 @@
 
                 const pendingCount = totalFollowups - confirmedCount;
 
+                const now = new Date(); // <-- Add this
+
                 document.getElementById("summaryHeader").innerHTML = `
     📋 Total Followups:
     <span style="color:#60a5fa">${totalFollowups}</span>
@@ -1012,6 +1014,9 @@
 
     ⏳ Pending:
     <span style="color:#facc15">${pendingCount}</span>
+    <br>
+    <br>
+    Output: <span style="color:#f472b6">${((confirmedCount / totalFollowups) * 100).toFixed(2)}%</span>
 `;
 
                 let serial = 1;
