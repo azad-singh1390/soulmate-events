@@ -219,7 +219,7 @@
 ========================= */
 
         .month-header-row td {
-            background: linear-gradient(135deg, #f97316, white);
+            background: linear-gradient(135deg, #f97316, black);
             color: #fff !important;
             font-size: 22px;
             font-weight: 700;
@@ -999,7 +999,7 @@
 
                         monthRow.innerHTML = `
         <td colspan="10" class="month-header">
-            ${currentMonth} - ${monthCounts[currentMonth]} Events
+            ${currentMonth} - [ ${monthCounts[currentMonth]} Events ]
         </td>
     `;
 
