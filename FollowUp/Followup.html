@@ -18,6 +18,22 @@
             padding-top: 60px;
         }
 
+        .summary-header {
+            background: linear-gradient(135deg, #111, #222);
+            color: white;
+            padding: 16px 20px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 22px;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .summary-header span {
+            margin: 0 15px;
+        }
+
         /* =========================
    BOOKING STATUS BADGES
 ========================= */
@@ -487,6 +503,9 @@
     </nav>
 
     <h1>📋 All Follow-ups</h1>
+    <div id="summaryHeader" class="summary-header">
+        Loading...
+    </div>
 
     <!-- Loader Overlay -->
     <div id="loader" class="loader-overlay" style="display: none;">
@@ -968,6 +987,32 @@
 
                     return dateA - dateB;
                 });
+
+                // Summary Counts
+                const totalFollowups = data.length;
+
+                const confirmedCount = data.filter(row =>
+                    (row.booking_status || "")
+                        .toLowerCase()
+                        .includes("confirmed")
+                ).length;
+
+                const pendingCount = totalFollowups - confirmedCount;
+
+                document.getElementById("summaryHeader").innerHTML = `
+    📋 Total Followups:
+    <span style="color:#60a5fa">${totalFollowups}</span>
+
+    &nbsp;&nbsp;|&nbsp;&nbsp;
+
+    ✅ Confirmed:
+    <span style="color:#4ade80">${confirmedCount}</span>
+
+    &nbsp;&nbsp;|&nbsp;&nbsp;
+
+    ⏳ Pending:
+    <span style="color:#facc15">${pendingCount}</span>
+`;
 
                 let serial = 1;
                 let lastMonth = "";
