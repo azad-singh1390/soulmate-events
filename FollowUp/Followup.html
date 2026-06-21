@@ -1364,12 +1364,15 @@ tbody tr:nth-child(even):not(.month-header-row) {
 
                 if (!res.ok) throw new Error("Update failed");
 
-                alert("✅ Booking updated!");
+                
+                const result = await res.json();
+                alert("✅ " + (result.message || "Followup updated!"));
+                // Fetch message from response
                 closePasswordModal();
                 closeModal();
                 loadBookings();
             } catch (err) {
-                alert("❌ Failed to update booking");
+                alert("❌ Failed to update followup");
                 console.error(err);
             }
 
